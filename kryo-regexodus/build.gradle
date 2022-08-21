@@ -1,0 +1,48 @@
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+eclipse.project.name = project.name
+
+sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+javadoc.destinationDir = file("../docs/$projectName/apidocs")
+javadoc.options.source("17")
+((StandardJavadocDocletOptions)javadoc.options).linkSource(true)
+((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
+((StandardJavadocDocletOptions)javadoc.options).use(true)
+((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022.")
+
+if(JavaVersion.current().isJava9Compatible()) {
+    allprojects {
+        tasks.withType(JavaCompile) {
+            options.release.set(8)
+        }
+    }
+}
+
+dependencies {
+    api "com.esotericsoftware:kryo:$kryoVersion"
+    api "com.github.tommyettinger:regexodus:$regexodusVersion"
+    testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testImplementation "junit:junit:4.13.2"
+
+    constraints {
+        implementation("org.apache.logging.log4j:log4j-core") {
+            version {
+                strictly("[2.18, 3[")
+                prefer("2.18.0")
+            }
+            because("CVE-2021-44228, CVE-2021-45046, CVE-2021-45105: Log4j vulnerable to remote code execution and other critical security vulnerabilities")
+        }
+    }
+}
+
+jar {
+    archiveBaseName.set(project.name)
+    manifest {
+        attributes 'Implementation-Title': projectName, 'Implementation-Version': archiveVersion
+    }
+}
