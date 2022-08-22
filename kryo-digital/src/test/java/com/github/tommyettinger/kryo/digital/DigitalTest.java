@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.Hasher;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,6 +45,24 @@ public class DigitalTest {
             Assert.assertEquals(data.signed(0xFEDCBA9876543210L), data2.signed(0xFEDCBA9876543210L));
             Assert.assertEquals(data.unsigned(0xFEDCBA9876543210L), data.unsigned(0xFEDCBA9876543210L));
             Assert.assertEquals(data, data2);
+        }
+    }
+    @Test
+    public void testHasher() {
+        Kryo kryo = new Kryo();
+        kryo.register(Hasher.class, new HasherSerializer());
+
+        long seed = Hasher.randomize3(System.nanoTime());
+        Hasher data = new Hasher(seed);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Hasher data2 = kryo.readObject(input, Hasher.class);
+            Assert.assertEquals(data.hash("0xFEDCBA9876543210L"), data2.hash("0xFEDCBA9876543210L"));
+            Assert.assertEquals(data.hash64("0xFEDCBA9876543210L"), data2.hash64("0xFEDCBA9876543210L"));
         }
     }
 }
