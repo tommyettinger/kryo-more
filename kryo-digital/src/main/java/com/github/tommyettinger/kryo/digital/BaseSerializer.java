@@ -15,31 +15,30 @@
  *
  */
 
-package com.github.tommyettinger.kryo.regexodus;
-
-import regexodus.Pattern;
+package com.github.tommyettinger.kryo.digital;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.digital.Base;
 
 /**
- * Kryo {@link Serializer} for Regexodus {@link Pattern}s.
+ * Kryo {@link Serializer} for digital {@link Base}s.
  */
-public class PatternSerializer extends Serializer<Pattern> {
+public class BaseSerializer extends Serializer<Base> {
 
-    public PatternSerializer() {
+    public BaseSerializer() {
         setImmutable(true);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final Pattern data) {
+    public void write(final Kryo kryo, final Output output, final Base data) {
         output.writeString(data.serializeToString());
     }
 
     @Override
-    public Pattern read(final Kryo kryo, final Input input, final Class<? extends Pattern> dataClass) {
-        return Pattern.deserializeFromString(input.readString());
+    public Base read(final Kryo kryo, final Input input, final Class<? extends Base> dataClass) {
+        return Base.deserializeFromString(input.readString());
     }
 }
