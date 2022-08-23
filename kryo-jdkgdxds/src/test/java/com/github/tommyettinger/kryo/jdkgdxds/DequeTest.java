@@ -26,139 +26,139 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 
-public class JdkgdxdsTest {
+public class DequeTest {
     @Test
-    public void testIntList() {
+    public void testIntDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(IntList.class, new IntListSerializer());
+        kryo.register(IntDeque.class, new IntDequeSerializer());
 
-        IntList data = IntList.with(-123, 0, 456, 0, 1, -1, 0);
+        IntDeque data = IntDeque.with(-123, 0, 456, 0, 1, -1, 0);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            IntList data2 = kryo.readObject(input, IntList.class);
+            IntDeque data2 = kryo.readObject(input, IntDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
 
     @Test
-    public void testLongList() {
+    public void testLongDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(LongList.class, new LongListSerializer());
+        kryo.register(LongDeque.class, new LongDequeSerializer());
 
-        LongList data = LongList.with(-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0);
+        LongDeque data = LongDeque.with(-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            LongList data2 = kryo.readObject(input, LongList.class);
+            LongDeque data2 = kryo.readObject(input, LongDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
 
     @Test
-    public void testShortList() {
+    public void testShortDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(ShortList.class, new ShortListSerializer());
+        kryo.register(ShortDeque.class, new ShortDequeSerializer());
 
-        ShortList data = ShortList.with(new short[]{-123, 0, 456, 0, 1, -1, 0});
+        ShortDeque data = ShortDeque.with(new short[]{-123, 0, 456, 0, 1, -1, 0});
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            ShortList data2 = kryo.readObject(input, ShortList.class);
+            ShortDeque data2 = kryo.readObject(input, ShortDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
 
     @Test
-    public void testByteList() {
+    public void testByteDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(ByteList.class, new ByteListSerializer());
+        kryo.register(ByteDeque.class, new ByteDequeSerializer());
 
-        ByteList data = ByteList.with(new byte[]{-123, 0, 45, 0, 1, -1, 0});
+        ByteDeque data = ByteDeque.with(new byte[]{-123, 0, 45, 0, 1, -1, 0});
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            ByteList data2 = kryo.readObject(input, ByteList.class);
+            ByteDeque data2 = kryo.readObject(input, ByteDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
 
     @Test
-    public void testFloatList() {
+    public void testFloatDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(FloatList.class, new FloatListSerializer());
+        kryo.register(FloatDeque.class, new FloatDequeSerializer());
 
-        FloatList data = FloatList.with(-123.123f, 0f, 456.456f, 0, 1f, -1f, 0.000001f);
+        FloatDeque data = FloatDeque.with(-123.123f, 0f, 456.456f, 0, 1f, -1f, 0.000001f);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            FloatList data2 = kryo.readObject(input, FloatList.class);
+            FloatDeque data2 = kryo.readObject(input, FloatDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
 
     @Test
-    public void testDoubleList() {
+    public void testDoubleDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(DoubleList.class, new DoubleListSerializer());
+        kryo.register(DoubleDeque.class, new DoubleDequeSerializer());
 
-        DoubleList data = DoubleList.with(-123.123, 0, 456.456, 0, 1.0, -1.0, 0.000001);
+        DoubleDeque data = DoubleDeque.with(-123.123, 0, 456.456, 0, 1.0, -1.0, 0.000001);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            DoubleList data2 = kryo.readObject(input, DoubleList.class);
+            DoubleDeque data2 = kryo.readObject(input, DoubleDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
 
     @Test
-    public void testBooleanList() {
+    public void testBooleanDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(BooleanList.class, new BooleanListSerializer());
+        kryo.register(BooleanDeque.class, new BooleanDequeSerializer());
 
-        BooleanList data = BooleanList.with(true, false, false, true, false, true, false);
+        BooleanDeque data = BooleanDeque.with(true, false, false, true, false, true, false);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            BooleanList data2 = kryo.readObject(input, BooleanList.class);
+            BooleanDeque data2 = kryo.readObject(input, BooleanDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
 
     @Test
-    public void testCharList() {
+    public void testCharDeque() {
         Kryo kryo = new Kryo();
-        kryo.register(CharList.class, new CharListSerializer());
+        kryo.register(CharDeque.class, new CharDequeSerializer());
 
-        CharList data = CharList.with("Hello, World!".toCharArray());
+        CharDeque data = CharDeque.with("Hello, World!".toCharArray());
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            CharList data2 = kryo.readObject(input, CharList.class);
+            CharDeque data2 = kryo.readObject(input, CharDeque.class);
             Assert.assertEquals(data, data2);
         }
     }
