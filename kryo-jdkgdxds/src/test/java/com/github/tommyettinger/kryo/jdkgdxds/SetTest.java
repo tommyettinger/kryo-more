@@ -45,6 +45,24 @@ public class SetTest {
     }
 
     @Test
+    public void testIntOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntOrderedSet.class, new IntOrderedSetSerializer());
+
+        IntOrderedSet data = IntOrderedSet.with(-123, 0, 456, 0, 1, -1, 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntOrderedSet data2 = kryo.readObject(input, IntOrderedSet.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
+        }
+    }
+
+    @Test
     public void testLongSet() {
         Kryo kryo = new Kryo();
         kryo.register(LongSet.class, new LongSetSerializer());
@@ -62,12 +80,30 @@ public class SetTest {
     }
 
     @Test
+    public void testLongOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongOrderedSet.class, new LongOrderedSetSerializer());
+
+        LongOrderedSet data = LongOrderedSet.with(-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongOrderedSet data2 = kryo.readObject(input, LongOrderedSet.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
+        }
+    }
+
+    @Test
     public void testObjectSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);
         kryo.register(ObjectSet.class);
 
-        ObjectSet<String> data = ObjectSet.with("Hello", "World", "!", "I", "am", "a", "test", "!");
+        ObjectSet<String> data = ObjectSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
@@ -76,6 +112,25 @@ public class SetTest {
         try (Input input = new Input(bytes)) {
             ObjectSet<?> data2 = kryo.readObject(input, ObjectSet.class);
             Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testObjectOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(ObjectOrderedSet.class);
+
+        ObjectOrderedSet<String> data = ObjectOrderedSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectOrderedSet<?> data2 = kryo.readObject(input, ObjectOrderedSet.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
         }
     }
 
