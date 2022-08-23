@@ -20,6 +20,8 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.ds.DoubleList;
+import com.github.tommyettinger.ds.FloatList;
 import com.github.tommyettinger.ds.IntList;
 import com.github.tommyettinger.ds.LongList;
 import org.junit.Assert;
@@ -44,6 +46,7 @@ public class JdkgdxdsTest {
             Assert.assertEquals(data, data2);
         }
     }
+
     @Test
     public void testLongList() {
         Kryo kryo = new Kryo();
@@ -60,4 +63,38 @@ public class JdkgdxdsTest {
             Assert.assertEquals(data, data2);
         }
     }
+    @Test
+    public void testFloatList() {
+        Kryo kryo = new Kryo();
+        kryo.register(FloatList.class, new FloatListSerializer());
+
+        FloatList data = FloatList.with(-123.123f, 0f, 456.456f, 0, 1f, -1f, 0.000001f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FloatList data2 = kryo.readObject(input, FloatList.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testDoubleList() {
+        Kryo kryo = new Kryo();
+        kryo.register(DoubleList.class, new DoubleListSerializer());
+
+        DoubleList data = DoubleList.with(-123.123, 0, 456.456, 0, 1.0, -1.0, 0.000001);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            DoubleList data2 = kryo.readObject(input, DoubleList.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
 }
