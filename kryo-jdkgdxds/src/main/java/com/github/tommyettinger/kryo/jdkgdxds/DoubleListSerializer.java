@@ -36,8 +36,7 @@ public class DoubleListSerializer extends Serializer<DoubleList> {
     public void write(final Kryo kryo, final Output output, final DoubleList data) {
         int length = data.size();
         output.writeInt(length, true);
-        for (int i = 0; i < length; i++)
-            output.writeDouble(data.get(i));
+        output.writeDoubles(data.items, 0, length);
     }
 
     @Override

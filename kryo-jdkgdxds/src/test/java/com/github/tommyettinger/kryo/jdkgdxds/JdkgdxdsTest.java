@@ -129,4 +129,38 @@ public class JdkgdxdsTest {
         }
     }
 
+    @Test
+    public void testBooleanList() {
+        Kryo kryo = new Kryo();
+        kryo.register(BooleanList.class, new BooleanListSerializer());
+
+        BooleanList data = BooleanList.with(true, false, false, true, false, true, false);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            BooleanList data2 = kryo.readObject(input, BooleanList.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testCharList() {
+        Kryo kryo = new Kryo();
+        kryo.register(CharList.class, new CharListSerializer());
+
+        CharList data = CharList.with("Hello, World!".toCharArray());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CharList data2 = kryo.readObject(input, CharList.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
 }

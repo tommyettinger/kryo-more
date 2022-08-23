@@ -21,30 +21,30 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.ds.ByteList;
+import com.github.tommyettinger.ds.CharList;
 
 /**
- * Kryo {@link Serializer} for jdkgdxds {@link ByteList}s.
+ * Kryo {@link Serializer} for jdkgdxds {@link CharList}s.
  */
-public class ByteListSerializer extends Serializer<ByteList> {
+public class CharListSerializer extends Serializer<CharList> {
 
-    public ByteListSerializer() {
+    public CharListSerializer() {
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final ByteList data) {
+    public void write(final Kryo kryo, final Output output, final CharList data) {
         int length = data.size();
         output.writeInt(length, true);
-        output.writeBytes(data.items, 0, length);
+        output.writeChars(data.items, 0, length);
     }
 
     @Override
-    public ByteList read(final Kryo kryo, final Input input, final Class<? extends ByteList> dataClass) {
+    public CharList read(final Kryo kryo, final Input input, final Class<? extends CharList> dataClass) {
         int length = input.readInt(true);
-        ByteList data = new ByteList(length);
+        CharList data = new CharList(length);
         for (int i = 0; i < length; i++)
-            data.add(input.readByte());
+            data.add(input.readChar());
         return data;
     }
 }

@@ -36,8 +36,7 @@ public class FloatListSerializer extends Serializer<FloatList> {
     public void write(final Kryo kryo, final Output output, final FloatList data) {
         int length = data.size();
         output.writeInt(length, true);
-        for (int i = 0; i < length; i++)
-            output.writeFloat(data.get(i));
+        output.writeFloats(data.items, 0, length);
     }
 
     @Override

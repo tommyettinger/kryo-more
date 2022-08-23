@@ -36,8 +36,7 @@ public class ShortListSerializer extends Serializer<ShortList> {
     public void write(final Kryo kryo, final Output output, final ShortList data) {
         int length = data.size();
         output.writeInt(length, true);
-        for (int i = 0; i < length; i++)
-            output.writeShort(data.get(i));
+        output.writeShorts(data.items, 0, length);
     }
 
     @Override
