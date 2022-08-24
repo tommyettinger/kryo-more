@@ -130,4 +130,39 @@ public class MapTest {
             Assert.assertEquals(data.order(), data2.order());
         }
     }
+    
+    @Test
+    public void testIntFloatMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntFloatMap.class, new IntFloatMapSerializer());
+
+        IntFloatMap data = IntFloatMap.with(-1234567890L, 1.2f, 0L, 2.3f, 4567890123456789L, -3.4f, 0, -4.5f, 1L, -5.6f, 1, 6.7f, -1, -7.8f, 0, 8.9f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntFloatMap data2 = kryo.readObject(input, IntFloatMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testIntFloatOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntFloatOrderedMap.class, new IntFloatOrderedMapSerializer());
+
+        IntFloatOrderedMap data = IntFloatOrderedMap.with(-1234567890L, 1.2f, 0L, 2.3f, 4567890123456789L, -3.4f, 0, -4.5f, 1L, -5.6f, 1, 6.7f, -1, -7.8f, 0, 8.9f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntFloatOrderedMap data2 = kryo.readObject(input, IntFloatOrderedMap.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
+        }
+    }
 }
