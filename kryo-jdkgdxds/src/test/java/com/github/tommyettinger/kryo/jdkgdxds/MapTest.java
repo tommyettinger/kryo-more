@@ -96,4 +96,38 @@ public class MapTest {
             Assert.assertEquals(data.order(), data2.order());
         }
     }
+    @Test
+    public void testLongLongMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongLongMap.class, new LongLongMapSerializer());
+
+        LongLongMap data = LongLongMap.with(-1234567890L, 1.2f, 0L, 2.3f, 4567890123456789L, -3.4f, 0, -4.5f, 1L, -5.6f, 1, 6.7f, -1, -7.8f, 0, 8.9f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongLongMap data2 = kryo.readObject(input, LongLongMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testLongLongOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongLongOrderedMap.class, new LongLongOrderedMapSerializer());
+
+        LongLongOrderedMap data = LongLongOrderedMap.with(-1234567890L, 1.2f, 0L, 2.3f, 4567890123456789L, -3.4f, 0, -4.5f, 1L, -5.6f, 1, 6.7f, -1, -7.8f, 0, 8.9f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongLongOrderedMap data2 = kryo.readObject(input, LongLongOrderedMap.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
+        }
+    }
 }
