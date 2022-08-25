@@ -304,4 +304,41 @@ public class MapTest {
         }
     }
 
+    @Test
+    public void testObjectLongMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectLongMap.class, new ObjectLongMapSerializer());
+
+        ObjectLongMap<String> data = ObjectLongMap.with("Cthulhu", -1234567890L, "lies", 0L, "deep",
+                4567890123456789L, "in", 0, "Rl'yeh", 1L, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectLongMap<?> data2 = kryo.readObject(input, ObjectLongMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testObjectLongOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectLongOrderedMap.class, new ObjectLongOrderedMapSerializer());
+
+        ObjectLongOrderedMap<String> data = ObjectLongOrderedMap.with("Cthulhu", -1234567890L, "lies", 0L, "deep",
+                4567890123456789L, "in", 0, "Rl'yeh", 1L, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectLongOrderedMap<?> data2 = kryo.readObject(input, ObjectLongOrderedMap.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
+        }
+    }
+
 }
