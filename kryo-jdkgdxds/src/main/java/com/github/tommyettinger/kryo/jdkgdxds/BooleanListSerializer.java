@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.BooleanList;
+import com.github.tommyettinger.ds.ShortList;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link BooleanList}s.
@@ -46,5 +47,10 @@ public class BooleanListSerializer extends Serializer<BooleanList> {
         for (int i = 0; i < length; i++)
             data.add(input.readBoolean());
         return data;
+    }
+
+    @Override
+    public BooleanList copy(Kryo kryo, BooleanList original) {
+        return new BooleanList(original);
     }
 }

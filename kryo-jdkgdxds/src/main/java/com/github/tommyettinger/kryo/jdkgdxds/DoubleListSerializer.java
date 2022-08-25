@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.DoubleList;
+import com.github.tommyettinger.ds.ShortList;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link DoubleList}s.
@@ -46,5 +47,10 @@ public class DoubleListSerializer extends Serializer<DoubleList> {
         for (int i = 0; i < length; i++)
             data.add(input.readDouble());
         return data;
+    }
+
+    @Override
+    public DoubleList copy(Kryo kryo, DoubleList original) {
+        return new DoubleList(original);
     }
 }

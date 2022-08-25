@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.ByteList;
+import com.github.tommyettinger.ds.ShortList;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link ByteList}s.
@@ -46,5 +47,10 @@ public class ByteListSerializer extends Serializer<ByteList> {
         for (int i = 0; i < length; i++)
             data.add(input.readByte());
         return data;
+    }
+
+    @Override
+    public ByteList copy(Kryo kryo, ByteList original) {
+        return new ByteList(original);
     }
 }

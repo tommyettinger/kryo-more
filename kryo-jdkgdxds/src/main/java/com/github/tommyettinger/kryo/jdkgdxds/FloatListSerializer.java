@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.FloatList;
+import com.github.tommyettinger.ds.ShortList;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link FloatList}s.
@@ -46,5 +47,10 @@ public class FloatListSerializer extends Serializer<FloatList> {
         for (int i = 0; i < length; i++)
             data.add(input.readFloat());
         return data;
+    }
+
+    @Override
+    public FloatList copy(Kryo kryo, FloatList original) {
+        return new FloatList(original);
     }
 }

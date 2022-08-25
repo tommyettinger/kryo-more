@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.LongList;
+import com.github.tommyettinger.ds.ShortList;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link LongList}s.
@@ -47,5 +48,10 @@ public class LongListSerializer extends Serializer<LongList> {
         for (int i = 0; i < length; i++)
             data.add(input.readVarLong(false));
         return data;
+    }
+    
+    @Override
+    public LongList copy(Kryo kryo, LongList original) {
+        return new LongList(original);
     }
 }

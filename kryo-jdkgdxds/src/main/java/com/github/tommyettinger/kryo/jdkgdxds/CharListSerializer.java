@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.CharList;
+import com.github.tommyettinger.ds.ShortList;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link CharList}s.
@@ -46,5 +47,10 @@ public class CharListSerializer extends Serializer<CharList> {
         for (int i = 0; i < length; i++)
             data.add(input.readChar());
         return data;
+    }
+
+    @Override
+    public CharList copy(Kryo kryo, CharList original) {
+        return new CharList(original);
     }
 }

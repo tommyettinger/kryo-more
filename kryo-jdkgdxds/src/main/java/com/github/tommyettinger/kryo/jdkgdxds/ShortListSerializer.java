@@ -47,4 +47,9 @@ public class ShortListSerializer extends Serializer<ShortList> {
             data.add(input.readShort());
         return data;
     }
+
+    @Override
+    public ShortList copy(Kryo kryo, ShortList original) {
+        return new ShortList(original);
+    }
 }
