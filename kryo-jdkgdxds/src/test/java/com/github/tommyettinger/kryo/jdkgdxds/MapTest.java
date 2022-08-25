@@ -45,6 +45,23 @@ public class MapTest {
     }
 
     @Test
+    public void testLongObjectOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongObjectOrderedMap.class, new LongObjectOrderedMapSerializer());
+
+        LongObjectOrderedMap<Float> data = LongObjectOrderedMap.with(-1234567890L, 1.2f, 0L, 2.3f, 4567890123456789L, -3.4f, 0, -4.5f, 1L, -5.6f, 1, 6.7f, -1, -7.8f, 0, 8.9f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongObjectOrderedMap<?> data2 = kryo.readObject(input, LongObjectOrderedMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testLongFloatMap() {
         Kryo kryo = new Kryo();
         kryo.register(LongFloatMap.class, new LongFloatMapSerializer());

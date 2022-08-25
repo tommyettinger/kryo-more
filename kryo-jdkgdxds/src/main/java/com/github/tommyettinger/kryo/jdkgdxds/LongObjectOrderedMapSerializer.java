@@ -22,22 +22,25 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.LongObjectMap;
+import com.github.tommyettinger.ds.LongObjectOrderedMap;
+
+import java.util.Iterator;
 
 /**
- * Kryo {@link Serializer} for jdkgdxds {@link LongObjectMap}s.
+ * Kryo {@link Serializer} for jdkgdxds {@link LongObjectOrderedMap}s.
  */
-public class LongObjectMapSerializer extends Serializer<LongObjectMap<?>> {
+public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrderedMap<?>> {
 
-    public LongObjectMapSerializer() {
+    public LongObjectOrderedMapSerializer() {
         setAcceptsNull(true);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final LongObjectMap<?> data) {
+    public void write(final Kryo kryo, final Output output, final LongObjectOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for(LongObjectMap.EntryIterator<?> it = new LongObjectMap.EntryIterator<>(data); it.hasNext();) {
-            LongObjectMap.Entry<?> ent = it.next();
+        for(Iterator<? extends LongObjectMap.Entry<?>> it = new LongObjectOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
+            LongObjectOrderedMap.Entry<?> ent = it.next();
             output.writeVarLong(ent.key, false);
             kryo.writeClassAndObject(output, ent.value);
         }
@@ -45,10 +48,10 @@ public class LongObjectMapSerializer extends Serializer<LongObjectMap<?>> {
 
     @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
-    public LongObjectMap<?> read(final Kryo kryo, final Input input, final Class<? extends LongObjectMap<?>> dataClass) {
+    public LongObjectOrderedMap<?> read(final Kryo kryo, final Input input, final Class<? extends LongObjectOrderedMap<?>> dataClass) {
         int length = input.readInt(true);
-        LongObjectMap<?> data = new LongObjectMap<>(length);
-        LongObjectMap rawData = data;
+        LongObjectOrderedMap<?> data = new LongObjectOrderedMap<>(length);
+        LongObjectOrderedMap rawData = data;
         for (int i = 0; i < length; i++)
             rawData.put(input.readVarLong(false), kryo.readClassAndObject(input));
         return data;
