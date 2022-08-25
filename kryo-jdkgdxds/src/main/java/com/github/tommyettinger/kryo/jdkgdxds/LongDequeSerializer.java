@@ -48,4 +48,9 @@ public class LongDequeSerializer extends Serializer<LongDeque> {
             data.add(input.readVarLong(false));
         return data;
     }
+
+    @Override
+    public LongDeque copy(Kryo kryo, LongDeque original) {
+        return new LongDeque(original);
+    }
 }

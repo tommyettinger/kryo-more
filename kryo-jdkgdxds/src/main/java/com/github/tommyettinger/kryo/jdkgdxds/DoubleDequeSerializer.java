@@ -48,4 +48,9 @@ public class DoubleDequeSerializer extends Serializer<DoubleDeque> {
             data.add(input.readDouble());
         return data;
     }
+
+    @Override
+    public DoubleDeque copy(Kryo kryo, DoubleDeque original) {
+        return new DoubleDeque(original);
+    }
 }

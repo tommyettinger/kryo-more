@@ -48,4 +48,9 @@ public class ByteDequeSerializer extends Serializer<ByteDeque> {
             data.add(input.readByte());
         return data;
     }
+
+    @Override
+    public ByteDeque copy(Kryo kryo, ByteDeque original) {
+        return new ByteDeque(original);
+    }
 }

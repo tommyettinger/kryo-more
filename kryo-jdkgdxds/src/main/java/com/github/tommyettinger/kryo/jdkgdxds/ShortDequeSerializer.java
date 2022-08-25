@@ -48,4 +48,9 @@ public class ShortDequeSerializer extends Serializer<ShortDeque> {
             data.add(input.readShort());
         return data;
     }
+
+    @Override
+    public ShortDeque copy(Kryo kryo, ShortDeque original) {
+        return new ShortDeque(original);
+    }
 }

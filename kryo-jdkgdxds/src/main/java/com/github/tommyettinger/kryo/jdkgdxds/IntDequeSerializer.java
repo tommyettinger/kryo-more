@@ -48,4 +48,9 @@ public class IntDequeSerializer extends Serializer<IntDeque> {
             data.add(input.readVarInt(false));
         return data;
     }
+
+    @Override
+    public IntDeque copy(Kryo kryo, IntDeque original) {
+        return new IntDeque(original);
+    }
 }

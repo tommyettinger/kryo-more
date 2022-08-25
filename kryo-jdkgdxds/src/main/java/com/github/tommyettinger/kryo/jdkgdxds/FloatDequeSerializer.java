@@ -48,4 +48,9 @@ public class FloatDequeSerializer extends Serializer<FloatDeque> {
             data.add(input.readFloat());
         return data;
     }
+
+    @Override
+    public FloatDeque copy(Kryo kryo, FloatDeque original) {
+        return new FloatDeque(original);
+    }
 }

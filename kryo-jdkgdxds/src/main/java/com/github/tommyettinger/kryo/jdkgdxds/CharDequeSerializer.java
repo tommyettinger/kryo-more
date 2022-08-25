@@ -48,4 +48,9 @@ public class CharDequeSerializer extends Serializer<CharDeque> {
             data.add(input.readChar());
         return data;
     }
+
+    @Override
+    public CharDeque copy(Kryo kryo, CharDeque original) {
+        return new CharDeque(original);
+    }
 }

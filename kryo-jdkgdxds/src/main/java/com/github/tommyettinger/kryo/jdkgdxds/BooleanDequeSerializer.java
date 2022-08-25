@@ -48,4 +48,9 @@ public class BooleanDequeSerializer extends Serializer<BooleanDeque> {
             data.add(input.readBoolean());
         return data;
     }
+
+    @Override
+    public BooleanDeque copy(Kryo kryo, BooleanDeque original) {
+        return new BooleanDeque(original);
+    }
 }
