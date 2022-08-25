@@ -305,6 +305,43 @@ public class MapTest {
     }
 
     @Test
+    public void testObjectIntMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectIntMap.class, new ObjectIntMapSerializer());
+
+        ObjectIntMap<String> data = ObjectIntMap.with("Cthulhu", -123456, "lies", Integer.MIN_VALUE,
+                "deep", 456789012, "in", 0, "Rl'yeh", 1111, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectIntMap<?> data2 = kryo.readObject(input, ObjectIntMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testObjectIntOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectIntOrderedMap.class, new ObjectIntOrderedMapSerializer());
+
+        ObjectIntOrderedMap<String> data = ObjectIntOrderedMap.with("Cthulhu", -123456, "lies", Integer.MIN_VALUE,
+                "deep", 456789012, "in", 0, "Rl'yeh", 1111, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectIntOrderedMap<?> data2 = kryo.readObject(input, ObjectIntOrderedMap.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
+        }
+    }
+
+    @Test
     public void testObjectLongMap() {
         Kryo kryo = new Kryo();
         kryo.register(ObjectLongMap.class, new ObjectLongMapSerializer());
@@ -340,8 +377,7 @@ public class MapTest {
             Assert.assertEquals(data.order(), data2.order());
         }
     }
-
-
+    
     @Test
     public void testObjectFloatMap() {
         Kryo kryo = new Kryo();
