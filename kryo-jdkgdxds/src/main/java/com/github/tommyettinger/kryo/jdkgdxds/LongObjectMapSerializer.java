@@ -53,4 +53,15 @@ public class LongObjectMapSerializer extends Serializer<LongObjectMap<?>> {
             rawData.put(input.readVarLong(false), kryo.readClassAndObject(input));
         return data;
     }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public LongObjectMap<?> copy(Kryo kryo, LongObjectMap<?> original) {
+        LongObjectMap<?> map = new LongObjectMap<>(original.size(), original.getLoadFactor());
+        LongObjectMap rawMap = map;
+        for(LongObjectMap.Entry ent : original) {
+            rawMap.put(ent.key, kryo.copy(ent.value));
+        }
+        return map;
+    }
 }

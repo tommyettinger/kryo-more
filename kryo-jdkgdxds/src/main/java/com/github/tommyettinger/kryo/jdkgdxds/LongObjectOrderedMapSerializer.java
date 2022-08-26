@@ -56,4 +56,16 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
             rawData.put(input.readVarLong(false), kryo.readClassAndObject(input));
         return data;
     }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public LongObjectOrderedMap<?> copy(Kryo kryo, LongObjectOrderedMap<?> original) {
+        LongObjectOrderedMap<?> map = new LongObjectOrderedMap<>(original.size(), original.getLoadFactor());
+        LongObjectOrderedMap rawMap = map;
+        for(LongObjectOrderedMap.Entry ent : original) {
+            rawMap.put(ent.key, kryo.copy(ent.value));
+        }
+        return map;
+    }
+
 }

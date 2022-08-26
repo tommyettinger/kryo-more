@@ -51,4 +51,9 @@ public class LongFloatMapSerializer extends Serializer<LongFloatMap> {
             data.put(input.readVarLong(false), input.readFloat());
         return data;
     }
+
+    @Override
+    public LongFloatMap copy(Kryo kryo, LongFloatMap original) {
+        return new LongFloatMap(original);
+    }
 }

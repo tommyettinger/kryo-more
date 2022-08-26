@@ -51,4 +51,9 @@ public class LongLongMapSerializer extends Serializer<LongLongMap> {
             data.put(input.readVarLong(false), input.readVarLong(false));
         return data;
     }
+
+    @Override
+    public LongLongMap copy(Kryo kryo, LongLongMap original) {
+        return new LongLongMap(original);
+    }
 }

@@ -54,4 +54,9 @@ public class LongFloatOrderedMapSerializer extends Serializer<LongFloatOrderedMa
             data.put(input.readVarLong(false), input.readFloat());
         return data;
     }
+
+    @Override
+    public LongFloatOrderedMap copy(Kryo kryo, LongFloatOrderedMap original) {
+        return new LongFloatOrderedMap(original);
+    }
 }
