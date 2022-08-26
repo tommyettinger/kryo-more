@@ -121,4 +121,42 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+    
+    @Test
+    public void testStrangerRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(StrangerRandom.class, new StrangerRandomSerializer());
+
+        StrangerRandom data = new StrangerRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            StrangerRandom data2 = kryo.readObject(input, StrangerRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testTrimRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(TrimRandom.class, new TrimRandomSerializer());
+
+        TrimRandom data = new TrimRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            TrimRandom data2 = kryo.readObject(input, TrimRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
