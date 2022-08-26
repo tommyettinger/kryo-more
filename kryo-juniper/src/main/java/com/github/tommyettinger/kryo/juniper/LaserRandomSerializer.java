@@ -21,24 +21,25 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.random.DistinctRandom;
+import com.github.tommyettinger.random.LaserRandom;
 
 /**
- * Kryo {@link Serializer} for juniper {@link DistinctRandom}s.
+ * Kryo {@link Serializer} for juniper {@link LaserRandom}s.
  */
-public class DistinctRandomSerializer extends Serializer<DistinctRandom> {
+public class LaserRandomSerializer extends Serializer<LaserRandom> {
 
-    public DistinctRandomSerializer() {
+    public LaserRandomSerializer() {
         setImmutable(true);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final DistinctRandom data) {
-        output.writeVarLong(data.state, false);
+    public void write(final Kryo kryo, final Output output, final LaserRandom data) {
+        output.writeVarLong(data.getStateA(), false);
+        output.writeVarLong(data.getStateB(), false);
     }
 
     @Override
-    public DistinctRandom read(final Kryo kryo, final Input input, final Class<? extends DistinctRandom> dataClass) {
-        return new DistinctRandom(input.readVarLong(false));
+    public LaserRandom read(final Kryo kryo, final Input input, final Class<? extends LaserRandom> dataClass) {
+        return new LaserRandom(input.readVarLong(false), input.readVarLong(false));
     }
 }

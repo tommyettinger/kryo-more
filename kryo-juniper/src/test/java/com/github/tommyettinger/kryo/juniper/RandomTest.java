@@ -20,7 +20,7 @@ package com.github.tommyettinger.kryo.juniper;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.random.DistinctRandom;
+import com.github.tommyettinger.random.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ import java.io.ByteArrayOutputStream;
 
 public class RandomTest {
     @Test
-    public void testPattern() {
+    public void testDistinctRandom() {
         Kryo kryo = new Kryo();
         kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
 
@@ -40,6 +40,44 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             DistinctRandom data2 = kryo.readObject(input, DistinctRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testLaserRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(LaserRandom.class, new LaserRandomSerializer());
+
+        LaserRandom data = new LaserRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LaserRandom data2 = kryo.readObject(input, LaserRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testMizuchiRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(MizuchiRandom.class, new MizuchiRandomSerializer());
+
+        MizuchiRandom data = new MizuchiRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            MizuchiRandom data2 = kryo.readObject(input, MizuchiRandom.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
             Assert.assertEquals(data, data2);
