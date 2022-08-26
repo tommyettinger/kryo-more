@@ -83,4 +83,42 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+    
+    @Test
+    public void testTricycleRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(TricycleRandom.class, new TricycleRandomSerializer());
+
+        TricycleRandom data = new TricycleRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            TricycleRandom data2 = kryo.readObject(input, TricycleRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testFourWheelRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(FourWheelRandom.class, new FourWheelRandomSerializer());
+
+        FourWheelRandom data = new FourWheelRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FourWheelRandom data2 = kryo.readObject(input, FourWheelRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
