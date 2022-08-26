@@ -216,4 +216,44 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testChopRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(ChopRandom.class, new ChopRandomSerializer());
+
+        ChopRandom data = new ChopRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ChopRandom data2 = kryo.readObject(input, ChopRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+
+    @Test
+    public void testXoshiro128PlusPlusRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(Xoshiro128PlusPlusRandom.class, new Xoshiro128PlusPlusRandomSerializer());
+
+        Xoshiro128PlusPlusRandom data = new Xoshiro128PlusPlusRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Xoshiro128PlusPlusRandom data2 = kryo.readObject(input, Xoshiro128PlusPlusRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
 }
