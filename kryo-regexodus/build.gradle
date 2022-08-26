@@ -24,9 +24,6 @@ if(JavaVersion.current().isJava9Compatible()) {
 dependencies {
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:regexodus:$regexodusVersion"
-    testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     testImplementation "junit:junit:4.13.2"
 
     constraints {

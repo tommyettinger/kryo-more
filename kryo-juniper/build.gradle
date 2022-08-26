@@ -23,7 +23,7 @@ if(JavaVersion.current().isJava9Compatible()) {
 
 dependencies {
     api "com.esotericsoftware:kryo:$kryoVersion"
-    api "com.github.tommyettinger:digital:$digitalVersion"
+    api "com.github.tommyettinger:juniper:$juniperVersion"
     testImplementation "junit:junit:4.13.2"
 
     constraints {

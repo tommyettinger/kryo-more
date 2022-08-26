@@ -17,7 +17,6 @@
 
 package com.github.tommyettinger.kryo.digital;
 
-import com.badlogic.gdx.math.RandomXS128;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -27,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Random;
 
 public class DigitalTest {
     @Test
@@ -34,7 +34,7 @@ public class DigitalTest {
         Kryo kryo = new Kryo();
         kryo.register(Base.class, new BaseSerializer());
 
-        Base data = Base.scrambledBase(new RandomXS128(123456789L));
+        Base data = Base.scrambledBase(new Random(123456789L));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);

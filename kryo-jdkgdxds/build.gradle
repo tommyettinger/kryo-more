@@ -25,9 +25,6 @@ dependencies {
 	api project(':kryo-digital')
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
-    testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     testImplementation "junit:junit:4.13.2"
 
     constraints {
