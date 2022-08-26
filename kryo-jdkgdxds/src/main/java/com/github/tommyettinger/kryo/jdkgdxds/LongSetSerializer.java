@@ -48,4 +48,9 @@ public class LongSetSerializer extends Serializer<LongSet> {
             data.add(input.readVarLong(false));
         return data;
     }
+
+    @Override
+    public LongSet copy(Kryo kryo, LongSet original) {
+        return new LongSet(original);
+    }
 }

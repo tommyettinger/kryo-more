@@ -48,4 +48,9 @@ public class IntSetSerializer extends Serializer<IntSet> {
             data.add(input.readVarInt(false));
         return data;
     }
+
+    @Override
+    public IntSet copy(Kryo kryo, IntSet original) {
+        return new IntSet(original);
+    }
 }

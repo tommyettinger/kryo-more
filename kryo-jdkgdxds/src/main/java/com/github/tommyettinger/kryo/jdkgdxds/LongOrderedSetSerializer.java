@@ -48,4 +48,9 @@ public class LongOrderedSetSerializer extends Serializer<LongOrderedSet> {
             data.add(input.readVarLong(false));
         return data;
     }
+
+    @Override
+    public LongOrderedSet copy(Kryo kryo, LongOrderedSet original) {
+        return new LongOrderedSet(original);
+    }
 }

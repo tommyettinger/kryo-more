@@ -48,4 +48,9 @@ public class IntOrderedSetSerializer extends Serializer<IntOrderedSet> {
             data.add(input.readVarInt(false));
         return data;
     }
+
+    @Override
+    public IntOrderedSet copy(Kryo kryo, IntOrderedSet original) {
+        return new IntOrderedSet(original);
+    }
 }
