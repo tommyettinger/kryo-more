@@ -67,5 +67,4 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
         }
         return map;
     }
-
 }

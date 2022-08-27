@@ -56,4 +56,15 @@ public class IntObjectOrderedMapSerializer extends Serializer<IntObjectOrderedMa
             rawData.put(input.readVarInt(false), kryo.readClassAndObject(input));
         return data;
     }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public IntObjectOrderedMap<?> copy(Kryo kryo, IntObjectOrderedMap<?> original) {
+        IntObjectOrderedMap<?> map = new IntObjectOrderedMap<>(original.size(), original.getLoadFactor());
+        IntObjectOrderedMap rawMap = map;
+        for(IntObjectOrderedMap.Entry ent : original) {
+            rawMap.put(ent.key, kryo.copy(ent.value));
+        }
+        return map;
+    }
 }

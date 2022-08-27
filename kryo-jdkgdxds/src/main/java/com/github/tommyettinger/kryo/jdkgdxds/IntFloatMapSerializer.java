@@ -51,4 +51,9 @@ public class IntFloatMapSerializer extends Serializer<IntFloatMap> {
             data.put(input.readVarInt(false), input.readFloat());
         return data;
     }
+
+    @Override
+    public IntFloatMap copy(Kryo kryo, IntFloatMap original) {
+        return new IntFloatMap(original);
+    }
 }

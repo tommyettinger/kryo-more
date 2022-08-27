@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.random.Xoshiro256StarStarRandom;
-import com.github.tommyettinger.random.Xoshiro256StarStarRandom;
 
 /**
  * Kryo {@link Serializer} for juniper {@link Xoshiro256StarStarRandom}s.

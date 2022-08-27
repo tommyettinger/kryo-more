@@ -54,4 +54,9 @@ public class IntIntOrderedMapSerializer extends Serializer<IntIntOrderedMap> {
             data.put(input.readVarInt(false), input.readVarInt(false));
         return data;
     }
+
+    @Override
+    public IntIntOrderedMap copy(Kryo kryo, IntIntOrderedMap original) {
+        return new IntIntOrderedMap(original);
+    }
 }

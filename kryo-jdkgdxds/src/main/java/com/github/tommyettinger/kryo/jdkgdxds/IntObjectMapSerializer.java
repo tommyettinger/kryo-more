@@ -53,4 +53,15 @@ public class IntObjectMapSerializer extends Serializer<IntObjectMap<?>> {
             rawData.put(input.readVarInt(false), kryo.readClassAndObject(input));
         return data;
     }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public IntObjectMap<?> copy(Kryo kryo, IntObjectMap<?> original) {
+        IntObjectMap<?> map = new IntObjectMap<>(original.size(), original.getLoadFactor());
+        IntObjectMap rawMap = map;
+        for(IntObjectMap.Entry ent : original) {
+            rawMap.put(ent.key, kryo.copy(ent.value));
+        }
+        return map;
+    }
 }

@@ -51,4 +51,9 @@ public class IntIntMapSerializer extends Serializer<IntIntMap> {
             data.put(input.readVarInt(false), input.readVarInt(false));
         return data;
     }
+
+    @Override
+    public IntIntMap copy(Kryo kryo, IntIntMap original) {
+        return new IntIntMap(original);
+    }
 }
