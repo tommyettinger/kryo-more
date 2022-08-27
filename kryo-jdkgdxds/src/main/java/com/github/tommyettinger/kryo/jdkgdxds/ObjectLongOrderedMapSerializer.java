@@ -21,7 +21,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.ds.ObjectLongMap;
 import com.github.tommyettinger.ds.ObjectLongOrderedMap;
 
 import java.util.Iterator;
@@ -39,7 +38,7 @@ public class ObjectLongOrderedMapSerializer extends Serializer<ObjectLongOrdered
     public void write(final Kryo kryo, final Output output, final ObjectLongOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for(Iterator<? extends ObjectLongMap.Entry<?>> it = new ObjectLongOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
+        for(Iterator<? extends ObjectLongOrderedMap.Entry<?>> it = new ObjectLongOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
             ObjectLongOrderedMap.Entry<?> ent = it.next();
             kryo.writeClassAndObject(output, ent.key);
             output.writeVarLong(ent.value, false);
@@ -55,5 +54,16 @@ public class ObjectLongOrderedMapSerializer extends Serializer<ObjectLongOrdered
         for (int i = 0; i < length; i++)
             rawData.put(kryo.readClassAndObject(input), input.readVarLong(false));
         return data;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public ObjectLongOrderedMap<?> copy(Kryo kryo, ObjectLongOrderedMap<?> original) {
+        ObjectLongOrderedMap<?> map = new ObjectLongOrderedMap<>(original.size(), original.getLoadFactor());
+        ObjectLongOrderedMap rawMap = map;
+        for(ObjectLongOrderedMap.Entry ent : original) {
+            rawMap.put(kryo.copy(ent.key), ent.value);
+        }
+        return map;
     }
 }

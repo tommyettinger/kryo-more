@@ -36,7 +36,7 @@ public class ObjectIntMapSerializer extends Serializer<ObjectIntMap<?>> {
     public void write(final Kryo kryo, final Output output, final ObjectIntMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for(ObjectIntMap.EntryIterator<?> it = new ObjectIntMap.EntryIterator<>(data); it.hasNext();) {
+        for (ObjectIntMap.EntryIterator<?> it = new ObjectIntMap.EntryIterator<>(data); it.hasNext(); ) {
             ObjectIntMap.Entry<?> ent = it.next();
             kryo.writeClassAndObject(output, ent.key);
             output.writeVarInt(ent.value, false);
@@ -52,5 +52,16 @@ public class ObjectIntMapSerializer extends Serializer<ObjectIntMap<?>> {
         for (int i = 0; i < length; i++)
             rawData.put(kryo.readClassAndObject(input), input.readVarInt(false));
         return data;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public ObjectIntMap<?> copy(Kryo kryo, ObjectIntMap<?> original) {
+        ObjectIntMap<?> map = new ObjectIntMap<>(original.size(), original.getLoadFactor());
+        ObjectIntMap rawMap = map;
+        for (ObjectIntMap.Entry ent : original) {
+            rawMap.put(kryo.copy(ent.key), ent.value);
+        }
+        return map;
     }
 }

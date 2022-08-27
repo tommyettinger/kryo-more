@@ -36,7 +36,7 @@ public class ObjectFloatMapSerializer extends Serializer<ObjectFloatMap<?>> {
     public void write(final Kryo kryo, final Output output, final ObjectFloatMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for(ObjectFloatMap.EntryIterator<?> it = new ObjectFloatMap.EntryIterator<>(data); it.hasNext();) {
+        for (ObjectFloatMap.EntryIterator<?> it = new ObjectFloatMap.EntryIterator<>(data); it.hasNext(); ) {
             ObjectFloatMap.Entry<?> ent = it.next();
             kryo.writeClassAndObject(output, ent.key);
             output.writeFloat(ent.value);
@@ -52,5 +52,16 @@ public class ObjectFloatMapSerializer extends Serializer<ObjectFloatMap<?>> {
         for (int i = 0; i < length; i++)
             rawData.put(kryo.readClassAndObject(input), input.readFloat());
         return data;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public ObjectFloatMap<?> copy(Kryo kryo, ObjectFloatMap<?> original) {
+        ObjectFloatMap<?> map = new ObjectFloatMap<>(original.size(), original.getLoadFactor());
+        ObjectFloatMap rawMap = map;
+        for (ObjectFloatMap.Entry ent : original) {
+            rawMap.put(kryo.copy(ent.key), ent.value);
+        }
+        return map;
     }
 }

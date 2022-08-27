@@ -56,4 +56,15 @@ public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrder
             rawData.put(kryo.readClassAndObject(input), input.readFloat());
         return data;
     }
+
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
+    @Override
+    public ObjectFloatOrderedMap<?> copy(Kryo kryo, ObjectFloatOrderedMap<?> original) {
+        ObjectFloatOrderedMap<?> map = new ObjectFloatOrderedMap<>(original.size(), original.getLoadFactor());
+        ObjectFloatOrderedMap rawMap = map;
+        for(ObjectFloatOrderedMap.Entry ent : original) {
+            rawMap.put(kryo.copy(ent.key), ent.value);
+        }
+        return map;
+    }
 }
