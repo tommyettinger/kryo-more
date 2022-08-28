@@ -45,4 +45,9 @@ public class Xoshiro128PlusPlusRandomSerializer extends Serializer<Xoshiro128Plu
         return new Xoshiro128PlusPlusRandom(input.readVarInt(false), input.readVarInt(false),
                 input.readVarInt(false), input.readVarInt(false));
     }
+
+    @Override
+    public Xoshiro128PlusPlusRandom copy(Kryo kryo, Xoshiro128PlusPlusRandom original) {
+        return original.copy();
+    }
 }

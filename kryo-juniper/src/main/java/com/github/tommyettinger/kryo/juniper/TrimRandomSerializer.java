@@ -48,6 +48,6 @@ public class TrimRandomSerializer extends Serializer<TrimRandom> {
 
     @Override
     public TrimRandom copy(Kryo kryo, TrimRandom original) {
-        return new TrimRandom(original.getStateA(), original.getStateB(), original.getStateC(), original.getStateD());
+        return original.copy();
     }
 }

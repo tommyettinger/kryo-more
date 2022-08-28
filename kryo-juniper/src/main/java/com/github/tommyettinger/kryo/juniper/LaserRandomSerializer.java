@@ -45,6 +45,6 @@ public class LaserRandomSerializer extends Serializer<LaserRandom> {
 
     @Override
     public LaserRandom copy(Kryo kryo, LaserRandom original) {
-        return new LaserRandom(original.getStateA(), original.getStateB());
+        return original.copy();
     }
 }

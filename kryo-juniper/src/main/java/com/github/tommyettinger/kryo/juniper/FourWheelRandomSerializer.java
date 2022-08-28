@@ -48,6 +48,6 @@ public class FourWheelRandomSerializer extends Serializer<FourWheelRandom> {
 
     @Override
     public FourWheelRandom copy(Kryo kryo, FourWheelRandom original) {
-        return new FourWheelRandom(original.getStateA(), original.getStateB(), original.getStateC(), original.getStateD());
+        return original.copy();
     }
 }

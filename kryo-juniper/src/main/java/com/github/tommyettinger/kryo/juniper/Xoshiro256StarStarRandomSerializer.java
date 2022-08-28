@@ -45,4 +45,9 @@ public class Xoshiro256StarStarRandomSerializer extends Serializer<Xoshiro256Sta
         return new Xoshiro256StarStarRandom(input.readVarLong(false), input.readVarLong(false),
                 input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public Xoshiro256StarStarRandom copy(Kryo kryo, Xoshiro256StarStarRandom original) {
+        return original.copy();
+    }
 }

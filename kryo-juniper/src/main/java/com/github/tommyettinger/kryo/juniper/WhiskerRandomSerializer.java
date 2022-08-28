@@ -45,4 +45,9 @@ public class WhiskerRandomSerializer extends Serializer<WhiskerRandom> {
         return new WhiskerRandom(input.readVarLong(false), input.readVarLong(false),
                 input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public WhiskerRandom copy(Kryo kryo, WhiskerRandom original) {
+        return original.copy();
+    }
 }

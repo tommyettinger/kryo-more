@@ -48,6 +48,6 @@ public class StrangerRandomSerializer extends Serializer<StrangerRandom> {
 
     @Override
     public StrangerRandom copy(Kryo kryo, StrangerRandom original) {
-        return new StrangerRandom(original.getStateA(), original.getStateB(), original.getStateC(), original.getStateD());
+        return original.copy();
     }
 }

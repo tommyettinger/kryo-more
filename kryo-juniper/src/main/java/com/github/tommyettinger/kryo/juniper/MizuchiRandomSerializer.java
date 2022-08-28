@@ -45,6 +45,6 @@ public class MizuchiRandomSerializer extends Serializer<MizuchiRandom> {
 
     @Override
     public MizuchiRandom copy(Kryo kryo, MizuchiRandom original) {
-        return new MizuchiRandom(original.getStateA(), original.getStateB());
+        return original.copy();
     }
 }

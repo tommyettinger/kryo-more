@@ -46,6 +46,6 @@ public class RomuTrioRandomSerializer extends Serializer<RomuTrioRandom> {
 
     @Override
     public RomuTrioRandom copy(Kryo kryo, RomuTrioRandom original) {
-        return new RomuTrioRandom(original.getStateA(), original.getStateB(), original.getStateC());
+        return original.copy();
     }
 }

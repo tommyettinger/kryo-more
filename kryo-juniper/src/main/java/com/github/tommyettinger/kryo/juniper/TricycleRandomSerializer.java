@@ -46,6 +46,6 @@ public class TricycleRandomSerializer extends Serializer<TricycleRandom> {
 
     @Override
     public TricycleRandom copy(Kryo kryo, TricycleRandom original) {
-        return new TricycleRandom(original.getStateA(), original.getStateB(), original.getStateC());
+        return original.copy();
     }
 }

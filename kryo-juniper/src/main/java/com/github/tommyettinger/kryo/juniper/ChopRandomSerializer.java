@@ -45,4 +45,9 @@ public class ChopRandomSerializer extends Serializer<ChopRandom> {
         return new ChopRandom(input.readVarInt(false), input.readVarInt(false),
                 input.readVarInt(false), input.readVarInt(false));
     }
+
+    @Override
+    public ChopRandom copy(Kryo kryo, ChopRandom original) {
+        return original.copy();
+    }
 }

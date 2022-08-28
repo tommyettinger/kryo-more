@@ -44,6 +44,6 @@ public class DistinctRandomSerializer extends Serializer<DistinctRandom> {
 
     @Override
     public DistinctRandom copy(Kryo kryo, DistinctRandom original) {
-        return new DistinctRandom(original.getState());
+        return original.copy();
     }
 }
