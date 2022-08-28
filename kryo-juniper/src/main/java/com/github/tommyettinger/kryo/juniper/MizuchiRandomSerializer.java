@@ -42,4 +42,9 @@ public class MizuchiRandomSerializer extends Serializer<MizuchiRandom> {
     public MizuchiRandom read(final Kryo kryo, final Input input, final Class<? extends MizuchiRandom> dataClass) {
         return new MizuchiRandom(input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public MizuchiRandom copy(Kryo kryo, MizuchiRandom original) {
+        return new MizuchiRandom(original.getStateA(), original.getStateB());
+    }
 }

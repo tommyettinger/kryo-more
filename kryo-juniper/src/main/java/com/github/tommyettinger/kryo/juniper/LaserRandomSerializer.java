@@ -42,4 +42,9 @@ public class LaserRandomSerializer extends Serializer<LaserRandom> {
     public LaserRandom read(final Kryo kryo, final Input input, final Class<? extends LaserRandom> dataClass) {
         return new LaserRandom(input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public LaserRandom copy(Kryo kryo, LaserRandom original) {
+        return new LaserRandom(original.getStateA(), original.getStateB());
+    }
 }

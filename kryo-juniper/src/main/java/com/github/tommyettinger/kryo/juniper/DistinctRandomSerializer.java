@@ -41,4 +41,9 @@ public class DistinctRandomSerializer extends Serializer<DistinctRandom> {
     public DistinctRandom read(final Kryo kryo, final Input input, final Class<? extends DistinctRandom> dataClass) {
         return new DistinctRandom(input.readVarLong(false));
     }
+
+    @Override
+    public DistinctRandom copy(Kryo kryo, DistinctRandom original) {
+        return new DistinctRandom(original.getState());
+    }
 }

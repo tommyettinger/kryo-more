@@ -43,4 +43,9 @@ public class RomuTrioRandomSerializer extends Serializer<RomuTrioRandom> {
     public RomuTrioRandom read(final Kryo kryo, final Input input, final Class<? extends RomuTrioRandom> dataClass) {
         return new RomuTrioRandom(input.readVarLong(false), input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public RomuTrioRandom copy(Kryo kryo, RomuTrioRandom original) {
+        return new RomuTrioRandom(original.getStateA(), original.getStateB(), original.getStateC());
+    }
 }
