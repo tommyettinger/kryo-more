@@ -45,4 +45,9 @@ public class StrangerRandomSerializer extends Serializer<StrangerRandom> {
         return new StrangerRandom(input.readVarLong(false), input.readVarLong(false),
                 input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public StrangerRandom copy(Kryo kryo, StrangerRandom original) {
+        return new StrangerRandom(original.getStateA(), original.getStateB(), original.getStateC(), original.getStateD());
+    }
 }

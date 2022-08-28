@@ -43,4 +43,9 @@ public class TricycleRandomSerializer extends Serializer<TricycleRandom> {
     public TricycleRandom read(final Kryo kryo, final Input input, final Class<? extends TricycleRandom> dataClass) {
         return new TricycleRandom(input.readVarLong(false), input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public TricycleRandom copy(Kryo kryo, TricycleRandom original) {
+        return new TricycleRandom(original.getStateA(), original.getStateB(), original.getStateC());
+    }
 }

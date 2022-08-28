@@ -45,4 +45,9 @@ public class TrimRandomSerializer extends Serializer<TrimRandom> {
         return new TrimRandom(input.readVarLong(false), input.readVarLong(false),
                 input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public TrimRandom copy(Kryo kryo, TrimRandom original) {
+        return new TrimRandom(original.getStateA(), original.getStateB(), original.getStateC(), original.getStateD());
+    }
 }

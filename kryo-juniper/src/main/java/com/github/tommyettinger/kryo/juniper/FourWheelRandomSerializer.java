@@ -45,4 +45,9 @@ public class FourWheelRandomSerializer extends Serializer<FourWheelRandom> {
         return new FourWheelRandom(input.readVarLong(false), input.readVarLong(false),
                 input.readVarLong(false), input.readVarLong(false));
     }
+
+    @Override
+    public FourWheelRandom copy(Kryo kryo, FourWheelRandom original) {
+        return new FourWheelRandom(original.getStateA(), original.getStateB(), original.getStateC(), original.getStateD());
+    }
 }
