@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.WhiskerRandom;
 public class WhiskerRandomSerializer extends Serializer<WhiskerRandom> {
 
     public WhiskerRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

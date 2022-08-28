@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 public class Xoshiro128PlusPlusRandomSerializer extends Serializer<Xoshiro128PlusPlusRandom> {
 
     public Xoshiro128PlusPlusRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

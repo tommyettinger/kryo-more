@@ -236,7 +236,6 @@ public class RandomTest {
         }
     }
 
-
     @Test
     public void testXoshiro128PlusPlusRandom() {
         Kryo kryo = new Kryo();
@@ -256,4 +255,23 @@ public class RandomTest {
         }
     }
 
+    @Test
+    public void testEnhancedRandom() {
+        Kryo kryo = new Kryo();
+        EnhancedRandomSerializer ser = new EnhancedRandomSerializer();
+        kryo.register(EnhancedRandom.class, ser);
+
+        EnhancedRandom data = new Xoshiro128PlusPlusRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            EnhancedRandom data2 = kryo.readObject(input, EnhancedRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
 }

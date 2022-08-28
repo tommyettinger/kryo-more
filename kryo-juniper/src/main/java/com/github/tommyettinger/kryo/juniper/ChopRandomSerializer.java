@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.ChopRandom;
 public class ChopRandomSerializer extends Serializer<ChopRandom> {
 
     public ChopRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

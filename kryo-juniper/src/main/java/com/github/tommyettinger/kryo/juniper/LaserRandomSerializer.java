@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.LaserRandom;
 public class LaserRandomSerializer extends Serializer<LaserRandom> {
 
     public LaserRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

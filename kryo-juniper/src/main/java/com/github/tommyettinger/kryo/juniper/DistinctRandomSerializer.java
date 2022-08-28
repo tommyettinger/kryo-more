@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.DistinctRandom;
 public class DistinctRandomSerializer extends Serializer<DistinctRandom> {
 
     public DistinctRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

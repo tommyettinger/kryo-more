@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.TricycleRandom;
 public class TricycleRandomSerializer extends Serializer<TricycleRandom> {
 
     public TricycleRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

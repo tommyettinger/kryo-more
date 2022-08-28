@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.TrimRandom;
 public class TrimRandomSerializer extends Serializer<TrimRandom> {
 
     public TrimRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

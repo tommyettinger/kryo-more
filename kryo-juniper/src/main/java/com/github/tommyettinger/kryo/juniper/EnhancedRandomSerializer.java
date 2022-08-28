@@ -21,34 +21,33 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.random.FourWheelRandom;
+import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.random.Deserializer;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * Kryo {@link Serializer} for juniper {@link FourWheelRandom}s.
+ * Kryo {@link Serializer} for juniper {@link EnhancedRandom}s. This is less space-efficient
+ * than storing a known class that extends EnhancedRandom.
  */
-public class FourWheelRandomSerializer extends Serializer<FourWheelRandom> {
+public class EnhancedRandomSerializer extends Serializer<EnhancedRandom> {
 
-    public FourWheelRandomSerializer() {
+    public EnhancedRandomSerializer() {
         setImmutable(false);
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final FourWheelRandom data) {
-        output.writeVarLong(data.getStateA(), false);
-        output.writeVarLong(data.getStateB(), false);
-        output.writeVarLong(data.getStateC(), false);
-        output.writeVarLong(data.getStateD(), false);
+    public void write(final Kryo kryo, final Output output, final EnhancedRandom data) {
+        output.writeString(data.stringSerialize(Base.BASE86));
     }
 
     @Override
-    public FourWheelRandom read(final Kryo kryo, final Input input, final Class<? extends FourWheelRandom> dataClass) {
-        return new FourWheelRandom(input.readVarLong(false), input.readVarLong(false),
-                input.readVarLong(false), input.readVarLong(false));
+    public EnhancedRandom read(final Kryo kryo, final Input input, final Class<? extends EnhancedRandom> dataClass) {
+        return Deserializer.deserialize(input.readString(), Base.BASE86);
     }
 
     @Override
-    public FourWheelRandom copy(Kryo kryo, FourWheelRandom original) {
+    public EnhancedRandom copy(Kryo kryo, EnhancedRandom original) {
         return original.copy();
     }
 }

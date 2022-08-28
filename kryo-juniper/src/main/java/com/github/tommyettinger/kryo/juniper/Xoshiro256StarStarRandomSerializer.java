@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.Xoshiro256StarStarRandom;
 public class Xoshiro256StarStarRandomSerializer extends Serializer<Xoshiro256StarStarRandom> {
 
     public Xoshiro256StarStarRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

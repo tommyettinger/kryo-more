@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.MizuchiRandom;
 public class MizuchiRandomSerializer extends Serializer<MizuchiRandom> {
 
     public MizuchiRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

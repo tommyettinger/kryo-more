@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.RomuTrioRandom;
 public class RomuTrioRandomSerializer extends Serializer<RomuTrioRandom> {
 
     public RomuTrioRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override

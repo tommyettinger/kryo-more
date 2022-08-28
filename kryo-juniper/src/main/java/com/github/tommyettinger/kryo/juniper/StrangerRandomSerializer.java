@@ -29,7 +29,8 @@ import com.github.tommyettinger.random.StrangerRandom;
 public class StrangerRandomSerializer extends Serializer<StrangerRandom> {
 
     public StrangerRandomSerializer() {
-        setImmutable(true);
+        setImmutable(false);
+        setAcceptsNull(false);
     }
 
     @Override
