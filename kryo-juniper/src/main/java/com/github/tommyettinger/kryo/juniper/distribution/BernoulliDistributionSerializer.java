@@ -15,7 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.kryo.juniper;
+package com.github.tommyettinger.kryo.juniper.distribution;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
