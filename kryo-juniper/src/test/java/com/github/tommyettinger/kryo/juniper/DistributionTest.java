@@ -48,6 +48,7 @@ public class DistributionTest {
             Assert.assertEquals(data, data2);
         }
     }
+
     @Test
     public void testBeta() {
         Kryo kryo = new Kryo();
@@ -87,4 +88,45 @@ public class DistributionTest {
             Assert.assertEquals(data, data2);
         }
     }
+    
+    @Test
+    public void testBinomial() {
+        Kryo kryo = new Kryo();
+        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
+        kryo.register(BinomialDistribution.class, new BinomialDistributionSerializer());
+
+        BinomialDistribution data = new BinomialDistribution(new DistinctRandom(-12345L), 0.5, 2);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            BinomialDistribution data2 = kryo.readObject(input, BinomialDistribution.class);
+            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
+            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testCauchy() {
+        Kryo kryo = new Kryo();
+        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
+        kryo.register(CauchyDistribution.class, new CauchyDistributionSerializer());
+
+        CauchyDistribution data = new CauchyDistribution(new DistinctRandom(-12345L), 0.0, 1.0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CauchyDistribution data2 = kryo.readObject(input, CauchyDistribution.class);
+            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
+            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
 }
