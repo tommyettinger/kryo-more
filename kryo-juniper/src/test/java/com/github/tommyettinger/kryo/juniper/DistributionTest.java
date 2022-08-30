@@ -18,24 +18,76 @@
 package com.github.tommyettinger.kryo.juniper;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.kryo.juniper.distribution.*;
-import com.github.tommyettinger.random.DistinctRandom;
+import com.github.tommyettinger.random.WhiskerRandom;
 import com.github.tommyettinger.random.distribution.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 public class DistributionTest {
     @Test
+    public void testDistributions() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+
+        IdentityHashMap<Class<? extends Distribution>, Class<? extends Serializer<? extends Distribution>>>
+                mapping = new IdentityHashMap<>();
+        mapping.put(BernoulliDistribution.class, BernoulliDistributionSerializer.class);
+        mapping.put(BetaDistribution.class, BetaDistributionSerializer.class);
+        mapping.put(BetaPrimeDistribution.class, BetaPrimeDistributionSerializer.class);
+        mapping.put(BinomialDistribution.class, BinomialDistributionSerializer.class);
+        mapping.put(CauchyDistribution.class, CauchyDistributionSerializer.class);
+        mapping.put(ChiDistribution.class, ChiDistributionSerializer.class);
+        mapping.put(ChiSquareDistribution.class, ChiSquareDistributionSerializer.class);
+        mapping.put(ContinuousUniformDistribution.class, ContinuousUniformDistributionSerializer.class);
+        mapping.put(DiscreteUniformDistribution.class, DiscreteUniformDistributionSerializer.class);
+        mapping.put(ErlangDistribution.class, ErlangDistributionSerializer.class);
+        mapping.put(ExponentialDistribution.class, ExponentialDistributionSerializer.class);
+        mapping.put(FisherSnedecorDistribution.class, FisherSnedecorDistributionSerializer.class);
+        mapping.put(FisherTippettDistribution.class, FisherTippettDistributionSerializer.class);
+        mapping.put(GammaDistribution.class, GammaDistributionSerializer.class);
+        mapping.put(GeometricDistribution.class, GeometricDistributionSerializer.class);
+        mapping.put(KumaraswamyDistribution.class, KumaraswamyDistributionSerializer.class);
+        mapping.put(LaplaceDistribution.class, LaplaceDistributionSerializer.class);
+        mapping.put(LogCauchyDistribution.class, LogCauchyDistributionSerializer.class);
+        mapping.put(LogisticDistribution.class, LogisticDistributionSerializer.class);
+        mapping.put(LogNormalDistribution.class, LogNormalDistributionSerializer.class);
+        mapping.put(NormalDistribution.class, NormalDistributionSerializer.class);
+
+        for (Map.Entry<Class<? extends Distribution>, Class<? extends Serializer<? extends Distribution>>> ent : mapping.entrySet()) {
+            Kryo kryo = new Kryo();
+            kryo.register(WhiskerRandom.class, new WhiskerRandomSerializer());
+            kryo.register(ent.getKey(), ent.getValue().getDeclaredConstructor().newInstance());
+
+            Distribution data = ent.getKey().getDeclaredConstructor().newInstance();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+            Output output = new Output(baos);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Distribution data2 = kryo.readObject(input, ent.getKey());
+                Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
+                Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
+                Assert.assertEquals(data, data2);
+            }
+        }
+    }
+
+    /* This is the old format the tests used.
+    @Test
     public void testBernoulli() {
         Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
+        kryo.register(WhiskerRandom.class, new WhiskerRandomSerializer());
         kryo.register(BernoulliDistribution.class, new BernoulliDistributionSerializer());
 
-        BernoulliDistribution data = new BernoulliDistribution(new DistinctRandom(-12345L), 0.5);
+        BernoulliDistribution data = new BernoulliDistribution();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
@@ -48,164 +100,5 @@ public class DistributionTest {
             Assert.assertEquals(data, data2);
         }
     }
-
-    @Test
-    public void testBeta() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(BetaDistribution.class, new BetaDistributionSerializer());
-
-        BetaDistribution data = new BetaDistribution(new DistinctRandom(-12345L), 1.0, 1.0);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            BetaDistribution data2 = kryo.readObject(input, BetaDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
-
-    @Test
-    public void testBetaPrime() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(BetaPrimeDistribution.class, new BetaPrimeDistributionSerializer());
-
-        BetaPrimeDistribution data = new BetaPrimeDistribution(new DistinctRandom(-12345L), 2.0, 2.0);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            BetaPrimeDistribution data2 = kryo.readObject(input, BetaPrimeDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
-    
-    @Test
-    public void testBinomial() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(BinomialDistribution.class, new BinomialDistributionSerializer());
-
-        BinomialDistribution data = new BinomialDistribution(new DistinctRandom(-12345L), 0.5, 2);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            BinomialDistribution data2 = kryo.readObject(input, BinomialDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
-
-    @Test
-    public void testCauchy() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(CauchyDistribution.class, new CauchyDistributionSerializer());
-
-        CauchyDistribution data = new CauchyDistribution(new DistinctRandom(-12345L), 0.0, 1.0);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            CauchyDistribution data2 = kryo.readObject(input, CauchyDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
-
-    @Test
-    public void testChi() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(ChiDistribution.class, new ChiDistributionSerializer());
-
-        ChiDistribution data = new ChiDistribution(new DistinctRandom(-12345L), 1);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            ChiDistribution data2 = kryo.readObject(input, ChiDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
-
-    @Test
-    public void testChiSquare() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(ChiSquareDistribution.class, new ChiSquareDistributionSerializer());
-
-        ChiSquareDistribution data = new ChiSquareDistribution(new DistinctRandom(-12345L), 1);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            ChiSquareDistribution data2 = kryo.readObject(input, ChiSquareDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
-
-    @Test
-    public void testContinuousUniform() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(ContinuousUniformDistribution.class, new ContinuousUniformDistributionSerializer());
-
-        ContinuousUniformDistribution data = new ContinuousUniformDistribution(new DistinctRandom(-12345L), 0.0, 1.0);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            ContinuousUniformDistribution data2 = kryo.readObject(input, ContinuousUniformDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
-
-    @Test
-    public void testDiscreteUniform() {
-        Kryo kryo = new Kryo();
-        kryo.register(DistinctRandom.class, new DistinctRandomSerializer());
-        kryo.register(DiscreteUniformDistribution.class, new DiscreteUniformDistributionSerializer());
-
-        DiscreteUniformDistribution data = new DiscreteUniformDistribution(new DistinctRandom(-12345L), 0, 2);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            DiscreteUniformDistribution data2 = kryo.readObject(input, DiscreteUniformDistribution.class);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
-            Assert.assertEquals(data, data2);
-        }
-    }
+     */
 }
