@@ -1,5 +1,7 @@
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
+version "0.1.13.0"
+
 eclipse.project.name = project.name
 
 sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
@@ -7,7 +9,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 javadoc.destinationDir = file("../docs/$projectName/apidocs")
-javadoc.options.source("17")
+javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).linkSource(true)
 ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
 ((StandardJavadocDocletOptions)javadoc.options).use(true)

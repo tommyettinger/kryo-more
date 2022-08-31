@@ -43,7 +43,6 @@ version "$VERSION_NAME"
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
 subprojects {
-    version = "$parent.version"
     group = parent.group
     ext.projectName = 'kryo-more'
     repositories {
