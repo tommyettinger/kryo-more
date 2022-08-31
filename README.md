@@ -15,7 +15,73 @@ Each sub-library has its own version, linked to the version of the library it de
   - kryo-jdkgdxds is currently version 1.0.4.0
   - kryo-juniper is currently version 0.1.3.0
 
-When I have the Gradle/Maven coordinates figured out, I'll update this with them.
+Gradle dependency info:
+
+kryo-regexodus:
+
+```gradle
+implementation "com.github.tommyettinger:kryo-regexodus:0.1.13.0"
+```
+
+kryo-digital:
+
+```gradle
+implementation "com.github.tommyettinger:kryo-digital:0.1.1.0"
+```
+
+kryo-jdkgdxds:
+
+```gradle
+implementation "com.github.tommyettinger:kryo-jdkgdxds:1.0.4.0"
+```
+
+kryo-juniper:
+
+```gradle
+implementation "com.github.tommyettinger:kryo-juniper:0.1.3.0"
+```
+
+Maven dependency info:
+
+kryo-regexodus:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>kryo-regexodus</artifactId>
+  <version>0.1.13.0</version>
+</dependency>
+```
+
+kryo-digital:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>kryo-digital</artifactId>
+  <version>0.1.1.0</version>
+</dependency>
+```
+
+kryo-jdkgdxds:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>kryo-jdkgdxds</artifactId>
+  <version>1.0.4.0</version>
+</dependency>
+```
+
+kryo-juniper:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>kryo-juniper</artifactId>
+  <version>0.1.3.0</version>
+</dependency>
+```
 
 ## License
 
