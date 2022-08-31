@@ -22,7 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.kryo.juniper.distribution.*;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.*;
 import com.github.tommyettinger.random.distribution.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -85,6 +85,47 @@ public class DistributionTest {
                 Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0.0000001);
                 Assert.assertEquals(data, data2);
             }
+        }
+    }
+
+    @Test
+    public void testDistribution() {
+        Kryo kryo = new Kryo();
+        DistributionSerializer ser = new DistributionSerializer();
+        kryo.register(Distribution.class, ser);
+
+        Distribution data = new KumaraswamyDistribution(new DistinctRandom(123L), 2.5, 2.0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Distribution data2 = kryo.readObject(input, Distribution.class);
+            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0x1p-32);
+            Assert.assertEquals(data.nextDouble(), data2.nextDouble(), 0x1p-32);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testDistributedRandom() {
+        Kryo kryo = new Kryo();
+//        DistributedRandomSerializer ser = new DistributedRandomSerializer();
+        kryo.register(DistributedRandom.class, new DistributedRandomSerializer());
+
+        DistributedRandom random = new DistributedRandom(
+                new KumaraswamyDistribution(new DistinctRandom(123L), 2.5, 2.0), DistributedRandom.ReductionMode.FRACTION);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, random);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            DistributedRandom data2 = kryo.readObject(input, DistributedRandom.class);
+            Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
+            Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
+            Assert.assertTrue(EnhancedRandom.areEqual(random, data2));
         }
     }
 
