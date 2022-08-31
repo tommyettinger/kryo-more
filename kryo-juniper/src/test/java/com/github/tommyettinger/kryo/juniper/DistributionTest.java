@@ -59,6 +59,10 @@ public class DistributionTest {
         mapping.put(LogisticDistribution.class, LogisticDistributionSerializer.class);
         mapping.put(LogNormalDistribution.class, LogNormalDistributionSerializer.class);
         mapping.put(NormalDistribution.class, NormalDistributionSerializer.class);
+        mapping.put(ParetoDistribution.class, ParetoDistributionSerializer.class);
+        mapping.put(PoissonDistribution.class, PoissonDistributionSerializer.class);
+        mapping.put(PowerDistribution.class, PowerDistributionSerializer.class);
+        mapping.put(RayleighDistribution.class, RayleighDistributionSerializer.class);
 
         for (Map.Entry<Class<? extends Distribution>, Class<? extends Serializer<? extends Distribution>>> ent : mapping.entrySet()) {
             Kryo kryo = new Kryo();
