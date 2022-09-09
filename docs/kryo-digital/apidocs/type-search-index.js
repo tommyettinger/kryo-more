@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"com.github.tommyettinger.kryo.digital","l":"BaseSerializer"},{"p":"com.github.tommyettinger.kryo.digital","l":"HasherSerializer"}];updateSearchResults();
