@@ -58,6 +58,7 @@ public class DistributionTest {
         mapping.put(LogCauchyDistribution.class, LogCauchyDistributionSerializer.class);
         mapping.put(LogisticDistribution.class, LogisticDistributionSerializer.class);
         mapping.put(LogNormalDistribution.class, LogNormalDistributionSerializer.class);
+        mapping.put(LumpDistribution.class, LumpDistributionSerializer.class);
         mapping.put(NormalDistribution.class, NormalDistributionSerializer.class);
         mapping.put(ParetoDistribution.class, ParetoDistributionSerializer.class);
         mapping.put(PoissonDistribution.class, PoissonDistributionSerializer.class);

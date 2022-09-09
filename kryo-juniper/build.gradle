@@ -1,6 +1,6 @@
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
-version "0.1.3.0"
+version "$VERSION_NAME"
 
 eclipse.project.name = project.name
 
@@ -24,6 +24,7 @@ if(JavaVersion.current().isJava9Compatible()) {
 }
 
 dependencies {
+    api project(':kryo-digital')
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:juniper:$juniperVersion"
     testImplementation "junit:junit:4.13.2"
