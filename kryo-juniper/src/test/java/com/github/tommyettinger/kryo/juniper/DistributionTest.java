@@ -38,6 +38,7 @@ public class DistributionTest {
 
         IdentityHashMap<Class<? extends Distribution>, Class<? extends Serializer<? extends Distribution>>>
                 mapping = new IdentityHashMap<>();
+        mapping.put(ArcsineDistribution.class, ArcsineDistributionSerializer.class);
         mapping.put(BernoulliDistribution.class, BernoulliDistributionSerializer.class);
         mapping.put(BetaDistribution.class, BetaDistributionSerializer.class);
         mapping.put(BetaPrimeDistribution.class, BetaPrimeDistributionSerializer.class);

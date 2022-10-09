@@ -45,6 +45,43 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+    @Test
+    public void testVanDerCorputQuasiRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(VanDerCorputQuasiRandom.class, new VanDerCorputQuasiRandomSerializer());
+
+        VanDerCorputQuasiRandom data = new VanDerCorputQuasiRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            VanDerCorputQuasiRandom data2 = kryo.readObject(input, VanDerCorputQuasiRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testGoldenQuasiRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(GoldenQuasiRandom.class, new GoldenQuasiRandomSerializer());
+
+        GoldenQuasiRandom data = new GoldenQuasiRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            GoldenQuasiRandom data2 = kryo.readObject(input, GoldenQuasiRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
     
     @Test
     public void testLaserRandom() {
@@ -192,6 +229,25 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             WhiskerRandom data2 = kryo.readObject(input, WhiskerRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testPasarRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(PasarRandom.class, new PasarRandomSerializer());
+
+        PasarRandom data = new PasarRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            PasarRandom data2 = kryo.readObject(input, PasarRandom.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
             Assert.assertEquals(data, data2);
