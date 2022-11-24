@@ -14,6 +14,7 @@ Each sub-library has its own version, linked to the version of the library it de
   - kryo-digital is currently version 0.1.2.0
   - kryo-jdkgdxds is currently version 1.0.4.0
   - kryo-juniper is currently version 0.1.6.0
+  - kryo-simple-graphs is not currently usable
 
 Gradle dependency info:
 
