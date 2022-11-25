@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import org.junit.Assert;
 import org.junit.Test;
+import space.earlygrey.simplegraphs.DirectedGraph;
 import space.earlygrey.simplegraphs.Graph;
 import space.earlygrey.simplegraphs.UndirectedGraph;
 
@@ -57,13 +58,14 @@ public class SimpleGraphsTest {
         kryo.register(UndirectedGraph.class, new UndirectedGraphSerializer());
         kryo.register(Vector2.class);
 
-        int n = 2;
+        int n = 5;
         Graph<Vector2> data = Vector2.makeGridGraph(new UndirectedGraph<>(), n);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
+        System.out.println("Undirected byte length: " + bytes.length);
         try (Input input = new Input(bytes)) {
             UndirectedGraph data2 = kryo.readObject(input, UndirectedGraph.class);
             Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
@@ -72,6 +74,29 @@ public class SimpleGraphsTest {
             Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
                                 data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
         }
+    }
 
+    @Test
+    public void testDirectedGraph() {
+        Kryo kryo = new Kryo();
+        kryo.register(DirectedGraph.class, new DirectedGraphSerializer());
+        kryo.register(Vector2.class);
+
+        int n = 5;
+        Graph<Vector2> data = Vector2.makeGridGraph(new DirectedGraph<>(), n);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Directed byte length: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            DirectedGraph data2 = kryo.readObject(input, DirectedGraph.class);
+            Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
+            Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
+            Assert.assertEquals(new ArrayList(data.getVertices()), new ArrayList(data2.getVertices()));
+            Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
+                                data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
+        }
     }
 }
