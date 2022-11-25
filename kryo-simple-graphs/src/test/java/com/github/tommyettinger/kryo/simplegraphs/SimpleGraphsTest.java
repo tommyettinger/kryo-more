@@ -26,6 +26,8 @@ import space.earlygrey.simplegraphs.Graph;
 import space.earlygrey.simplegraphs.UndirectedGraph;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class SimpleGraphsTest {
 	/*
@@ -66,8 +68,9 @@ public class SimpleGraphsTest {
             UndirectedGraph data2 = kryo.readObject(input, UndirectedGraph.class);
             Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
             Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
-            Assert.assertEquals(data.getVertices(), data2.getVertices());
-            Assert.assertEquals(data.getEdges(), data2.getEdges());
+            Assert.assertEquals(new ArrayList(data.getVertices()), new ArrayList(data2.getVertices()));
+            Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
+                                data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
         }
 
     }
