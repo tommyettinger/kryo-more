@@ -22,6 +22,8 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import org.junit.Assert;
 import org.junit.Test;
+import space.earlygrey.simplegraphs.Graph;
+import space.earlygrey.simplegraphs.UndirectedGraph;
 
 import java.io.ByteArrayOutputStream;
 
@@ -46,4 +48,27 @@ public class SimpleGraphsTest {
         }
     }
 	*/
+
+    @Test
+    public void testUndirectedGraph() {
+        Kryo kryo = new Kryo();
+        kryo.register(UndirectedGraph.class, new UndirectedGraphSerializer());
+        kryo.register(Vector2.class);
+
+        int n = 2;
+        Graph<Vector2> data = Vector2.makeGridGraph(new UndirectedGraph<>(), n);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            UndirectedGraph data2 = kryo.readObject(input, UndirectedGraph.class);
+            Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
+            Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
+            Assert.assertEquals(data.getVertices(), data2.getVertices());
+            Assert.assertEquals(data.getEdges(), data2.getEdges());
+        }
+
+    }
 }
