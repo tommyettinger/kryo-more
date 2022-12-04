@@ -11,7 +11,7 @@ and [juniper](https://github.com/tommyettinger/juniper).
 Each sub-library has its own version, linked to the version of the library it de/serializes.
 
   - kryo-regexodus is currently version 0.1.13.0
-  - kryo-digital is currently version 0.1.2.0
+  - kryo-digital is currently version 0.1.5.0
   - kryo-jdkgdxds is currently version 1.0.4.0
   - kryo-juniper is currently version 0.1.6.0
   - kryo-simple-graphs is not currently usable
@@ -27,7 +27,7 @@ implementation "com.github.tommyettinger:kryo-regexodus:0.1.13.0"
 kryo-digital:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-digital:0.1.2.0"
+implementation "com.github.tommyettinger:kryo-digital:0.1.5.0"
 ```
 
 kryo-jdkgdxds:
@@ -60,7 +60,7 @@ kryo-digital:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-digital</artifactId>
-  <version>0.1.2.0</version>
+  <version>0.1.5.0</version>
 </dependency>
 ```
 
