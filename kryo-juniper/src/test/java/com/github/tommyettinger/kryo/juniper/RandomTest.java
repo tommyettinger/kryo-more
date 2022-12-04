@@ -255,6 +255,25 @@ public class RandomTest {
     }
 
     @Test
+    public void testAceRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(AceRandom.class, new AceRandomSerializer());
+
+        AceRandom data = new AceRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            AceRandom data2 = kryo.readObject(input, AceRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testXoshiro256StarStarRandom() {
         Kryo kryo = new Kryo();
         kryo.register(Xoshiro256StarStarRandom.class, new Xoshiro256StarStarRandomSerializer());
