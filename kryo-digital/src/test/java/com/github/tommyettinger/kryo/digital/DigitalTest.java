@@ -20,6 +20,7 @@ package com.github.tommyettinger.kryo.digital;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.digital.AlternateRandom;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Hasher;
 import org.junit.Assert;
@@ -47,6 +48,26 @@ public class DigitalTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testAlternateRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(AlternateRandom.class, new AlternateRandomSerializer());
+
+        AlternateRandom data = new AlternateRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            AlternateRandom data2 = kryo.readObject(input, AlternateRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data.serializeToString(), data2.serializeToString()); // equals() not implemented yet
+        }
+    }
+
     @Test
     public void testHasher() {
         Kryo kryo = new Kryo();
