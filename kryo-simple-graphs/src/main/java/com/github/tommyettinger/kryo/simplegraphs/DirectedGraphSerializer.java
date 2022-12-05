@@ -52,7 +52,8 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
             output.writeFloat(e.getWeight());
         }
     }
-
+    
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public DirectedGraph<?> read(final Kryo kryo, final Input input, final Class<? extends DirectedGraph<?>> dataClass) {
         DirectedGraph<?> graph = new DirectedGraph<>();
@@ -68,6 +69,7 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         return graph;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public DirectedGraph<?> copy(Kryo kryo, DirectedGraph<?> original) {
         DirectedGraph<?> graph = new DirectedGraph<>(original);

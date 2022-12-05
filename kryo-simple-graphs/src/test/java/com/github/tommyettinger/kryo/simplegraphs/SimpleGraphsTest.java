@@ -31,27 +31,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class SimpleGraphsTest {
-	/*
-    @Test
-    public void testPattern() {
-        Kryo kryo = new Kryo();
-        kryo.register(Pattern.class, new PatternSerializer());
-
-        Pattern data = Pattern.compile("[a-z0-9_\\p{Sc}]+", REFlags.IGNORE_CASE | REFlags.UNICODE);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            Pattern data2 = kryo.readObject(input, Pattern.class);
-            Assert.assertEquals(data.matches("Meow€€€"), data2.matches("Meow€€€"));
-            Assert.assertEquals(data.matches("Meow, baby, meow."), data2.matches("Meow, baby, meow."));
-            Assert.assertEquals(data, data2);
-        }
-    }
-	*/
-
     @Test
     public void testUndirectedGraph() {
         Kryo kryo = new Kryo();

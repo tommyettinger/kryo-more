@@ -53,6 +53,7 @@ public class UndirectedGraphSerializer extends Serializer<UndirectedGraph<?>> {
         }
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public UndirectedGraph<?> read(final Kryo kryo, final Input input, final Class<? extends UndirectedGraph<?>> dataClass) {
         UndirectedGraph<?> graph = new UndirectedGraph<>();
@@ -68,6 +69,7 @@ public class UndirectedGraphSerializer extends Serializer<UndirectedGraph<?>> {
         return graph;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public UndirectedGraph<?> copy(Kryo kryo, UndirectedGraph<?> original) {
         UndirectedGraph<?> graph = new UndirectedGraph<>(original);

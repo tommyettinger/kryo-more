@@ -57,26 +57,28 @@ public class Vector2 {
         return "(" + x + ", " + y + ')';
     }
 
-    public static Graph<Vector2> makeGridGraph(Graph<Vector2> graph, int n) {
+    public static Graph<Vector2> makeGridGraph(Graph<Vector2> graph, int sideLength) {
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+        for (int i = 0; i < sideLength; i++) {
+            for (int j = 0; j < sideLength; j++) {
                 Vector2 v = new Vector2(i, j);
                 graph.addVertex(v);
             }
         }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i<n-1) {
+        for (int i = 0; i < sideLength; i++) {
+            for (int j = 0; j < sideLength; j++) {
+                if (i<sideLength-1) {
                     Vector2 v1 = new Vector2(i, j), v2 = new Vector2(i+1,j);
-                    graph.addEdge(v1, v2, v1.dst(v2));
-                    if (graph.isDirected()) graph.addEdge(v2, v1, v1.dst(v2));
+                    float dst = v1.dst(v2);
+                    graph.addEdge(v1, v2, dst);
+                    if (graph.isDirected()) graph.addEdge(v2, v1, dst);
                 }
-                if (j<n-1) {
+                if (j<sideLength-1) {
                     Vector2 v1 = new Vector2(i, j), v2 = new Vector2(i,j+1);
-                    graph.addEdge(v1, v2, v1.dst(v2));
-                    if (graph.isDirected()) graph.addEdge(v2, v1, v1.dst(v2));
+                    float dst = v1.dst(v2);
+                    graph.addEdge(v1, v2, dst);
+                    if (graph.isDirected()) graph.addEdge(v2, v1, dst);
                 }
             }
         }
