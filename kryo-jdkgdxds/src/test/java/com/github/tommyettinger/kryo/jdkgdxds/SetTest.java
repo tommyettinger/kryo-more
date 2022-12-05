@@ -133,5 +133,22 @@ public class SetTest {
             Assert.assertEquals(data.order(), data2.order());
         }
     }
+    @Test
+    public void testOffsetBitSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(OffsetBitSet.class, new OffsetBitSetSerializer());
+
+        OffsetBitSet data = new OffsetBitSet(-123, 500);
+        data.addAll(new int[]{-123, 0, 456, 0, 1, -1, 0});
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            OffsetBitSet data2 = kryo.readObject(input, OffsetBitSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 
 }
