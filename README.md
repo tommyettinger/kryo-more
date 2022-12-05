@@ -1,10 +1,12 @@
 # kryo-more
 
-Kryo 5.x serializers for the various `com.github.tommyettinger` libraries.
+Kryo 5.x serializers for various libGDX-related libraries.
 
 This lets Kryo 5.x (currently 5.3.0) de/serialize objects from [RegExodus](https://github.com/tommyettinger/RegExodus),
 [digital](https://github.com/tommyettinger/digital), [jdkgdxds](https://github.com/tommyettinger/jdkgdxds),
-and [juniper](https://github.com/tommyettinger/juniper).
+[juniper](https://github.com/tommyettinger/juniper), and [simple-graphs](https://github.com/earlygrey/simple-graphs).
+All of these but simple-graphs are maintained by [tommyettinger](https://github.com/tommyettinger), who also maintains
+this serialization library.
 
 ## How to get
 
@@ -14,7 +16,7 @@ Each sub-library has its own version, linked to the version of the library it de
   - kryo-digital is currently version 0.1.5.0
   - kryo-jdkgdxds is currently version 1.1.0.0
   - kryo-juniper is currently version 0.1.7.0
-  - kryo-simple-graphs is not currently usable
+  - kryo-simple-graphs is currently version 5.1.0.0
 
 Gradle dependency info:
 
@@ -40,6 +42,12 @@ kryo-juniper:
 
 ```gradle
 implementation "com.github.tommyettinger:kryo-juniper:0.1.7.0"
+```
+
+kryo-simple-graphs:
+
+```gradle
+implementation "com.github.tommyettinger:kryo-simple-graphs:5.1.0.0"
 ```
 
 Maven dependency info:
@@ -81,6 +89,16 @@ kryo-juniper:
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-juniper</artifactId>
   <version>0.1.7.0</version>
+</dependency>
+```
+
+kryo-simple-graphs:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>kryo-simple-graphs</artifactId>
+  <version>5.1.0.0</version>
 </dependency>
 ```
 
