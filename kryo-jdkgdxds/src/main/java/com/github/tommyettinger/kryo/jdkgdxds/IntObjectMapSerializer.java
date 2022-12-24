@@ -58,6 +58,7 @@ public class IntObjectMapSerializer extends Serializer<IntObjectMap<?>> {
     @Override
     public IntObjectMap<?> copy(Kryo kryo, IntObjectMap<?> original) {
         IntObjectMap<?> map = new IntObjectMap<>(original.size(), original.getLoadFactor());
+        kryo.reference(map);
         IntObjectMap rawMap = map;
         for(IntObjectMap.Entry ent : original) {
             rawMap.put(ent.key, kryo.copy(ent.value));

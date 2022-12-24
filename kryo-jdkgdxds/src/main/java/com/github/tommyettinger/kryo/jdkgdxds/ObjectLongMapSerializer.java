@@ -58,6 +58,7 @@ public class ObjectLongMapSerializer extends Serializer<ObjectLongMap<?>> {
     @Override
     public ObjectLongMap<?> copy(Kryo kryo, ObjectLongMap<?> original) {
         ObjectLongMap<?> map = new ObjectLongMap<>(original.size(), original.getLoadFactor());
+        kryo.reference(map);
         ObjectLongMap rawMap = map;
         for(ObjectLongMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);

@@ -58,6 +58,7 @@ public class ObjectIntMapSerializer extends Serializer<ObjectIntMap<?>> {
     @Override
     public ObjectIntMap<?> copy(Kryo kryo, ObjectIntMap<?> original) {
         ObjectIntMap<?> map = new ObjectIntMap<>(original.size(), original.getLoadFactor());
+        kryo.reference(map);
         ObjectIntMap rawMap = map;
         for (ObjectIntMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);

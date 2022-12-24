@@ -61,6 +61,7 @@ public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrder
     @Override
     public ObjectFloatOrderedMap<?> copy(Kryo kryo, ObjectFloatOrderedMap<?> original) {
         ObjectFloatOrderedMap<?> map = new ObjectFloatOrderedMap<>(original.size(), original.getLoadFactor());
+        kryo.reference(map);
         ObjectFloatOrderedMap rawMap = map;
         for(ObjectFloatOrderedMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);

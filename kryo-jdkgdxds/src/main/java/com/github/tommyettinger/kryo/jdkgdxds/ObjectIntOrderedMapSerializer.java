@@ -61,6 +61,7 @@ public class ObjectIntOrderedMapSerializer extends Serializer<ObjectIntOrderedMa
     @Override
     public ObjectIntOrderedMap<?> copy(Kryo kryo, ObjectIntOrderedMap<?> original) {
         ObjectIntOrderedMap<?> map = new ObjectIntOrderedMap<>(original.size(), original.getLoadFactor());
+        kryo.reference(map);
         ObjectIntOrderedMap rawMap = map;
         for(ObjectIntOrderedMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);

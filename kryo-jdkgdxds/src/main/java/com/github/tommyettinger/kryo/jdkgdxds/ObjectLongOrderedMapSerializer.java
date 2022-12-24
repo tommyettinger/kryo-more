@@ -60,6 +60,7 @@ public class ObjectLongOrderedMapSerializer extends Serializer<ObjectLongOrdered
     @Override
     public ObjectLongOrderedMap<?> copy(Kryo kryo, ObjectLongOrderedMap<?> original) {
         ObjectLongOrderedMap<?> map = new ObjectLongOrderedMap<>(original.size(), original.getLoadFactor());
+        kryo.reference(map);
         ObjectLongOrderedMap rawMap = map;
         for(ObjectLongOrderedMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);

@@ -58,6 +58,7 @@ public class ObjectFloatMapSerializer extends Serializer<ObjectFloatMap<?>> {
     @Override
     public ObjectFloatMap<?> copy(Kryo kryo, ObjectFloatMap<?> original) {
         ObjectFloatMap<?> map = new ObjectFloatMap<>(original.size(), original.getLoadFactor());
+        kryo.reference(map);
         ObjectFloatMap rawMap = map;
         for (ObjectFloatMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);
