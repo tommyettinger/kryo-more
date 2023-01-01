@@ -23,6 +23,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.HolderSet;
 
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class HolderSetSerializer extends CollectionSerializer<HolderSet<?, ?>> {
@@ -33,7 +34,10 @@ public class HolderSetSerializer extends CollectionSerializer<HolderSet<?, ?>> {
     @Override
     protected void writeHeader(Kryo kryo, Output output, HolderSet<?, ?> collection) {
         Function<?, ?> ext = collection.getExtractor();
-        kryo.register(ext.getClass());
+        if(ext == null)
+            throw new NoSuchElementException("A HolderSet must have a non-null extractor to be serialized.");
+        if(kryo.getClassResolver().getRegistration(ext.getClass()) == null)
+            kryo.register(ext.getClass());
         kryo.writeClassAndObject(output, ext);
     }
 
