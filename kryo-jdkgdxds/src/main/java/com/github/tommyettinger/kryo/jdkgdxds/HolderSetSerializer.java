@@ -32,7 +32,9 @@ public class HolderSetSerializer extends CollectionSerializer<HolderSet<?, ?>> {
 
     @Override
     protected void writeHeader(Kryo kryo, Output output, HolderSet<?, ?> collection) {
-        kryo.writeClassAndObject(output, collection.getExtractor());
+        Function<?, ?> ext = collection.getExtractor();
+        kryo.register(ext.getClass());
+        kryo.writeClassAndObject(output, ext);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

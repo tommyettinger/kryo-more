@@ -22,9 +22,11 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.*;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.util.function.Function;
 
 public class SetTest {
     @Test
@@ -101,7 +103,7 @@ public class SetTest {
     public void testObjectSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);
-        kryo.register(ObjectSet.class);
+        kryo.register(ObjectSet.class, new ObjectSetSerializer());
 
         ObjectSet<String> data = ObjectSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
 
@@ -119,7 +121,7 @@ public class SetTest {
     public void testObjectOrderedSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);
-        kryo.register(ObjectOrderedSet.class);
+        kryo.register(ObjectOrderedSet.class, new ObjectOrderedSetSerializer());
 
         ObjectOrderedSet<String> data = ObjectOrderedSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
 
@@ -151,4 +153,42 @@ public class SetTest {
         }
     }
 
+    @Test
+    public void testNumberedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(NumberedSet.class, new NumberedSetSerializer());
+
+        NumberedSet<String> data = NumberedSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            NumberedSet<?> data2 = kryo.readObject(input, NumberedSet.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.order(), data2.order());
+        }
+    }
+
+    @Test
+    public void testHolderSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(Function.class);
+        kryo.register(HolderSet.class, new HolderSetSerializer());
+
+        Function<String, String> f = s -> s.split("\\s+")[0];
+        HolderSet<String, String> data = HolderSet.with(f, "Hello World!", "I am", "a test!", "Yippee yay wahoo!");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            HolderSet<?, ?> data2 = kryo.readObject(input, HolderSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
