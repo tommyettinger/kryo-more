@@ -23,6 +23,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.HolderOrderedSet;
 
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class HolderOrderedSetSerializer extends CollectionSerializer<HolderOrderedSet<?, ?>> {
@@ -32,7 +33,12 @@ public class HolderOrderedSetSerializer extends CollectionSerializer<HolderOrder
 
     @Override
     protected void writeHeader(Kryo kryo, Output output, HolderOrderedSet<?, ?> collection) {
-        kryo.writeClassAndObject(output, collection.getExtractor());
+        Function<?, ?> ext = collection.getExtractor();
+        if(ext == null)
+            throw new NoSuchElementException("A HolderSet must have a non-null extractor to be serialized.");
+        if(kryo.getClassResolver().getRegistration(ext.getClass()) == null)
+            kryo.register(ext.getClass());
+        kryo.writeClassAndObject(output, ext);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

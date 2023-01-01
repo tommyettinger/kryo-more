@@ -191,4 +191,24 @@ public class SetTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testHolderOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(Function.class);
+        kryo.register(HolderOrderedSet.class, new HolderOrderedSetSerializer());
+
+        Function<String, String> f = s -> s.split("\\s+")[0];
+        HolderOrderedSet<String, String> data = HolderOrderedSet.with(f, "Hello World!", "I am", "a test!", "Yippee yay wahoo!");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            HolderOrderedSet<?, ?> data2 = kryo.readObject(input, HolderOrderedSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
