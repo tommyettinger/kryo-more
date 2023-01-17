@@ -16,7 +16,7 @@ Each sub-library has its own version, linked to the version of the library it de
   - kryo-digital is currently version 0.1.5.0
   - kryo-jdkgdxds is currently version 1.1.1.0
   - kryo-juniper is currently version 0.1.7.0
-  - kryo-simple-graphs is currently version 5.1.0.0
+  - kryo-simple-graphs is currently version 5.1.1.0
 
 Gradle dependency info:
 
@@ -47,7 +47,7 @@ implementation "com.github.tommyettinger:kryo-juniper:0.1.7.0"
 kryo-simple-graphs:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-simple-graphs:5.1.0.0"
+implementation "com.github.tommyettinger:kryo-simple-graphs:5.1.1.0"
 ```
 
 Maven dependency info:
@@ -98,7 +98,7 @@ kryo-simple-graphs:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-simple-graphs</artifactId>
-  <version>5.1.0.0</version>
+  <version>5.1.1.0</version>
 </dependency>
 ```
 
