@@ -24,7 +24,7 @@ if(JavaVersion.current().isJava9Compatible()) {
 }
 
 dependencies {
-    api "com.github.tommyettinger:kryo-digital:0.1.5.0"
+    api "com.github.tommyettinger:kryo-digital:0.1.7.0"
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
     testImplementation "junit:junit:4.13.2"
