@@ -451,4 +451,39 @@ public class MapTest {
         }
     }
 
+    @Test
+    public void testCaseInsensitiveMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(CaseInsensitiveMap.class, new CaseInsensitiveMapSerializer());
+
+        CaseInsensitiveMap<Integer> data = CaseInsensitiveMap.with("Cthulhu", -123456, "lies", Integer.MIN_VALUE,
+                "deep", 456789012, "in", 0, "Rl'yeh", 1111, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CaseInsensitiveMap<?> data2 = kryo.readObject(input, CaseInsensitiveMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testCaseInsensitiveOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(CaseInsensitiveOrderedMap.class, new CaseInsensitiveOrderedMapSerializer());
+
+        CaseInsensitiveOrderedMap<Integer> data = CaseInsensitiveOrderedMap.with("Cthulhu", -123456, "lies", Integer.MIN_VALUE,
+                "deep", 456789012, "in", 0, "Rl'yeh", 1111, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CaseInsensitiveOrderedMap<?> data2 = kryo.readObject(input, CaseInsensitiveOrderedMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }

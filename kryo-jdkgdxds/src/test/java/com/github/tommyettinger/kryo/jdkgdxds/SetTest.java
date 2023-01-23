@@ -135,6 +135,43 @@ public class SetTest {
             Assert.assertEquals(data.order(), data2.order());
         }
     }
+
+    @Test
+    public void testCaseInsensitiveSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(CaseInsensitiveSet.class, new CaseInsensitiveSetSerializer());
+
+        CaseInsensitiveSet data = CaseInsensitiveSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CaseInsensitiveSet data2 = kryo.readObject(input, CaseInsensitiveSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testCaseInsensitiveOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(CaseInsensitiveOrderedSet.class, new CaseInsensitiveOrderedSetSerializer());
+
+        CaseInsensitiveOrderedSet data = CaseInsensitiveOrderedSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CaseInsensitiveOrderedSet data2 = kryo.readObject(input, CaseInsensitiveOrderedSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
     @Test
     public void testOffsetBitSet() {
         Kryo kryo = new Kryo();
