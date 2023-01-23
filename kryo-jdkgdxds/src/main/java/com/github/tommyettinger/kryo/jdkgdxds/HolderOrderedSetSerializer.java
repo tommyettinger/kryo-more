@@ -29,6 +29,7 @@ import java.util.function.Function;
 public class HolderOrderedSetSerializer extends CollectionSerializer<HolderOrderedSet<?, ?>> {
     public HolderOrderedSetSerializer() {
         super();
+        setElementsCanBeNull(false);
     }
 
     @Override

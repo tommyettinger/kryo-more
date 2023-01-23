@@ -25,6 +25,7 @@ import com.github.tommyettinger.ds.NumberedSet;
 public class NumberedSetSerializer extends CollectionSerializer<NumberedSet<?>> {
     public NumberedSetSerializer() {
         super();
+        setElementsCanBeNull(false);
     }
 
     @Override

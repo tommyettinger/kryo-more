@@ -25,6 +25,7 @@ import com.github.tommyettinger.ds.ObjectSet;
 public class ObjectSetSerializer extends CollectionSerializer<ObjectSet<?>> {
     public ObjectSetSerializer() {
         super();
+        setElementsCanBeNull(false);
     }
 
     @Override

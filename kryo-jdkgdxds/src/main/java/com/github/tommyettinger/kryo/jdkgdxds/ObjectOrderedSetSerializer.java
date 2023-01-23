@@ -25,6 +25,7 @@ import com.github.tommyettinger.ds.ObjectOrderedSet;
 public class ObjectOrderedSetSerializer extends CollectionSerializer<ObjectOrderedSet<?>> {
     public ObjectOrderedSetSerializer() {
         super();
+        setElementsCanBeNull(false);
     }
 
     @Override

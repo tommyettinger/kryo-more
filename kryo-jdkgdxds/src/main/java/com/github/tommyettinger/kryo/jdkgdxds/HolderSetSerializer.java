@@ -29,6 +29,7 @@ import java.util.function.Function;
 public class HolderSetSerializer extends CollectionSerializer<HolderSet<?, ?>> {
     public HolderSetSerializer() {
         super();
+        setElementsCanBeNull(false);
     }
 
     @Override
