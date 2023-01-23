@@ -305,6 +305,42 @@ public class MapTest {
     }
 
     @Test
+    public void testObjectObjectMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectObjectMap.class, new ObjectObjectMapSerializer());
+
+        ObjectObjectMap<String, Integer> data = ObjectObjectMap.with("Cthulhu", -123456, "lies", Integer.MIN_VALUE,
+                "deep", 456789012, "in", 0, "Rl'yeh", 1111, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectObjectMap<?,?> data2 = kryo.readObject(input, ObjectObjectMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testObjectObjectOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectObjectOrderedMap.class, new ObjectObjectOrderedMapSerializer());
+
+        ObjectObjectOrderedMap<String, Integer> data = ObjectObjectOrderedMap.with("Cthulhu", -123456, "lies", Integer.MIN_VALUE,
+                "deep", 456789012, "in", 0, "Rl'yeh", 1111, "dreaming", 1, "of", -1, "waffles", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectObjectOrderedMap<?,?> data2 = kryo.readObject(input, ObjectObjectOrderedMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testObjectIntMap() {
         Kryo kryo = new Kryo();
         kryo.register(ObjectIntMap.class, new ObjectIntMapSerializer());
