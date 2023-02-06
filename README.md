@@ -78,7 +78,7 @@ kryo-jdkgdxds:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-jdkgdxds</artifactId>
-  <version>1.1.2.1</version>
+  <version>1.1.3.0</version>
 </dependency>
 ```
 
