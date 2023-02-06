@@ -5,8 +5,6 @@ version "$VERSION_NAME"
 eclipse.project.name = project.name
 
 sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 javadoc.destinationDir = file("../docs/$POM_NAME/apidocs")
 javadoc.options.source("8")
@@ -15,11 +13,19 @@ javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).use(true)
 ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2023.")
 
-if(JavaVersion.current().isJava9Compatible()) {
-    allprojects {
-        tasks.withType(JavaCompile) {
-            options.release.set(8)
-        }
+compileJava {
+    sourceCompatibility = 7
+    targetCompatibility = 7
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.release.set(7)
+    }
+}
+
+compileTestJava {
+    sourceCompatibility = 8
+    targetCompatibility = 8
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.release.set(8)
     }
 }
 

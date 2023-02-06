@@ -23,8 +23,6 @@ configure(subprojects) {
     }
 }
 
-sourceCompatibility = 1.8
-
 def projectName = 'kryo-more'
 
 group 'com.github.tommyettinger'
@@ -61,11 +59,19 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
-if(JavaVersion.current().isJava9Compatible()) {
-    allprojects {
-        tasks.withType(JavaCompile) {
-            options.release.set(8) // LWJGL3 needs Java 8 starting in libGDX 1.11.0, which forces tests to use Java 8 or higher.
-        }
+compileJava {
+    sourceCompatibility = 7
+    targetCompatibility = 7
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.release.set(7)
+    }
+}
+
+compileTestJava {
+    sourceCompatibility = 8
+    targetCompatibility = 8
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.release.set(8)
     }
 }
 
