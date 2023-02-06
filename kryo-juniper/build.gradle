@@ -16,15 +16,10 @@ javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2023.")
 
 compileJava {
-//    sourceCompatibility = 7
-//    targetCompatibility = 7
-//    if (JavaVersion.current().isJava9Compatible()) {
-//        options.release.set(7)
-//    }
-    sourceCompatibility = 8
-    targetCompatibility = 8
+    sourceCompatibility = 7
+    targetCompatibility = 7
     if (JavaVersion.current().isJava9Compatible()) {
-        options.release.set(8)
+        options.release.set(7)
     }
 }
 
@@ -37,7 +32,7 @@ compileTestJava {
 }
 
 dependencies {
-    api "com.github.tommyettinger:kryo-digital:0.1.7.0"
+    api "com.github.tommyettinger:kryo-digital:0.1.8.0"
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:juniper:$juniperVersion"
     testImplementation "junit:junit:4.13.2"
