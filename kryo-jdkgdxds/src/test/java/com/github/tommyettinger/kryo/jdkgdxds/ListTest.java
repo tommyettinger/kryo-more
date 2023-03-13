@@ -28,6 +28,24 @@ import java.io.ByteArrayOutputStream;
 
 public class ListTest {
     @Test
+    public void testObjectList() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectList.class, new ObjectListSerializer());
+
+        ObjectList<String> data = ObjectList.with("-123.123", "0", "Four-Fifty Six", "0", "1.0", "-1.0", "0.000001");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectList data2 = kryo.readObject(input, ObjectList.class);
+            System.out.println(data.equals(data2));
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testIntList() {
         Kryo kryo = new Kryo();
         kryo.register(IntList.class, new IntListSerializer());
