@@ -25,6 +25,7 @@ import org.junit.Test;
 import space.earlygrey.simplegraphs.DirectedGraph;
 import space.earlygrey.simplegraphs.Graph;
 import space.earlygrey.simplegraphs.UndirectedGraph;
+import space.earlygrey.simplegraphs.utils.WeightFunction;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class SimpleGraphsTest {
     @Test
     public void testDirectedGraph() {
         Kryo kryo = new Kryo();
+        kryo.register(WeightFunction.class);
         kryo.register(DirectedGraph.class, new DirectedGraphSerializer());
         kryo.register(Vector2.class);
 
