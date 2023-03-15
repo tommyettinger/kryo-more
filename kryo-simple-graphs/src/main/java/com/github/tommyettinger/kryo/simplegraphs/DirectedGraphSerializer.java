@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import space.earlygrey.simplegraphs.Connection;
-import space.earlygrey.simplegraphs.Edge;
 import space.earlygrey.simplegraphs.DirectedGraph;
 import space.earlygrey.simplegraphs.utils.WeightFunction;
 
@@ -51,7 +50,7 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         for(Connection<?> e : edges) {
             kryo.writeClassAndObject(output, e.getA());
             kryo.writeClassAndObject(output, e.getB());
-            kryo.writeObjectOrNull(output, e.getWeightFunction(), WeightFunction.class);
+            kryo.writeClassAndObject(output, e.getWeightFunction());
 //            output.writeFloat(e.getWeight());
         }
     }
@@ -67,7 +66,7 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         }
         length = input.readInt(true);
         for (int i = 0; i < length; i++) {
-            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), kryo.readObject(input, WeightFunction.class));
+            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), (WeightFunction) kryo.readClassAndObject(input));
         }
         return graph;
     }
@@ -81,9 +80,9 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         for(Object v : vertices){
             raw.addVertex(kryo.copy(v));
         }
-        Collection<? extends Edge<?>> edges = graph.getEdges();
-        for(Edge<?> e : edges){
-            raw.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeight());
+        Collection<? extends Connection<?>> edges = graph.internals().getConnections();
+        for(Connection<?> e : edges){
+            raw.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeightFunction());
         }
         return graph;
     }
