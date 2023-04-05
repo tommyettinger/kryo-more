@@ -40,7 +40,6 @@ public class BagTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             ObjectBag data2 = kryo.readObject(input, ObjectBag.class);
-            System.out.println(data.equals(data2));
             Assert.assertEquals(data, data2);
         }
     }

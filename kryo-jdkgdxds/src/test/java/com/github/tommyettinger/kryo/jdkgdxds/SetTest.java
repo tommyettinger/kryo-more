@@ -21,12 +21,11 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.*;
+import com.github.tommyettinger.function.ObjToObjFunction;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.util.function.Function;
 
 public class SetTest {
     @Test
@@ -213,10 +212,10 @@ public class SetTest {
     public void testHolderSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);
-        kryo.register(Function.class);
+        kryo.register(ObjToObjFunction.class);
         kryo.register(HolderSet.class, new HolderSetSerializer());
 
-        Function<String, String> f = s -> s.split("\\s+")[0];
+        ObjToObjFunction<String, String> f = s -> s.split("\\s+")[0];
         HolderSet<String, String> data = HolderSet.with(f, "Hello World!", "I am", "a test!", "Yippee yay wahoo!");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
@@ -233,10 +232,10 @@ public class SetTest {
     public void testHolderOrderedSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);
-        kryo.register(Function.class);
+        kryo.register(ObjToObjFunction.class);
         kryo.register(HolderOrderedSet.class, new HolderOrderedSetSerializer());
 
-        Function<String, String> f = s -> s.split("\\s+")[0];
+        ObjToObjFunction<String, String> f = s -> s.split("\\s+")[0];
         HolderOrderedSet<String, String> data = HolderOrderedSet.with(f, "Hello World!", "I am", "a test!", "Yippee yay wahoo!");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);

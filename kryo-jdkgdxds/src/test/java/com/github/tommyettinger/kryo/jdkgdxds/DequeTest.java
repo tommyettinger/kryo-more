@@ -40,7 +40,6 @@ public class DequeTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             ObjectDeque data2 = kryo.readObject(input, ObjectDeque.class);
-            System.out.println(data.equals(data2));
             Assert.assertEquals(data, data2);
         }
     }

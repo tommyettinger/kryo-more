@@ -40,7 +40,6 @@ public class ListTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             ObjectList data2 = kryo.readObject(input, ObjectList.class);
-            System.out.println(data.equals(data2));
             Assert.assertEquals(data, data2);
         }
     }

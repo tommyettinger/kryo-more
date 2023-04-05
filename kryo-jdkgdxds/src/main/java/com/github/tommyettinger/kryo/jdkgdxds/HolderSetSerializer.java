@@ -22,9 +22,9 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.HolderSet;
+import com.github.tommyettinger.function.ObjToObjFunction;
 
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 
 public class HolderSetSerializer extends CollectionSerializer<HolderSet<?, ?>> {
     public HolderSetSerializer() {
@@ -34,7 +34,7 @@ public class HolderSetSerializer extends CollectionSerializer<HolderSet<?, ?>> {
 
     @Override
     protected void writeHeader(Kryo kryo, Output output, HolderSet<?, ?> collection) {
-        Function<?, ?> ext = collection.getExtractor();
+        ObjToObjFunction<?, ?> ext = collection.getExtractor();
         if(ext == null)
             throw new NoSuchElementException("A HolderSet must have a non-null extractor to be serialized.");
         if(kryo.getClassResolver().getRegistration(ext.getClass()) == null)
@@ -45,7 +45,7 @@ public class HolderSetSerializer extends CollectionSerializer<HolderSet<?, ?>> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected HolderSet<?, ?> create(Kryo kryo, Input input, Class<? extends HolderSet<?, ?>> type, int size) {
-        return new HolderSet<>((Function)kryo.readClassAndObject(input), size);
+        return new HolderSet<>((ObjToObjFunction)kryo.readClassAndObject(input), size);
     }
 
     @SuppressWarnings("DataFlowIssue")

@@ -22,9 +22,9 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.HolderOrderedSet;
+import com.github.tommyettinger.function.ObjToObjFunction;
 
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 
 public class HolderOrderedSetSerializer extends CollectionSerializer<HolderOrderedSet<?, ?>> {
     public HolderOrderedSetSerializer() {
@@ -34,7 +34,7 @@ public class HolderOrderedSetSerializer extends CollectionSerializer<HolderOrder
 
     @Override
     protected void writeHeader(Kryo kryo, Output output, HolderOrderedSet<?, ?> collection) {
-        Function<?, ?> ext = collection.getExtractor();
+        ObjToObjFunction<?, ?> ext = collection.getExtractor();
         if(ext == null)
             throw new NoSuchElementException("A HolderSet must have a non-null extractor to be serialized.");
         if(kryo.getClassResolver().getRegistration(ext.getClass()) == null)
@@ -45,7 +45,7 @@ public class HolderOrderedSetSerializer extends CollectionSerializer<HolderOrder
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected HolderOrderedSet<?, ?> create(Kryo kryo, Input input, Class<? extends HolderOrderedSet<?, ?>> type, int size) {
-        return new HolderOrderedSet<>((Function)kryo.readClassAndObject(input), size);
+        return new HolderOrderedSet<>((ObjToObjFunction)kryo.readClassAndObject(input), size);
     }
 
     @SuppressWarnings("DataFlowIssue")
