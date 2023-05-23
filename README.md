@@ -13,7 +13,7 @@ this serialization library.
 Each sub-library has its own version, linked to the version of the library it de/serializes.
 
   - kryo-regexodus is currently version 0.1.15.0
-  - kryo-digital is currently version 0.3.0.0
+  - kryo-digital is currently version 0.3.2.0
   - kryo-jdkgdxds is currently version 1.3.0.0
   - kryo-juniper is currently version 0.2.0.0
   - kryo-simple-graphs is currently version 5.1.1.0
