@@ -84,6 +84,44 @@ public class RandomTest {
     }
     
     @Test
+    public void testLowChangeQuasiRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(LowChangeQuasiRandom.class, new LowChangeQuasiRandomSerializer());
+
+        LowChangeQuasiRandom data = new LowChangeQuasiRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LowChangeQuasiRandom data2 = kryo.readObject(input, LowChangeQuasiRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testTupleQuasiRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(TupleQuasiRandom.class, new TupleQuasiRandomSerializer());
+
+        TupleQuasiRandom data = new TupleQuasiRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            TupleQuasiRandom data2 = kryo.readObject(input, TupleQuasiRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
     public void testLaserRandom() {
         Kryo kryo = new Kryo();
         kryo.register(LaserRandom.class, new LaserRandomSerializer());
@@ -236,6 +274,25 @@ public class RandomTest {
     }
 
     @Test
+    public void testScruffRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(ScruffRandom.class, new ScruffRandomSerializer());
+
+        ScruffRandom data = new ScruffRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ScruffRandom data2 = kryo.readObject(input, ScruffRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testPasarRandom() {
         Kryo kryo = new Kryo();
         kryo.register(PasarRandom.class, new PasarRandomSerializer());
@@ -324,6 +381,46 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             Xoshiro128PlusPlusRandom data2 = kryo.readObject(input, Xoshiro128PlusPlusRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testKnownSequenceRandom() {
+        Kryo kryo = new Kryo();
+        KnownSequenceRandomSerializer ser = new KnownSequenceRandomSerializer();
+        kryo.register(KnownSequenceRandom.class, ser);
+
+        KnownSequenceRandom data = new KnownSequenceRandom(LongSequence.with(0L, 1L, -2L, -3L, 4L, 5L));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            KnownSequenceRandom data2 = kryo.readObject(input, KnownSequenceRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testReverseWrapper() {
+        Kryo kryo = new Kryo();
+        ReverseWrapperSerializer ser = new ReverseWrapperSerializer();
+        kryo.register(ReverseWrapper.class, ser);
+
+        ReverseWrapper data = new ReverseWrapper(new DistinctRandom(-12345L));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ReverseWrapper data2 = kryo.readObject(input, ReverseWrapper.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
             Assert.assertEquals(data, data2);

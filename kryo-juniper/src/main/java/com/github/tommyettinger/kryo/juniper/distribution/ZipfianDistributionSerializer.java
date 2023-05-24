@@ -37,7 +37,7 @@ public class ZipfianDistributionSerializer extends Serializer<ZipfianDistributio
     @Override
     public void write(Kryo kryo, Output output, ZipfianDistribution object) {
         kryo.writeClassAndObject(output, object.generator);
-        output.writeVarLong(object.getAlpha(), true);
+        output.writeVarLong((long) object.getAlpha(), true);
         output.writeDouble(object.getSkew());
         output.writeDouble(object.getZeta());
     }
