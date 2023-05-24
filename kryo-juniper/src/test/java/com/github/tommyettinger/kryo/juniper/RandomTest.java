@@ -428,6 +428,30 @@ public class RandomTest {
     }
 
     @Test
+    public void testArchivalWrapper() {
+        Kryo kryo = new Kryo();
+        ArchivalWrapperSerializer ser = new ArchivalWrapperSerializer();
+        kryo.register(ArchivalWrapper.class, ser);
+
+        ArchivalWrapper data = new ArchivalWrapper(new DistinctRandom(-12345L));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ArchivalWrapper data2 = kryo.readObject(input, ArchivalWrapper.class);
+//            System.out.println("data...");
+//            System.out.println(data);
+//            System.out.println("vs. data2...");
+//            System.out.println(data2);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testEnhancedRandom() {
         Kryo kryo = new Kryo();
         EnhancedRandomSerializer ser = new EnhancedRandomSerializer();
@@ -443,6 +467,23 @@ public class RandomTest {
             EnhancedRandom data2 = kryo.readObject(input, EnhancedRandom.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testLongSequence() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongSequence.class, new LongSequenceSerializer());
+
+        LongSequence data = LongSequence.with(-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongSequence data2 = kryo.readObject(input, LongSequence.class);
             Assert.assertEquals(data, data2);
         }
     }
