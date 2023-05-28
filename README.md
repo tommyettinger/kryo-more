@@ -15,8 +15,8 @@ The last component of the version is usually .0, but can be increased for bug-fi
 
   - kryo-regexodus is currently version 0.1.15.0
   - kryo-jdkgdxds is currently version 1.3.1.0
-  - kryo-juniper is currently version 0.3.4.0
   - kryo-digital is currently version 0.3.3.0
+  - kryo-juniper is currently version 0.3.5.0
   - kryo-simple-graphs is currently version 5.1.1.0
 
 Gradle dependency info:
@@ -42,7 +42,7 @@ implementation "com.github.tommyettinger:kryo-jdkgdxds:1.3.1.0"
 kryo-juniper:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-juniper:0.3.4.0"
+implementation "com.github.tommyettinger:kryo-juniper:0.3.5.0"
 ```
 
 kryo-simple-graphs:
