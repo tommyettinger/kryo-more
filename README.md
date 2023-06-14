@@ -15,7 +15,7 @@ The last component of the version is usually .0, but can be increased for bug-fi
 
   - kryo-regexodus is currently version 0.1.15.0
   - kryo-digital is currently version 0.3.3.0
-  - kryo-jdkgdxds is currently version 1.3.2.0
+  - kryo-jdkgdxds is currently version 1.4.0.0
   - kryo-juniper is currently version 0.3.5.0
   - kryo-simple-graphs is currently version 5.1.1.0
 
@@ -36,7 +36,7 @@ implementation "com.github.tommyettinger:kryo-digital:0.3.3.0"
 kryo-jdkgdxds:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-jdkgdxds:1.3.2.0"
+implementation "com.github.tommyettinger:kryo-jdkgdxds:1.4.0.0"
 ```
 
 kryo-juniper:
@@ -69,7 +69,7 @@ kryo-digital:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-digital</artifactId>
-  <version>0.3.2.0</version>
+  <version>0.3.3.0</version>
 </dependency>
 ```
 
@@ -79,7 +79,7 @@ kryo-jdkgdxds:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-jdkgdxds</artifactId>
-  <version>1.3.1.0</version>
+  <version>1.4.0.0</version>
 </dependency>
 ```
 
@@ -89,7 +89,7 @@ kryo-juniper:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-juniper</artifactId>
-  <version>0.3.4.0</version>
+  <version>0.3.5.0</version>
 </dependency>
 ```
 
