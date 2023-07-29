@@ -20,9 +20,7 @@ package com.github.tommyettinger.kryo.digital;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.digital.AlternateRandom;
-import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -84,6 +82,27 @@ public class DigitalTest {
             Hasher data2 = kryo.readObject(input, Hasher.class);
             Assert.assertEquals(data.hash("0xFEDCBA9876543210L"), data2.hash("0xFEDCBA9876543210L"));
             Assert.assertEquals(data.hash64("0xFEDCBA9876543210L"), data2.hash64("0xFEDCBA9876543210L"));
+        }
+    }
+
+    @Test
+    public void testInterpolator() {
+        Kryo kryo = new Kryo();
+        kryo.register(Interpolations.Interpolator.class, new InterpolatorSerializer());
+
+        Interpolations.Interpolator data = Interpolations.elasticOut;
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Interpolations.Interpolator data2 = kryo.readObject(input, Interpolations.Interpolator.class);
+            Assert.assertEquals(data.apply(0.1f), data2.apply(0.1f), MathTools.FLOAT_ROUNDING_ERROR);
+            Assert.assertEquals(data.apply(0.2f), data2.apply(0.2f), MathTools.FLOAT_ROUNDING_ERROR);
+            Assert.assertEquals(data.apply(0.7f), data2.apply(0.7f), MathTools.FLOAT_ROUNDING_ERROR);
+            Assert.assertEquals(data.apply(0.8f), data2.apply(0.8f), MathTools.FLOAT_ROUNDING_ERROR);
+            Assert.assertEquals(data, data2);
         }
     }
 }
