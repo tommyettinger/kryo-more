@@ -350,6 +350,44 @@ public class RandomTest {
     }
 
     @Test
+    public void testXoshiro256MX3Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Xoshiro256MX3Random.class, new Xoshiro256MX3RandomSerializer());
+
+        Xoshiro256MX3Random data = new Xoshiro256MX3Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Xoshiro256MX3Random data2 = kryo.readObject(input, Xoshiro256MX3Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+ 
+    @Test
+    public void testXoroshiro128StarStarRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(Xoroshiro128StarStarRandom.class, new Xoroshiro128StarStarRandomSerializer());
+
+        Xoroshiro128StarStarRandom data = new Xoroshiro128StarStarRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Xoroshiro128StarStarRandom data2 = kryo.readObject(input, Xoroshiro128StarStarRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testChopRandom() {
         Kryo kryo = new Kryo();
         kryo.register(ChopRandom.class, new ChopRandomSerializer());
