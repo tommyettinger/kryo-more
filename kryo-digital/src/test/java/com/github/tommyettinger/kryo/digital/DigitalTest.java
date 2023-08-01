@@ -90,19 +90,20 @@ public class DigitalTest {
         Kryo kryo = new Kryo();
         kryo.register(Interpolations.Interpolator.class, new InterpolatorSerializer());
 
-        Interpolations.Interpolator data = Interpolations.elasticOut;
+        for (Interpolations.Interpolator data : Interpolations.getInterpolatorArray()) {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
-        kryo.writeObject(output, data);
-        byte[] bytes = output.toBytes();
-        try (Input input = new Input(bytes)) {
-            Interpolations.Interpolator data2 = kryo.readObject(input, Interpolations.Interpolator.class);
-            Assert.assertEquals(data.apply(0.1f), data2.apply(0.1f), MathTools.FLOAT_ROUNDING_ERROR);
-            Assert.assertEquals(data.apply(0.2f), data2.apply(0.2f), MathTools.FLOAT_ROUNDING_ERROR);
-            Assert.assertEquals(data.apply(0.7f), data2.apply(0.7f), MathTools.FLOAT_ROUNDING_ERROR);
-            Assert.assertEquals(data.apply(0.8f), data2.apply(0.8f), MathTools.FLOAT_ROUNDING_ERROR);
-            Assert.assertEquals(data, data2);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+            Output output = new Output(baos);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Interpolations.Interpolator data2 = kryo.readObject(input, Interpolations.Interpolator.class);
+                Assert.assertEquals(data.apply(0.1f), data2.apply(0.1f), MathTools.FLOAT_ROUNDING_ERROR);
+                Assert.assertEquals(data.apply(0.2f), data2.apply(0.2f), MathTools.FLOAT_ROUNDING_ERROR);
+                Assert.assertEquals(data.apply(0.7f), data2.apply(0.7f), MathTools.FLOAT_ROUNDING_ERROR);
+                Assert.assertEquals(data.apply(0.8f), data2.apply(0.8f), MathTools.FLOAT_ROUNDING_ERROR);
+                Assert.assertEquals(data, data2);
+            }
         }
     }
 }
