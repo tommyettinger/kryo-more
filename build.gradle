@@ -77,7 +77,7 @@ compileTestJava {
 
 repositories {
     // You can uncomment mavenLocal() if you need self-built versions, but it can be a problem with GWT or other sources dependencies.
-    //mavenLocal()
+//    mavenLocal()
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org' }
     google()

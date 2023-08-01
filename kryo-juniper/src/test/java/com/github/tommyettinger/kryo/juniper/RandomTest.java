@@ -20,7 +20,9 @@ package com.github.tommyettinger.kryo.juniper;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.digital.Interpolations;
 import com.github.tommyettinger.random.*;
+import com.github.tommyettinger.random.distribution.KumaraswamyDistribution;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -424,6 +426,28 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testInterpolatedRandom() {
+        Kryo kryo = new Kryo();
+//        InterpolatedRandomSerializer ser = new InterpolatedRandomSerializer();
+        kryo.register(InterpolatedRandom.class, new InterpolatedRandomSerializer());
+
+        InterpolatedRandom random = new InterpolatedRandom(Interpolations.kumaraswamyExtremeB,
+                new DistinctRandom(123L));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, random);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            InterpolatedRandom data2 = kryo.readObject(input, InterpolatedRandom.class);
+            Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
+            Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
+            Assert.assertTrue(EnhancedRandom.areEqual(random, data2));
+        }
+    }
+
 
     @Test
     public void testKnownSequenceRandom() {
