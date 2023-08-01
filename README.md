@@ -2,7 +2,7 @@
 
 Kryo 5.x serializers for various libGDX-related libraries.
 
-This lets Kryo 5.x (currently 5.4.0) de/serialize objects from [RegExodus](https://github.com/tommyettinger/RegExodus),
+This lets Kryo 5.x (currently 5.5.0) de/serialize objects from [RegExodus](https://github.com/tommyettinger/RegExodus),
 [digital](https://github.com/tommyettinger/digital), [jdkgdxds](https://github.com/tommyettinger/jdkgdxds),
 [juniper](https://github.com/tommyettinger/juniper), and [simple-graphs](https://github.com/earlygrey/simple-graphs).
 All of these but simple-graphs are maintained by [tommyettinger](https://github.com/tommyettinger), who also maintains
@@ -14,7 +14,7 @@ Each sub-library has its own version, linked to the version of the library it de
 The last component of the version is usually .0, but can be increased for bug-fixes to the same linked library version. 
 
   - kryo-regexodus is currently version 0.1.15.0
-  - kryo-digital is currently version 0.3.5.0
+  - kryo-digital is currently version 0.3.7.1
   - kryo-jdkgdxds is currently version 1.4.0.0
   - kryo-juniper is currently version 0.3.7.0
   - kryo-simple-graphs is currently version 5.1.1.0
@@ -33,7 +33,7 @@ implementation "com.github.tommyettinger:kryo-regexodus:0.1.15.0"
 kryo-digital:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-digital:0.3.5.0"
+implementation "com.github.tommyettinger:kryo-digital:0.3.7.1"
 ```
 
 kryo-jdkgdxds:
@@ -72,7 +72,7 @@ kryo-digital:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-digital</artifactId>
-  <version>0.3.5.0</version>
+  <version>0.3.7.1</version>
 </dependency>
 ```
 
