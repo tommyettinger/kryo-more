@@ -54,6 +54,7 @@ public class DistributionTest {
         mapping.put(FisherTippettDistribution.class, FisherTippettDistributionSerializer.class);
         mapping.put(GammaDistribution.class, GammaDistributionSerializer.class);
         mapping.put(GeometricDistribution.class, GeometricDistributionSerializer.class);
+        mapping.put(KnobDistribution.class, KnobDistributionSerializer.class);
         mapping.put(KumaraswamyDistribution.class, KumaraswamyDistributionSerializer.class);
         mapping.put(LaplaceDistribution.class, LaplaceDistributionSerializer.class);
         mapping.put(LogCauchyDistribution.class, LogCauchyDistributionSerializer.class);
