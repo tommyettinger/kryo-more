@@ -16,7 +16,7 @@ The last component of the version is usually .0, but can be increased for bug-fi
   - kryo-regexodus is currently version 0.1.15.0
   - kryo-digital is currently version 0.4.0.0
   - kryo-jdkgdxds is currently version 1.4.1.0
-  - kryo-juniper is currently version 0.3.8.1
+  - kryo-juniper is currently version 0.3.9.0
   - kryo-simple-graphs is currently version 5.1.1.0
 
 All of these sub-libraries depend on Java 8, except for kryo-regexodus (which depends on Java 7) and some older versions
@@ -45,7 +45,7 @@ implementation "com.github.tommyettinger:kryo-jdkgdxds:1.4.1.0"
 kryo-juniper:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-juniper:0.3.8.1"
+implementation "com.github.tommyettinger:kryo-juniper:0.3.9.0"
 ```
 
 kryo-simple-graphs:
@@ -92,7 +92,7 @@ kryo-juniper:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-juniper</artifactId>
-  <version>0.3.8.1</version>
+  <version>0.3.9.0</version>
 </dependency>
 ```
 
@@ -105,6 +105,11 @@ kryo-simple-graphs:
   <version>5.1.1.0</version>
 </dependency>
 ```
+
+### GWT
+
+GWT is not supported because Kryo doesn't support it. You can use libGDX Json on GWT; except for simple-graphs, all the
+libraries here are supported by [jdkgdxds-interop](https://github.com/tommyettinger/jdkgdxds_interop) with Json.
 
 ## License
 
