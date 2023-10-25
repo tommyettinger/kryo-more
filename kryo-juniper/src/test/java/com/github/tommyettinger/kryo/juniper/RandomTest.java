@@ -295,6 +295,44 @@ public class RandomTest {
     }
 
     @Test
+    public void testPouchRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(PouchRandom.class, new PouchRandomSerializer());
+
+        PouchRandom data = new PouchRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            PouchRandom data2 = kryo.readObject(input, PouchRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testSfc64Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Sfc64Random.class, new Sfc64RandomSerializer());
+
+        Sfc64Random data = new Sfc64Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Sfc64Random data2 = kryo.readObject(input, Sfc64Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testPasarRandom() {
         Kryo kryo = new Kryo();
         kryo.register(PasarRandom.class, new PasarRandomSerializer());
@@ -307,6 +345,25 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             PasarRandom data2 = kryo.readObject(input, PasarRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testCrand64Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Crand64Random.class, new Crand64RandomSerializer());
+
+        Crand64Random data = new Crand64Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Crand64Random data2 = kryo.readObject(input, Crand64Random.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
             Assert.assertEquals(data, data2);
@@ -402,6 +459,25 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             ChopRandom data2 = kryo.readObject(input, ChopRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testJsf32Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Jsf32Random.class, new Jsf32RandomSerializer());
+
+        Jsf32Random data = new Jsf32Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Jsf32Random data2 = kryo.readObject(input, Jsf32Random.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
             Assert.assertEquals(data, data2);
