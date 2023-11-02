@@ -5,8 +5,8 @@ version "$VERSION_NAME"
 eclipse.project.name = project.name
 
 sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java.sourceCompatibility = 1.8
+java.targetCompatibility = 1.8
 
 javadoc.destinationDir = file("../docs/$POM_NAME/apidocs")
 javadoc.options.source("8")
@@ -17,14 +17,16 @@ javadoc.options.source("8")
 
 if(JavaVersion.current().isJava9Compatible()) {
     allprojects {
-        tasks.withType(JavaCompile) {
-            options.release.set(8)
+        tasks.withType(JavaCompile).tap {
+            configureEach {
+                options.release.set(8)
+            }
         }
     }
 }
 
 dependencies {
-    api "com.github.tommyettinger:kryo-digital:0.4.1.0"
+    api "com.github.tommyettinger:kryo-digital:0.4.2.0"
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
     testImplementation "junit:junit:4.13.2"
