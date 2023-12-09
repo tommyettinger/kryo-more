@@ -247,4 +247,26 @@ public class SetTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+
+    @Test
+    public void testFilteredStringSet() {
+        CharFilter filter = CharFilter.getOrCreate("LettersOnlyIgnoreCase", Character::isLetter, Character::toUpperCase);
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(FilteredStringSet.class, new FilteredStringSetSerializer());
+
+        FilteredStringSet data = FilteredStringSet.with(filter, "Hello", "World", "!", "YES", "HELLO", "WORLD", "!");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FilteredStringSet data2 = kryo.readObject(input, FilteredStringSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+
 }
