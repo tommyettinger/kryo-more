@@ -160,7 +160,26 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
-    
+
+    @Test
+    public void testFlowRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(FlowRandom.class, new FlowRandomSerializer());
+
+        FlowRandom data = new FlowRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FlowRandom data2 = kryo.readObject(input, FlowRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
     @Test
     public void testRomuTrioRandom() {
         Kryo kryo = new Kryo();

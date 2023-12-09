@@ -73,7 +73,7 @@ public class DistributionTest {
 
         for (Map.Entry<Class<? extends Distribution>, Class<? extends Serializer<? extends Distribution>>> ent : mapping.entrySet()) {
             Kryo kryo = new Kryo();
-            kryo.register(WhiskerRandom.class, new WhiskerRandomSerializer());
+            kryo.register(AceRandom.class, new AceRandomSerializer());
             kryo.register(ent.getKey(), ent.getValue().getDeclaredConstructor().newInstance());
 
             Distribution data = ent.getKey().getDeclaredConstructor().newInstance();
