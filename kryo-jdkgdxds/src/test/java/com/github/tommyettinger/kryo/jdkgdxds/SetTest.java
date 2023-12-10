@@ -21,7 +21,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.*;
+import com.github.tommyettinger.function.ObjPredicate;
 import com.github.tommyettinger.function.ObjToObjFunction;
+import com.github.tommyettinger.function.ObjToSameFunction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -283,6 +285,32 @@ public class SetTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             FilteredStringOrderedSet data2 = kryo.readObject(input, FilteredStringOrderedSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testFilteredIterableSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(ObjPredicate.class);
+        kryo.register(ObjToSameFunction.class);
+        kryo.register(ObjectList.class, new ObjectListSerializer());
+        kryo.register(FilteredIterableSet.class, new FilteredIterableSetSerializer());
+
+        FilteredIterableSet<String, Iterable<String>> data = FilteredIterableSet.with(
+                (String s) -> s.length() > 3, String::toUpperCase,
+                ObjectList.with("zzz", "bee", "binturong"),
+                ObjectList.with("hm?", "bee", "BINTURONG"),
+                ObjectList.with(":D", "bee", "Aardvark", "bandicoot")
+        );
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FilteredIterableSet<?, ?> data2 = kryo.readObject(input, FilteredIterableSet.class);
             Assert.assertEquals(data, data2);
         }
     }
