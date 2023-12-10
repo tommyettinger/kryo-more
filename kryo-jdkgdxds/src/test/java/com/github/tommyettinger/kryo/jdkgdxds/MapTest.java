@@ -505,4 +505,23 @@ public class MapTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testFilteredStringOrderedMap() {
+        CharFilter filter = CharFilter.getOrCreate("LettersOnlyIgnoreCase", Character::isLetter, Character::toUpperCase);
+        Kryo kryo = new Kryo();
+        kryo.register(FilteredStringOrderedMap.class, new FilteredStringOrderedMapSerializer());
+
+        FilteredStringOrderedMap<Integer> data = FilteredStringOrderedMap.with(filter, "Hello", -123456, "World", Integer.MIN_VALUE,
+                "!", 456789012, "YES", 0, "HELLO", 1111, "WORLD", 1, "!", 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FilteredStringOrderedMap<?> data2 = kryo.readObject(input, FilteredStringOrderedMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }

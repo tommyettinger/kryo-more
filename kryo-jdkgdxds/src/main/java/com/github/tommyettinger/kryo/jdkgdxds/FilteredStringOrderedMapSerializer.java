@@ -22,33 +22,32 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.CharFilter;
-import com.github.tommyettinger.ds.FilteredStringMap;
-import com.github.tommyettinger.ds.FilteredStringSet;
+import com.github.tommyettinger.ds.FilteredStringOrderedMap;
 import com.github.tommyettinger.ds.Utilities;
 
 import java.util.NoSuchElementException;
 
-public class FilteredStringMapSerializer extends MapSerializer<FilteredStringMap<?>> {
-    public FilteredStringMapSerializer() {
+public class FilteredStringOrderedMapSerializer extends MapSerializer<FilteredStringOrderedMap<?>> {
+    public FilteredStringOrderedMapSerializer() {
         super();
         setKeysCanBeNull(false);
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, FilteredStringMap<?> map) {
+    protected void writeHeader(Kryo kryo, Output output, FilteredStringOrderedMap<?> map) {
         CharFilter fil = map.getFilter();
         if(fil == null)
-            throw new NoSuchElementException("A FilteredStringMap must have a non-null filter to be serialized.");
+            throw new NoSuchElementException("A FilteredStringOrderedMap must have a non-null filter to be serialized.");
         output.writeString(fil.getName());
     }
 
     @Override
-    protected FilteredStringMap<?> create(Kryo kryo, Input input, Class<? extends FilteredStringMap<?>> type, int size) {
-        return new FilteredStringMap<>(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor());
+    protected FilteredStringOrderedMap<?> create(Kryo kryo, Input input, Class<? extends FilteredStringOrderedMap<?>> type, int size) {
+        return new FilteredStringOrderedMap<>(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor());
     }
 
     @Override
-    protected FilteredStringMap<?> createCopy(Kryo kryo, FilteredStringMap<?> original) {
-        return new FilteredStringMap<>(original.getFilter(), original.size(), original.getLoadFactor());
+    protected FilteredStringOrderedMap<?> createCopy(Kryo kryo, FilteredStringOrderedMap<?> original) {
+        return new FilteredStringOrderedMap<>(original.getFilter(), original.size(), original.getLoadFactor());
     }
 }
