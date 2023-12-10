@@ -552,5 +552,31 @@ public class MapTest {
             Assert.assertEquals(data, data2);
         }
     }
+    
+    @Test
+    public void testFilteredIterableOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(ObjPredicate.class);
+        kryo.register(ObjToSameFunction.class);
+        kryo.register(ObjectList.class, new ObjectListSerializer());
+        kryo.register(FilteredIterableOrderedMap.class, new FilteredIterableOrderedMapSerializer());
+
+        FilteredIterableOrderedMap<String, ObjectList<String>, Integer> data = FilteredIterableOrderedMap.with(
+                (String s) -> s.length() > 3, String::toUpperCase,
+                ObjectList.with("zzz", "bee", "binturong"), 1234,
+                ObjectList.with("hm?", "bee", "BINTURONG"), -5678,
+                ObjectList.with(":D", "bee", "Aardvark", "bandicoot"), Integer.MIN_VALUE
+        );
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FilteredIterableOrderedMap<?,?,?> data2 = kryo.readObject(input, FilteredIterableOrderedMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 
 }
