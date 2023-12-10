@@ -268,5 +268,22 @@ public class SetTest {
         }
     }
 
+    @Test
+    public void testFilteredStringOrderedSet() {
+        CharFilter filter = CharFilter.getOrCreate("LettersOnlyIgnoreCase", Character::isLetter, Character::toUpperCase);
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(FilteredStringOrderedSet.class, new FilteredStringOrderedSetSerializer());
 
+        FilteredStringOrderedSet data = FilteredStringOrderedSet.with(filter, "Hello", "World", "!", "YES", "HELLO", "WORLD", "!");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FilteredStringOrderedSet data2 = kryo.readObject(input, FilteredStringOrderedSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
