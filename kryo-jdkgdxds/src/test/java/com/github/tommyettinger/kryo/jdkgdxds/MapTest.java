@@ -21,6 +21,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.*;
+import com.github.tommyettinger.function.ObjPredicate;
+import com.github.tommyettinger.function.ObjToSameFunction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -524,4 +526,31 @@ public class MapTest {
             Assert.assertEquals(data, data2);
         }
     }
+    
+    @Test
+    public void testFilteredIterableMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(ObjPredicate.class);
+        kryo.register(ObjToSameFunction.class);
+        kryo.register(ObjectList.class, new ObjectListSerializer());
+        kryo.register(FilteredIterableMap.class, new FilteredIterableMapSerializer());
+
+        FilteredIterableMap<String, ObjectList<String>, Integer> data = FilteredIterableMap.with(
+                (String s) -> s.length() > 3, String::toUpperCase,
+                ObjectList.with("zzz", "bee", "binturong"), 1234,
+                ObjectList.with("hm?", "bee", "BINTURONG"), -5678,
+                ObjectList.with(":D", "bee", "Aardvark", "bandicoot"), Integer.MIN_VALUE
+        );
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FilteredIterableMap<?,?,?> data2 = kryo.readObject(input, FilteredIterableMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
 }
