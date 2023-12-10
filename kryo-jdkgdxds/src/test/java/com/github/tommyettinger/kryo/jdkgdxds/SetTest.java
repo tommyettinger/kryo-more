@@ -314,4 +314,30 @@ public class SetTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testFilteredIterableOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(String.class);
+        kryo.register(ObjPredicate.class);
+        kryo.register(ObjToSameFunction.class);
+        kryo.register(ObjectList.class, new ObjectListSerializer());
+        kryo.register(FilteredIterableOrderedSet.class, new FilteredIterableOrderedSetSerializer());
+
+        FilteredIterableOrderedSet<String, Iterable<String>> data = FilteredIterableOrderedSet.with(
+                (String s) -> s.length() > 3, String::toUpperCase,
+                ObjectList.with("zzz", "bee", "binturong"),
+                ObjectList.with("hm?", "bee", "BINTURONG"),
+                ObjectList.with(":D", "bee", "Aardvark", "bandicoot")
+        );
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FilteredIterableOrderedSet<?, ?> data2 = kryo.readObject(input, FilteredIterableOrderedSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
