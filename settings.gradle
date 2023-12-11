@@ -1,1 +1,1 @@
-include 'kryo-regexodus', 'kryo-digital', 'kryo-jdkgdxds', 'kryo-juniper', 'kryo-simple-graphs'
+include 'kryo-regexodus', 'kryo-digital', 'kryo-jdkgdxds', 'kryo-juniper', 'kryo-simple-graphs', 'kryo-jdk-extra'
