@@ -41,21 +41,21 @@ public class EnumMapSerializerTest {
 		BLUE, ORANGE, PINK, WHITE, BROWN, BLONDE;
 	}
 
-    private Kryo _kryo;
-    private EnumMap<Vipers, Set<String>> _original;
+    private Kryo kryo;
+    private EnumMap<Vipers, Set<String>> originalMap;
     
     @Before
     public void beforeTest() {
-        _kryo = new Kryo();
-		_kryo.register(Vipers.class);
-		_kryo.register(EnumMap.class, new EnumMapSerializer(Vipers.class));
-		_original = new EnumMap<Vipers, Set<String>>(Vipers.class);
+        kryo = new Kryo();
+		kryo.register(Vipers.class);
+		kryo.register(EnumMap.class, new EnumMapSerializer(Vipers.class));
+		originalMap = new EnumMap<Vipers, Set<String>>(Vipers.class);
     }
     
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test(expected = ClassCastException.class)
     public void testCopyEmpty() {
-        EnumMap copy = _kryo.copy(_original);        
+        EnumMap copy = kryo.copy(originalMap);
         // The next statement asserts that the key type of the copy is initialized correctly - 
         // it should throw the expected ClassCastException.
     	copy.put(Colors.BROWN, new HashSet<String>());
@@ -63,17 +63,17 @@ public class EnumMapSerializerTest {
 
 	@Test
     public void testDeepCopy() {
-    	_kryo.register(java.util.HashSet.class);
+    	kryo.register(java.util.HashSet.class);
 
 		final Set<String> mambaAka = new HashSet<String>();
 		mambaAka.add("Beatrix Kiddo");
 		mambaAka.add("The Bride");
-        _original.put(Vipers.BLACK_MAMBA, mambaAka);
+        originalMap.put(Vipers.BLACK_MAMBA, mambaAka);
         
-		EnumMap<Vipers, Set<String>> copy = _kryo.copy(_original);        
-        Assert.assertNotSame(_original, copy);
+		EnumMap<Vipers, Set<String>> copy = kryo.copy(originalMap);
+        Assert.assertNotSame(originalMap, copy);
         Assert.assertTrue(copy.containsKey(Vipers.BLACK_MAMBA));
-		Assert.assertNotSame(_original.get(Vipers.BLACK_MAMBA), copy.get(Vipers.BLACK_MAMBA));
-        Assert.assertEquals(_original, copy);
+		Assert.assertNotSame(originalMap.get(Vipers.BLACK_MAMBA), copy.get(Vipers.BLACK_MAMBA));
+        Assert.assertEquals(originalMap, copy);
     }
 }
