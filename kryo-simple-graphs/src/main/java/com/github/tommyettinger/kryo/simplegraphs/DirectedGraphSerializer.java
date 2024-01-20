@@ -23,7 +23,6 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import space.earlygrey.simplegraphs.Connection;
 import space.earlygrey.simplegraphs.DirectedGraph;
-import space.earlygrey.simplegraphs.utils.WeightFunction;
 
 import java.util.Collection;
 
@@ -50,8 +49,7 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         for(Connection<?> e : edges) {
             kryo.writeClassAndObject(output, e.getA());
             kryo.writeClassAndObject(output, e.getB());
-            kryo.writeClassAndObject(output, e.getWeightFunction());
-//            output.writeFloat(e.getWeight());
+            output.writeFloat(e.getWeight());
         }
     }
 
@@ -66,7 +64,8 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         }
         length = input.readInt(true);
         for (int i = 0; i < length; i++) {
-            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), (WeightFunction) kryo.readClassAndObject(input));
+//            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), (WeightFunction) kryo.readClassAndObject(input));
+            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), input.readFloat());
         }
         return graph;
     }
@@ -74,7 +73,7 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
     @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public DirectedGraph<?> copy(Kryo kryo, DirectedGraph<?> original) {
-        DirectedGraph<?> graph = new DirectedGraph<>(original);
+        DirectedGraph<?> graph = new DirectedGraph<>();
         DirectedGraph raw = graph;
         Collection<?> vertices = graph.getVertices();
         for(Object v : vertices){
@@ -82,7 +81,7 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         }
         Collection<? extends Connection<?>> edges = graph.internals().getConnections();
         for(Connection<?> e : edges){
-            raw.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeightFunction());
+            raw.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeight());
         }
         return graph;
     }

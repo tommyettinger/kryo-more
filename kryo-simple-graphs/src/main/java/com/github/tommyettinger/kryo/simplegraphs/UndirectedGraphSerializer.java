@@ -51,7 +51,8 @@ public class UndirectedGraphSerializer extends Serializer<UndirectedGraph<?>> {
         for(Connection<?> e : edges) {
             kryo.writeClassAndObject(output, e.getA());
             kryo.writeClassAndObject(output, e.getB());
-            kryo.writeClassAndObject(output, e.getWeightFunction());
+//            kryo.writeClassAndObject(output, e.getWeightFunction());
+            output.writeFloat(e.getWeight());
         }
     }
 
@@ -66,7 +67,8 @@ public class UndirectedGraphSerializer extends Serializer<UndirectedGraph<?>> {
         }
         length = input.readInt(true);
         for (int i = 0; i < length; i++) {
-            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), (WeightFunction) kryo.readClassAndObject(input));
+//            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), (WeightFunction) kryo.readClassAndObject(input));
+            raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), input.readFloat());
         }
         return graph;
     }
@@ -74,7 +76,7 @@ public class UndirectedGraphSerializer extends Serializer<UndirectedGraph<?>> {
     @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public UndirectedGraph<?> copy(Kryo kryo, UndirectedGraph<?> original) {
-        UndirectedGraph<?> graph = new UndirectedGraph<>(original);
+        UndirectedGraph<?> graph = new UndirectedGraph<>();
         UndirectedGraph raw = graph;
         Collection<?> vertices = graph.getVertices();
         for(Object v : vertices){
@@ -82,7 +84,8 @@ public class UndirectedGraphSerializer extends Serializer<UndirectedGraph<?>> {
         }
         Collection<? extends Connection<?>> edges = graph.internals().getConnections();
         for(Connection<?> e : edges){
-            raw.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeightFunction());
+//            raw.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeightFunction());
+            raw.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeight());
         }
         return graph;
     }
