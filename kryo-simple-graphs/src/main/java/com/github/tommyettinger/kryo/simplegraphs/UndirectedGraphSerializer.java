@@ -22,14 +22,13 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import space.earlygrey.simplegraphs.Connection;
-import space.earlygrey.simplegraphs.Edge;
 import space.earlygrey.simplegraphs.UndirectedGraph;
-import space.earlygrey.simplegraphs.utils.WeightFunction;
 
 import java.util.Collection;
 
 /**
  * Kryo {@link Serializer} for simple-graphs {@link UndirectedGraph}s.
+ * You should register the vertex type when you register this as the serializer for UndirectedGraph.
  */
 public class UndirectedGraphSerializer extends Serializer<UndirectedGraph<?>> {
 

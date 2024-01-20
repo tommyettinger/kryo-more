@@ -32,14 +32,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-//TODO: This is ignored while we wait for some kind of fix to become available for serializing the constant weight
-// function inside simple-graphs.
-//@Ignore
 public class SimpleGraphsTest {
     @Test
     public void testUndirectedGraph() {
         Kryo kryo = new Kryo();
-        kryo.register(WeightFunction.class);
         kryo.register(UndirectedGraph.class, new UndirectedGraphSerializer());
         kryo.register(Vector2.class);
 
@@ -52,10 +48,10 @@ public class SimpleGraphsTest {
         byte[] bytes = output.toBytes();
         System.out.println("Undirected byte length: " + bytes.length);
         try (Input input = new Input(bytes)) {
-            UndirectedGraph data2 = kryo.readObject(input, UndirectedGraph.class);
+            UndirectedGraph<?> data2 = kryo.readObject(input, UndirectedGraph.class);
 //            Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
             Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
-            Assert.assertEquals(new ArrayList(data.getVertices()), new ArrayList(data2.getVertices()));
+            Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));
             Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
                                 data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
         }
@@ -64,7 +60,6 @@ public class SimpleGraphsTest {
     @Test
     public void testDirectedGraph() {
         Kryo kryo = new Kryo();
-        kryo.register(WeightFunction.class);
         kryo.register(DirectedGraph.class, new DirectedGraphSerializer());
         kryo.register(Vector2.class);
 
@@ -77,10 +72,10 @@ public class SimpleGraphsTest {
         byte[] bytes = output.toBytes();
         System.out.println("Directed byte length: " + bytes.length);
         try (Input input = new Input(bytes)) {
-            DirectedGraph data2 = kryo.readObject(input, DirectedGraph.class);
+            DirectedGraph<?> data2 = kryo.readObject(input, DirectedGraph.class);
 //            Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
             Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
-            Assert.assertEquals(new ArrayList(data.getVertices()), new ArrayList(data2.getVertices()));
+            Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));
             Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
                                 data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
         }

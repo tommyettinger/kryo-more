@@ -28,6 +28,7 @@ import java.util.Collection;
 
 /**
  * Kryo {@link Serializer} for simple-graphs {@link DirectedGraph}s.
+ * You should register the vertex type when you register this as the serializer for DirectedGraph.
  */
 public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
 
