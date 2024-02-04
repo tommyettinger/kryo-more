@@ -4,6 +4,13 @@ version "$VERSION_NAME"
 
 eclipse.project.name = project.name
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+
 sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
 
 javadoc.destinationDir = file("../docs/$POM_NAME/apidocs")
@@ -11,7 +18,7 @@ javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).linkSource(true)
 ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
 ((StandardJavadocDocletOptions)javadoc.options).use(true)
-((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2023.")
+((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2024.")
 
 compileJava {
     sourceCompatibility = 7

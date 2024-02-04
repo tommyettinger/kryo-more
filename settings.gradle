@@ -1,1 +1,5 @@
+// Can be used to automatically download a JDK with the correct version.
+plugins {
+    id('org.gradle.toolchains.foojay-resolver-convention') version '0.7.0'
+}
 include 'kryo-regexodus', 'kryo-digital', 'kryo-jdkgdxds', 'kryo-juniper', 'kryo-simple-graphs', 'kryo-jdk-extra'

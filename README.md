@@ -11,9 +11,10 @@ this serialization library.
 ## How to get
 
 Each sub-library has its own version, linked to the version of the library it de/serializes.
-The last component of the version is usually .0, but can be increased for bug-fixes to the same linked library version. 
+The last component of the version is usually .0, but can be increased for bug-fixes to the same linked library version,
+or if Kryo itself had a (compatible) update available but the linked library did not have an update.
 
-  - kryo-regexodus is currently version 0.1.15.0
+  - kryo-regexodus is currently version 0.1.15.1
   - kryo-digital is currently version 0.4.7.1
   - kryo-jdkgdxds is currently version 1.4.8.0
   - kryo-juniper is currently version 0.5.0.0
@@ -29,7 +30,7 @@ Gradle dependency info:
 kryo-regexodus:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-regexodus:0.1.15.0"
+implementation "com.github.tommyettinger:kryo-regexodus:0.1.15.1"
 ```
 
 kryo-digital:
@@ -64,7 +65,7 @@ kryo-regexodus:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-regexodus</artifactId>
-  <version>0.1.15.0</version>
+  <version>0.1.15.1</version>
 </dependency>
 ```
 

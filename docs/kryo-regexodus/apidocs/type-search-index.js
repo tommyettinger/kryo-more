@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"com.github.tommyettinger.kryo.regexodus","l":"PatternSerializer"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.github.tommyettinger.kryo.regexodus","l":"PatternSerializer"}];updateSearchResults();
