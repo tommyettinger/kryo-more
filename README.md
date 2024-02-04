@@ -18,7 +18,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
   - kryo-digital is currently version 0.4.7.1
   - kryo-jdkgdxds is currently version 1.4.8.0
   - kryo-juniper is currently version 0.5.0.0
-  - kryo-simple-graphs is currently (usable at) version 3.0.0.0
+  - kryo-simple-graphs is currently (usable at) version 3.0.0.1
     - This depends on simple-graphs v3.0.0, not the current 5.1.1, because versions since 4.0.0 don't make the edges on
       graphs serializable in any way (they use a lambda per-edge).
 
@@ -54,7 +54,7 @@ implementation "com.github.tommyettinger:kryo-juniper:0.5.0.0"
 kryo-simple-graphs:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-simple-graphs:3.0.0.0"
+implementation "com.github.tommyettinger:kryo-simple-graphs:3.0.0.1"
 ```
 
 Maven dependency info:
@@ -105,7 +105,7 @@ kryo-simple-graphs:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-simple-graphs</artifactId>
-  <version>3.0.0.0</version>
+  <version>3.0.0.1</version>
 </dependency>
 ```
 
