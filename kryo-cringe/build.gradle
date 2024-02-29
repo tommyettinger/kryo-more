@@ -13,7 +13,7 @@ javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).linkSource(true)
 ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
 ((StandardJavadocDocletOptions)javadoc.options).use(true)
-((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2024.")
+((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2024.")
 
 compileJava {
     sourceCompatibility = 8
@@ -33,7 +33,7 @@ compileTestJava {
 
 dependencies {
     api "com.esotericsoftware:kryo:$kryoVersion"
-    api "space.earlygrey:simple-graphs:$simpleGraphsVersion"
+    api "com.github.tommyettinger:cringe:$cringeVersion"
     testImplementation "junit:junit:4.13.2"
 }
 
