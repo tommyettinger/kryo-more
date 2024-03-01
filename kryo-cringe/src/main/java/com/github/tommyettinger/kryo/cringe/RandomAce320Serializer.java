@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.cringe.RandomAce320;
-import com.github.tommyettinger.cringe.RandomAce320;
 
 /**
  * Kryo {@link Serializer} for cringe {@link RandomAce320}s.

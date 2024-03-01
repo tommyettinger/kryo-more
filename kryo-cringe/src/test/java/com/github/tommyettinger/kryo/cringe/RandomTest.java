@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.cringe.*;
 import com.github.tommyettinger.kryo.gdx.ArraySerializer;
 import org.junit.Assert;
