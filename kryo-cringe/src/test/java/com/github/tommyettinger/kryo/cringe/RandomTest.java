@@ -22,10 +22,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
-import com.github.tommyettinger.cringe.GapShuffler;
-import com.github.tommyettinger.cringe.RandomAce320;
-import com.github.tommyettinger.cringe.RandomDistinct64;
-import com.github.tommyettinger.cringe.RandomXMX256;
+import com.github.tommyettinger.cringe.*;
 import com.github.tommyettinger.kryo.gdx.ArraySerializer;
 import org.junit.Assert;
 import org.junit.Test;
@@ -110,4 +107,28 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+
+    @Test
+    public void testWeightedTable() {
+        Kryo kryo = new Kryo();
+        kryo.register(RandomAce320.class, new RandomAce320Serializer());
+        kryo.register(WeightedTable.class, new WeightedTableSerializer());
+
+        WeightedTable data = new WeightedTable(new RandomAce320(123L), 1f, 2f, 3f, 4f, 0.5f, 5.5f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            WeightedTable data2 = kryo.readObject(input, WeightedTable.class);
+            Assert.assertEquals(data.random(0L), data2.random(0L));
+            Assert.assertEquals(data.random(1L), data2.random(1L));
+            Assert.assertEquals(data.random(2L), data2.random(2L));
+            Assert.assertEquals(data.stringSerialize(), data2.stringSerialize());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
 }
