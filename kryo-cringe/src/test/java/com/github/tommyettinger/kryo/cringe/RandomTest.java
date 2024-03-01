@@ -17,12 +17,16 @@
 
 package com.github.tommyettinger.kryo.cringe;
 
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.CollectionSerializer;
+import com.github.tommyettinger.cringe.GapShuffler;
 import com.github.tommyettinger.cringe.RandomAce320;
 import com.github.tommyettinger.cringe.RandomDistinct64;
 import com.github.tommyettinger.cringe.RandomXMX256;
+import com.github.tommyettinger.kryo.gdx.ArraySerializer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -82,6 +86,27 @@ public class RandomTest {
             RandomXMX256 data2 = kryo.readObject(input, RandomXMX256.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testGapShuffler() {
+        Kryo kryo = new Kryo();
+        kryo.register(RandomAce320.class, new RandomAce320Serializer());
+        kryo.register(Array.class, new ArraySerializer());
+        kryo.register(GapShuffler.class, new GapShufflerSerializer());
+
+        GapShuffler<String> data = new GapShuffler<>(new String[]{"Foo", "Bar", "Baz", "Quux"}, new RandomAce320(123));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            GapShuffler data2 = kryo.readObject(input, GapShuffler.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
             Assert.assertEquals(data, data2);
         }
     }
