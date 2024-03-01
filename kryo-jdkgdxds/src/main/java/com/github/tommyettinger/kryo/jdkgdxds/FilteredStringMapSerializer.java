@@ -23,7 +23,6 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.CharFilter;
 import com.github.tommyettinger.ds.FilteredStringMap;
-import com.github.tommyettinger.ds.FilteredStringSet;
 import com.github.tommyettinger.ds.Utilities;
 
 import java.util.NoSuchElementException;

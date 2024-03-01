@@ -21,30 +21,32 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.cringe.HoneyNoise;
+import com.github.tommyettinger.cringe.CyclicNoise;
 
 /**
- * Kryo {@link Serializer} for cringe {@link HoneyNoise}s.
+ * Kryo {@link Serializer} for cringe {@link CyclicNoise}s.
  */
-public class HoneyNoiseSerializer extends Serializer<HoneyNoise> {
+public class CyclicNoiseSerializer extends Serializer<CyclicNoise> {
 
-    public HoneyNoiseSerializer() {
+    public CyclicNoiseSerializer() {
         setImmutable(false);
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final HoneyNoise data) {
+    public void write(final Kryo kryo, final Output output, final CyclicNoise data) {
         output.writeInt(data.getSeed(), false);
+        output.writeInt(data.getOctaves(), true);
+        output.writeFloat(data.getFrequency());
     }
 
     @Override
-    public HoneyNoise read(final Kryo kryo, final Input input, final Class<? extends HoneyNoise> dataClass) {
-        return new HoneyNoise(input.readInt(false));
+    public CyclicNoise read(final Kryo kryo, final Input input, final Class<? extends CyclicNoise> dataClass) {
+        return new CyclicNoise(input.readInt(false), input.readInt(true), input.readFloat());
     }
 
     @Override
-    public HoneyNoise copy(Kryo kryo, HoneyNoise original) {
+    public CyclicNoise copy(Kryo kryo, CyclicNoise original) {
         return original.copy();
     }
 }

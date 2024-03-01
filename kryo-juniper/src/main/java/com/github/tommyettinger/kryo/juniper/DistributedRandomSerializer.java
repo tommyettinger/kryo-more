@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.random.Deserializer;
 import com.github.tommyettinger.random.DistributedRandom;
 
 /**

@@ -21,7 +21,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.CaseInsensitiveSet;
-import com.github.tommyettinger.ds.ObjectSet;
 
 public class CaseInsensitiveSetSerializer extends CollectionSerializer<CaseInsensitiveSet> {
     public CaseInsensitiveSetSerializer() {

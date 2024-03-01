@@ -22,9 +22,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.FilteredIterableSet;
-import com.github.tommyettinger.ds.FilteredIterableSet;
 import com.github.tommyettinger.function.ObjPredicate;
-import com.github.tommyettinger.function.ObjToObjFunction;
 import com.github.tommyettinger.function.ObjToSameFunction;
 
 import java.util.NoSuchElementException;

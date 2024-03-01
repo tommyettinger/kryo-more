@@ -21,30 +21,32 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.cringe.HoneyNoise;
+import com.github.tommyettinger.cringe.SorbetNoise;
 
 /**
- * Kryo {@link Serializer} for cringe {@link HoneyNoise}s.
+ * Kryo {@link Serializer} for cringe {@link SorbetNoise}s.
  */
-public class HoneyNoiseSerializer extends Serializer<HoneyNoise> {
+public class SorbetNoiseSerializer extends Serializer<SorbetNoise> {
 
-    public HoneyNoiseSerializer() {
+    public SorbetNoiseSerializer() {
         setImmutable(false);
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final HoneyNoise data) {
+    public void write(final Kryo kryo, final Output output, final SorbetNoise data) {
         output.writeInt(data.getSeed(), false);
+        output.writeInt(data.getOctaves(), true);
+        output.writeFloat(data.getFrequency());
     }
 
     @Override
-    public HoneyNoise read(final Kryo kryo, final Input input, final Class<? extends HoneyNoise> dataClass) {
-        return new HoneyNoise(input.readInt(false));
+    public SorbetNoise read(final Kryo kryo, final Input input, final Class<? extends SorbetNoise> dataClass) {
+        return new SorbetNoise(input.readInt(false), input.readInt(true), input.readFloat());
     }
 
     @Override
-    public HoneyNoise copy(Kryo kryo, HoneyNoise original) {
+    public SorbetNoise copy(Kryo kryo, SorbetNoise original) {
         return original.copy();
     }
 }

@@ -21,12 +21,10 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import space.earlygrey.simplegraphs.DirectedGraph;
 import space.earlygrey.simplegraphs.Graph;
 import space.earlygrey.simplegraphs.UndirectedGraph;
-import space.earlygrey.simplegraphs.utils.WeightFunction;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.digital.Interpolations;
 import com.github.tommyettinger.random.*;
-import com.github.tommyettinger.random.distribution.KumaraswamyDistribution;
 import org.junit.Assert;
 import org.junit.Test;
 
