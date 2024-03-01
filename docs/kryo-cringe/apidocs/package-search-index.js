@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.github.tommyettinger.kryo.cringe"},{"l":"com.github.tommyettinger.kryo.gdx"}];updateSearchResults();

@@ -2,9 +2,10 @@
 
 Kryo 5.x serializers for various libGDX-related libraries.
 
-This lets Kryo 5.x (currently 5.5.0) de/serialize objects from [RegExodus](https://github.com/tommyettinger/RegExodus),
+This lets Kryo 5.x (currently 5.6.0) de/serialize objects from [RegExodus](https://github.com/tommyettinger/RegExodus),
 [digital](https://github.com/tommyettinger/digital), [jdkgdxds](https://github.com/tommyettinger/jdkgdxds),
-[juniper](https://github.com/tommyettinger/juniper), and [simple-graphs](https://github.com/earlygrey/simple-graphs).
+[juniper](https://github.com/tommyettinger/juniper), [cringe](https://github.com/tommyettinger/cringe),
+and [simple-graphs](https://github.com/earlygrey/simple-graphs).
 All of these but simple-graphs are maintained by [tommyettinger](https://github.com/tommyettinger), who also maintains
 this serialization library.
 
@@ -18,6 +19,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
   - kryo-digital is currently version 0.4.7.1
   - kryo-jdkgdxds is currently version 1.4.8.1
   - kryo-juniper is currently version 0.5.0.1
+  - kryo-cringe is currently version 0.1.0.1
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
     - This depends on simple-graphs v3.0.0, not the current 5.1.1, because versions since 4.0.0 don't make the edges on
       graphs serializable in any way (they use a lambda per-edge).
@@ -49,6 +51,12 @@ kryo-juniper:
 
 ```gradle
 implementation "com.github.tommyettinger:kryo-juniper:0.5.0.1"
+```
+
+kryo-cringe:
+
+```gradle
+implementation "com.github.tommyettinger:kryo-cringe:0.1.0.1"
 ```
 
 kryo-simple-graphs:
@@ -96,6 +104,16 @@ kryo-juniper:
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-juniper</artifactId>
   <version>0.5.0.1</version>
+</dependency>
+```
+
+kryo-cringe:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>kryo-cringe</artifactId>
+  <version>0.1.0.1</version>
 </dependency>
 ```
 
