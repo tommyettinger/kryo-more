@@ -1,0 +1,45 @@
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+version "$VERSION_NAME"
+
+eclipse.project.name = project.name
+
+sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
+java.sourceCompatibility = 1.8
+java.targetCompatibility = 1.8
+
+javadoc.destinationDir = file("../docs/$POM_NAME/apidocs")
+javadoc.options.source("8")
+((StandardJavadocDocletOptions)javadoc.options).linkSource(true)
+((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
+((StandardJavadocDocletOptions)javadoc.options).use(true)
+((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2024.")
+
+compileJava {
+    sourceCompatibility = 8
+    targetCompatibility = 8
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.release.set(8)
+    }
+}
+
+compileTestJava {
+    sourceCompatibility = 8
+    targetCompatibility = 8
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.release.set(8)
+    }
+}
+
+dependencies {
+    api "com.esotericsoftware:kryo:$kryoVersion"
+    api "com.github.tommyettinger:gand:$gandVersion"
+    testImplementation "junit:junit:4.13.2"
+}
+
+jar {
+    archiveBaseName.set(project.name)
+    manifest {
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': archiveVersion
+    }
+}
