@@ -21,7 +21,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.gand.Path;
+import com.github.tommyettinger.crux.Point2;
+import com.github.tommyettinger.crux.PointN;
+import com.github.tommyettinger.gand.*;
 import com.github.tommyettinger.gand.ds.ObjectDeque;
 import com.github.tommyettinger.gand.points.PointI2;
 import com.github.tommyettinger.gand.points.PointMaker;
@@ -29,9 +31,6 @@ import com.github.tommyettinger.kryo.gand.ds.ObjectDequeSerializer;
 import com.github.tommyettinger.kryo.gand.points.PointI2Serializer;
 import org.junit.Assert;
 import org.junit.Test;
-import com.github.tommyettinger.gand.DirectedGraph;
-import com.github.tommyettinger.gand.Graph;
-import com.github.tommyettinger.gand.UndirectedGraph;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -69,6 +68,35 @@ public class GandTest {
         return graph;
     }
 
+    public static<V extends Point2<V>> Graph<V> makeGridGraph(Graph<V> graph, int sideLength, V basis) {
+
+        for (int i = 0; i < sideLength; i++) {
+            for (int j = 0; j < sideLength; j++) {
+                V v = basis.cpy().set(i, j);
+                graph.addVertex(v);
+            }
+        }
+
+        for (int i = 0; i < sideLength; i++) {
+            for (int j = 0; j < sideLength; j++) {
+                if (i<sideLength-1) {
+                    V v1 = basis.cpy().set(i, j), v2 = basis.cpy().set(i+1,j);
+                    float dst = v1.dst(v2);
+                    graph.addEdge(v1, v2, dst);
+                    if (graph.isDirected()) graph.addEdge(v2, v1, dst);
+                }
+                if (j<sideLength-1) {
+                    V v1 = basis.cpy().set(i, j), v2 = basis.cpy().set(i,j+1);
+                    float dst = v1.dst(v2);
+                    graph.addEdge(v1, v2, dst);
+                    if (graph.isDirected()) graph.addEdge(v2, v1, dst);
+                }
+            }
+        }
+
+        return graph;
+    }
+
     @Test
     public void testUndirectedGraph() {
         Kryo kryo = new Kryo();
@@ -82,7 +110,7 @@ public class GandTest {
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
-        System.out.println("Undirected byte length: " + bytes.length);
+        System.out.println("UndirectedGraph byte length: " + bytes.length);
         try (Input input = new Input(bytes)) {
             UndirectedGraph<?> data2 = kryo.readObject(input, UndirectedGraph.class);
             Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
@@ -107,9 +135,34 @@ public class GandTest {
         Output output = new Output(baos);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
-        System.out.println("Directed byte length: " + bytes.length);
+        System.out.println("DirectedGraph byte length: " + bytes.length);
         try (Input input = new Input(bytes)) {
             DirectedGraph<?> data2 = kryo.readObject(input, DirectedGraph.class);
+            Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
+            Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
+            Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));
+            Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
+                                data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testInt2DirectedGraph() {
+        Kryo kryo = new Kryo();
+        kryo.register(Int2DirectedGraph.class, new Int2DirectedGraphSerializer());
+        kryo.register(PointI2.class, new PointI2Serializer());
+
+        int n = 5;
+        Graph<PointI2> data = makeGridGraph(new Int2DirectedGraph(), n, new PointI2());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Int2DirectedGraph byte length: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Int2DirectedGraph data2 = kryo.readObject(input, Int2DirectedGraph.class);
             Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
             Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
             Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));
