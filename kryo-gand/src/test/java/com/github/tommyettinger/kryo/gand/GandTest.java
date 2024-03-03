@@ -21,6 +21,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.gand.Path;
+import com.github.tommyettinger.gand.ds.ObjectDeque;
+import com.github.tommyettinger.gand.points.PointI2;
+import com.github.tommyettinger.gand.points.PointMaker;
+import com.github.tommyettinger.kryo.gand.ds.ObjectDequeSerializer;
+import com.github.tommyettinger.kryo.gand.points.PointI2Serializer;
 import org.junit.Assert;
 import org.junit.Test;
 import com.github.tommyettinger.gand.DirectedGraph;
@@ -30,6 +36,8 @@ import com.github.tommyettinger.gand.UndirectedGraph;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+
+import static com.github.tommyettinger.gand.points.PointMaker.pt;
 
 public class GandTest {
     public static Graph<Vector2> makeGridGraph(Graph<Vector2> graph, int sideLength) {
@@ -107,6 +115,25 @@ public class GandTest {
             Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));
             Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
                                 data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testPath() {
+        Kryo kryo = new Kryo();
+        kryo.register(PointI2.class, new PointI2Serializer());
+        kryo.register(Path.class, new PathSerializer());
+
+        Path<PointI2> data = Path.with(pt(1, 1), pt(1, 2), pt(1, 3), pt(2, 3), pt(2, 4));
+        data.setLength(4f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Path data2 = kryo.readObject(input, Path.class);
             Assert.assertEquals(data, data2);
         }
     }
