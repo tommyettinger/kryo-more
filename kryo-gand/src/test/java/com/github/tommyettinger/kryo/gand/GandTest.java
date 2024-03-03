@@ -192,8 +192,11 @@ public class GandTest {
         kryo.register(PointI2.class, new PointI2Serializer());
 
         int n = 5;
-        Graph<PointI2> data = makeGridGraph2D(new Int2DirectedGraph(), n, new PointI2());
-
+        Int2DirectedGraph data = new Int2DirectedGraph();
+        makeGridGraph2D(data, n, new PointI2());
+        System.out.println("Initial graph with length " + data.getVertices().size() + ": ");
+        System.out.println(data.getVertices());
+        System.out.println(data);
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
         kryo.writeObject(output, data);
@@ -201,6 +204,9 @@ public class GandTest {
         System.out.println("Int2DirectedGraph byte length: " + bytes.length);
         try (Input input = new Input(bytes)) {
             Int2DirectedGraph data2 = kryo.readObject(input, Int2DirectedGraph.class);
+            System.out.println("Read back in with length " + data2.getVertices().size() + ": ");
+            System.out.println(data2.getVertices());
+            System.out.println(data2);
             Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
             Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
             Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));

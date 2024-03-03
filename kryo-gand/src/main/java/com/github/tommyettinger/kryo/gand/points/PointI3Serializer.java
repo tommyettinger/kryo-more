@@ -35,14 +35,14 @@ public class PointI3Serializer extends Serializer<PointI3> {
 
     @Override
     public void write(final Kryo kryo, final Output output, final PointI3 data) {
-        output.writeInt(data.x);
-        output.writeInt(data.y);
-        output.writeInt(data.z);
+        output.writeInt(data.x, true);
+        output.writeInt(data.y, true);
+        output.writeInt(data.z, true);
     }
 
     @Override
     public PointI3 read(final Kryo kryo, final Input input, final Class<? extends PointI3> dataClass) {
-        return new PointI3(input.readInt(), input.readInt(), input.readInt());
+        return new PointI3(input.readInt(true), input.readInt(true), input.readInt(true));
     }
 
     @Override

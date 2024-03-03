@@ -35,6 +35,7 @@ public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
 
     public Int3DirectedGraphSerializer() {
         setAcceptsNull(false);
+        setImmutable(false);
     }
 
     @Override
@@ -42,12 +43,13 @@ public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
         Collection<PointI3> vertices = data.getVertices();
         Collection<Connection<PointI3>> edges = data.internals().getConnections();
         int length = vertices.size();
-        output.writeInt(length);
+        output.writeInt(length, true);
         for(PointI3 v : vertices) {
+            System.out.println("writing hash " + System.identityHashCode(v));
             kryo.writeObjectOrNull(output, v, PointI3.class);
         }
         length = edges.size();
-        output.writeInt(length);
+        output.writeInt(length, true);
         for(Connection<PointI3> e : edges) {
             kryo.writeObjectOrNull(output, e.getA(), PointI3.class);
             kryo.writeObjectOrNull(output, e.getB(), PointI3.class);
@@ -58,13 +60,15 @@ public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
     @Override
     public Int3DirectedGraph read(final Kryo kryo, final Input input, final Class<? extends Int3DirectedGraph> dataClass) {
         Int3DirectedGraph graph = new Int3DirectedGraph();
-        int length = input.readInt();
+        int length = input.readInt(true);
         for (int i = 0; i < length; i++) {
-            graph.addVertex(kryo.readObject(input, PointI3.class));
+            PointI3 pt = kryo.readObjectOrNull(input, PointI3.class);
+            System.out.println(pt);
+            graph.addVertex(pt);
         }
-        length = input.readInt();
+        length = input.readInt(true);
         for (int i = 0; i < length; i++) {
-            graph.addEdge(kryo.readObject(input, PointI3.class), kryo.readObject(input, PointI3.class), input.readFloat());
+            graph.addEdge(kryo.readObjectOrNull(input, PointI3.class), kryo.readObjectOrNull(input, PointI3.class), input.readFloat());
         }
         return graph;
     }

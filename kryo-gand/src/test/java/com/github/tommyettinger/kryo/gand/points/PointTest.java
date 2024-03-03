@@ -97,6 +97,7 @@ public class PointTest {
         try (Input input = new Input(bytes)) {
             PointI3 data2 = kryo.readObject(input, PointI3.class);
             Assert.assertEquals(data, data2);
+//            System.out.println(data + " == " + data2);
         }
     }
     @Test
