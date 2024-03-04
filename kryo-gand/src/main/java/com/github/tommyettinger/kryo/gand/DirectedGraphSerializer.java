@@ -42,12 +42,16 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         Collection<? extends Connection<?>> edges = data.internals().getConnections();
         int length = vertices.size();
         output.writeInt(length, true);
+        System.out.println("Writing " + length + " vertices...");
         for(Object v : vertices) {
+            if(v == null) System.out.println("NO NO NO BAD VERTEX");
             kryo.writeClassAndObject(output, v);
         }
         length = edges.size();
         output.writeInt(length, true);
+        System.out.println("Writing " + length + " edges...");
         for(Connection<?> e : edges) {
+            if(e == null) System.out.println("NO NO NO BAD EDGE");
             kryo.writeClassAndObject(output, e.getA());
             kryo.writeClassAndObject(output, e.getB());
             output.writeFloat(e.getWeight());
@@ -60,10 +64,12 @@ public class DirectedGraphSerializer extends Serializer<DirectedGraph<?>> {
         DirectedGraph<?> graph = new DirectedGraph<>();
         DirectedGraph raw = graph;
         int length = input.readInt(true);
+        System.out.println("Attempting to read " + length + " vertices...");
         for (int i = 0; i < length; i++) {
             raw.addVertex(kryo.readClassAndObject(input));
         }
         length = input.readInt(true);
+        System.out.println("Attempting to read " + length + " edges...");
         for (int i = 0; i < length; i++) {
             raw.addEdge(kryo.readClassAndObject(input), kryo.readClassAndObject(input), input.readFloat());
         }

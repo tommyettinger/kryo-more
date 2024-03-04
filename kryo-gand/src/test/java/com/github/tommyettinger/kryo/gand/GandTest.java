@@ -131,7 +131,7 @@ public class GandTest {
                 }
             }
         }
-
+        System.out.println("Graph has " + graph.getVertices().size() + " vertices and " + graph.getEdgeCount() + " edges.");
         return graph;
     }
 
@@ -168,6 +168,32 @@ public class GandTest {
 
         int n = 5;
         Graph<Vector2> data = makeGridGraph(new DirectedGraph<>(), n);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("DirectedGraph byte length: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            DirectedGraph<?> data2 = kryo.readObject(input, DirectedGraph.class);
+            Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
+            Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
+            Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));
+            Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
+                                data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+
+    @Test
+    public void testDirectedGraphAgain() {
+        Kryo kryo = new Kryo();
+        kryo.register(DirectedGraph.class, new DirectedGraphSerializer());
+        kryo.register(PointI3.class);
+
+        int n = 5;
+        Graph<PointI3> data = makeGridGraph3D(new DirectedGraph<>(), n, new PointI3());
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
@@ -244,8 +270,8 @@ public class GandTest {
     @Test
     public void testInt3DirectedGraph() {
         Kryo kryo = new Kryo();
-        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
         kryo.register(PointI3.class, new PointI3Serializer());
+        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 
         int n = 5;
         Int3DirectedGraph data = new Int3DirectedGraph();

@@ -23,6 +23,8 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.gand.Connection;
 import com.github.tommyettinger.gand.Int3DirectedGraph;
+import com.github.tommyettinger.gand.Int3DirectedGraph;
+import com.github.tommyettinger.gand.points.PointI3;
 import com.github.tommyettinger.gand.points.PointI3;
 
 import java.util.Collection;
@@ -32,27 +34,24 @@ import java.util.Collection;
  * You must have {@link PointI3} registered to use this as the serializer for Int3DirectedGraph.
  */
 public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
-
     public Int3DirectedGraphSerializer() {
         setAcceptsNull(false);
-        setImmutable(false);
     }
 
     @Override
     public void write(final Kryo kryo, final Output output, final Int3DirectedGraph data) {
         Collection<PointI3> vertices = data.getVertices();
-        Collection<Connection<PointI3>> edges = data.internals().getConnections();
+        Collection<? extends Connection<PointI3>> edges = data.internals().getConnections();
         int length = vertices.size();
         output.writeInt(length, true);
         for(PointI3 v : vertices) {
-            System.out.println("writing hash " + System.identityHashCode(v));
-            kryo.writeObjectOrNull(output, v, PointI3.class);
+            kryo.writeObject(output, v);
         }
         length = edges.size();
         output.writeInt(length, true);
         for(Connection<PointI3> e : edges) {
-            kryo.writeObjectOrNull(output, e.getA(), PointI3.class);
-            kryo.writeObjectOrNull(output, e.getB(), PointI3.class);
+            kryo.writeObject(output, e.getA());
+            kryo.writeObject(output, e.getB());
             output.writeFloat(e.getWeight());
         }
     }
@@ -62,13 +61,13 @@ public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
         Int3DirectedGraph graph = new Int3DirectedGraph();
         int length = input.readInt(true);
         for (int i = 0; i < length; i++) {
-            PointI3 pt = kryo.readObjectOrNull(input, PointI3.class);
-            System.out.println(pt);
-            graph.addVertex(pt);
+            PointI3 item = kryo.readObject(input, PointI3.class);
+            System.out.println(item + " has " + item.getClass());
+            graph.addVertex(item);
         }
         length = input.readInt(true);
         for (int i = 0; i < length; i++) {
-            graph.addEdge(kryo.readObjectOrNull(input, PointI3.class), kryo.readObjectOrNull(input, PointI3.class), input.readFloat());
+            graph.addEdge(kryo.readObject(input, PointI3.class), kryo.readObject(input, PointI3.class), input.readFloat());
         }
         return graph;
     }
@@ -80,7 +79,7 @@ public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
         for(PointI3 v : vertices){
             graph.addVertex(kryo.copy(v));
         }
-        Collection<Connection<PointI3>> edges = graph.internals().getConnections();
+        Collection<? extends Connection<PointI3>> edges = graph.internals().getConnections();
         for(Connection<PointI3> e : edges){
             graph.addEdge(kryo.copy(e.getA()), kryo.copy(e.getB()), e.getWeight());
         }
