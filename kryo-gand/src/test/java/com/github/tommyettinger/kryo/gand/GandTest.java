@@ -190,7 +190,7 @@ public class GandTest {
     public void testDirectedGraphAgain() {
         Kryo kryo = new Kryo();
         kryo.register(DirectedGraph.class, new DirectedGraphSerializer());
-        kryo.register(PointI3.class);
+        kryo.register(PointI3.class, new PointI3Serializer());
 
         int n = 5;
         Graph<PointI3> data = makeGridGraph3D(new DirectedGraph<>(), n, new PointI3());

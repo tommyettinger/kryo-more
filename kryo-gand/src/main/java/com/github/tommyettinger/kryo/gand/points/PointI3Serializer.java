@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.gand.points.PointI3;
-import com.github.tommyettinger.gand.points.PointI3;
 
 /**
  * Kryo {@link Serializer} for gand {@link PointI3}s.
@@ -36,14 +35,17 @@ public class PointI3Serializer extends Serializer<PointI3> {
 
     @Override
     public void write(final Kryo kryo, final Output output, final PointI3 data) {
-        output.writeInt(data.x, true);
-        output.writeInt(data.y, true);
-        output.writeInt(data.z, true);
+        output.writeVarInt(data.x, true);
+        output.writeVarInt(data.y, true);
+        output.writeVarInt(data.z, true);
     }
 
     @Override
     public PointI3 read(final Kryo kryo, final Input input, final Class<? extends PointI3> dataClass) {
-        return new PointI3(input.readInt(true), input.readInt(true), input.readInt(true));
+        return new PointI3(
+                input.readVarInt(true),
+                input.readVarInt(true),
+                input.readVarInt(true));
     }
 
     @Override
