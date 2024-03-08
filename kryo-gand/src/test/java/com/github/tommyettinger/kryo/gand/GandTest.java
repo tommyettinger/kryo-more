@@ -29,6 +29,7 @@ import com.github.tommyettinger.gand.points.PointI2;
 import com.github.tommyettinger.gand.points.PointI3;
 import com.github.tommyettinger.kryo.gand.points.PointF2Serializer;
 import com.github.tommyettinger.kryo.gand.points.PointI2Serializer;
+import com.github.tommyettinger.kryo.gand.points.PointI3FallbackSerializer;
 import com.github.tommyettinger.kryo.gand.points.PointI3Serializer;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -190,8 +191,9 @@ public class GandTest {
     @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
     public void testDirectedGraphAgain() {
         Kryo kryo = new Kryo();
+        kryo.setRegistrationRequired(false);
         kryo.register(DirectedGraph.class, new DirectedGraphSerializer());
-        kryo.register(PointI3.class, new PointI3Serializer());
+        kryo.register(PointI3.class, new PointI3FallbackSerializer());
 
         int n = 5;
         DirectedGraph<PointI3> data = new DirectedGraph<>();
@@ -274,7 +276,7 @@ public class GandTest {
     @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
     public void testInt3DirectedGraph() {
         Kryo kryo = new Kryo();
-        kryo.register(PointI3.class, new PointI3Serializer());
+        kryo.register(PointI3.class, new PointI3FallbackSerializer());
         kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 
         int n = 5;
