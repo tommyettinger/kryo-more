@@ -22,27 +22,25 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.gand.Connection;
-import com.github.tommyettinger.gand.Int3DirectedGraph;
-import com.github.tommyettinger.gand.Int3DirectedGraph;
-import com.github.tommyettinger.gand.points.PointI3;
+import com.github.tommyettinger.gand.Int3UndirectedGraph;
 import com.github.tommyettinger.gand.points.PointI3;
 
 import java.util.Collection;
 
 /**
- * Kryo {@link Serializer} for gand {@link Int3DirectedGraph}s.
- * You must have {@link PointI3} registered to use this as the serializer for Int3DirectedGraph.
+ * Kryo {@link Serializer} for gand {@link Int3UndirectedGraph}s.
+ * You must have {@link PointI3} registered to use this as the serializer for Int3UndirectedGraph.
  * <br>
  * This currently doesn't work reliably because {@link com.github.tommyettinger.kryo.gand.points.PointI3Serializer}
  * doesn't work reliably. It looks like a bug in Kryo 5.x, but I can't be sure.
  */
-public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
-    public Int3DirectedGraphSerializer() {
+public class Int3UndirectedGraphSerializer extends Serializer<Int3UndirectedGraph> {
+    public Int3UndirectedGraphSerializer() {
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final Int3DirectedGraph data) {
+    public void write(final Kryo kryo, final Output output, final Int3UndirectedGraph data) {
         Collection<PointI3> vertices = data.getVertices();
         Collection<? extends Connection<PointI3>> edges = data.internals().getConnections();
         int length = vertices.size();
@@ -60,8 +58,8 @@ public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
     }
 
     @Override
-    public Int3DirectedGraph read(final Kryo kryo, final Input input, final Class<? extends Int3DirectedGraph> dataClass) {
-        Int3DirectedGraph graph = new Int3DirectedGraph();
+    public Int3UndirectedGraph read(final Kryo kryo, final Input input, final Class<? extends Int3UndirectedGraph> dataClass) {
+        Int3UndirectedGraph graph = new Int3UndirectedGraph();
         int length = input.readInt(true);
         for (int i = 0; i < length; i++) {
             PointI3 item = kryo.readObject(input, PointI3.class);
@@ -75,8 +73,8 @@ public class Int3DirectedGraphSerializer extends Serializer<Int3DirectedGraph> {
     }
 
     @Override
-    public Int3DirectedGraph copy(Kryo kryo, Int3DirectedGraph original) {
-        Int3DirectedGraph graph = new Int3DirectedGraph();
+    public Int3UndirectedGraph copy(Kryo kryo, Int3UndirectedGraph original) {
+        Int3UndirectedGraph graph = new Int3UndirectedGraph();
         Collection<PointI3> vertices = graph.getVertices();
         for(PointI3 v : vertices){
             graph.addVertex(kryo.copy(v));

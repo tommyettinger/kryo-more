@@ -25,6 +25,9 @@ import com.github.tommyettinger.gand.points.PointI3;
 
 /**
  * Kryo {@link Serializer} for gand {@link PointI3}s.
+ * <br>
+ * This currently doesn't work reliably, despite being very simple.
+ * It looks like a bug in Kryo 5.x, but I can't be sure.
  */
 public class PointI3Serializer extends Serializer<PointI3> {
 
@@ -35,17 +38,17 @@ public class PointI3Serializer extends Serializer<PointI3> {
 
     @Override
     public void write(final Kryo kryo, final Output output, final PointI3 data) {
-        output.writeVarInt(data.x, true);
-        output.writeVarInt(data.y, true);
-        output.writeVarInt(data.z, true);
+        output.writeInt(data.x, true);
+        output.writeInt(data.y, true);
+        output.writeInt(data.z, true);
     }
 
     @Override
     public PointI3 read(final Kryo kryo, final Input input, final Class<? extends PointI3> dataClass) {
         return new PointI3(
-                input.readVarInt(true),
-                input.readVarInt(true),
-                input.readVarInt(true));
+                input.readInt(true),
+                input.readInt(true),
+                input.readInt(true));
     }
 
     @Override
