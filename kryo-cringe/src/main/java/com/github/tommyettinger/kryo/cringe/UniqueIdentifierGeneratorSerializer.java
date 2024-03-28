@@ -24,10 +24,11 @@ import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.cringe.UniqueIdentifier;
 
 /**
- * Doesn't need anything else registered. This is an unusual one because its {@link #read(Kryo, Input, Class)}
- * method deserializes and assigns to {@link UniqueIdentifier#GENERATOR} (there's usually no other Generator
- * instance available). This is usually what you want, though. Also, the name doesn't match exactly; the class
+ * Doesn't need anything else registered. The name doesn't match exactly; the class
  * this serializes and deserializes is {@link UniqueIdentifier.Generator}.
+ * You usually will want to assign the result of {@link #read(Kryo, Input, Class)} to
+ * {@link UniqueIdentifier#GENERATOR}. Unlike in earlier versions, this does not assign
+ * to GENERATOR automatically.
  */
 public class UniqueIdentifierGeneratorSerializer extends Serializer<UniqueIdentifier.Generator> {
     public UniqueIdentifierGeneratorSerializer() {
@@ -42,6 +43,6 @@ public class UniqueIdentifierGeneratorSerializer extends Serializer<UniqueIdenti
 
     @Override
     public UniqueIdentifier.Generator read(final Kryo kryo, final Input input, final Class<? extends UniqueIdentifier.Generator> dataClass) {
-        return UniqueIdentifier.GENERATOR.stringDeserialize(input.readString());
+        return new UniqueIdentifier.Generator().stringDeserialize(input.readString());
     }
 }

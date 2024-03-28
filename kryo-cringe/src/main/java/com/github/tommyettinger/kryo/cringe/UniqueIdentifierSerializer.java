@@ -34,12 +34,13 @@ public class UniqueIdentifierSerializer extends Serializer<UniqueIdentifier> {
 
     @Override
     public void write(final Kryo kryo, final Output output, final UniqueIdentifier data) {
-        output.writeString(data.stringSerialize());
+        output.writeLong(data.getHi());
+        output.writeLong(data.getLo());
     }
 
     @Override
     public UniqueIdentifier read(final Kryo kryo, final Input input, final Class<? extends UniqueIdentifier> dataClass) {
-        return new UniqueIdentifier().stringDeserialize(input.readString());
+        return new UniqueIdentifier(input.readLong(), input.readLong());
     }
 
     @Override

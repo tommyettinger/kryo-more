@@ -11,8 +11,10 @@ All of these but simple-graphs are maintained by [tommyettinger](https://github.
 this serialization library.
 
 You may want to consider using [Fury](https://fury.apache.org) serialization instead of Kryo, since it
-so far hasn't needed these kinds of manual serializer, and is faster than Kryo in most benchmarks. It isn't
-as mature of a project, but it's being incubated by the Apache Foundation, and is developing quickly.
+sometimes doesn't need these kinds of manual serializer, and is faster than Kryo in most benchmarks. It isn't
+as mature of a project, but it's being incubated by the Apache Foundation, and is developing quickly. If you
+do use Fury, you can get manual serializers (when they are needed) from kryo-more's relative project,
+[tantrum](https://github.com/tommyettinger/tantrum).
 
 ## How to get
 

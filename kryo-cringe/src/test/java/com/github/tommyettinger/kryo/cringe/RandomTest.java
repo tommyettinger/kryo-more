@@ -114,7 +114,7 @@ public class RandomTest {
         kryo.register(RandomAce320.class, new RandomAce320Serializer());
         kryo.register(WeightedTable.class, new WeightedTableSerializer());
 
-        WeightedTable data = new WeightedTable(new RandomAce320(123L), 1f, 2f, 3f, 4f, 0.5f, 5.5f);
+        WeightedTable data = new WeightedTable(new RandomAce320(123), 1.1f, 2.2f, 3.3f, 4.4f, 5.5f);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         Output output = new Output(baos);
@@ -122,9 +122,10 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             WeightedTable data2 = kryo.readObject(input, WeightedTable.class);
-            Assert.assertEquals(data.random(0L), data2.random(0L));
-            Assert.assertEquals(data.random(1L), data2.random(1L));
-            Assert.assertEquals(data.random(2L), data2.random(2L));
+            int latest;
+            Assert.assertEquals(data.random(0L), latest = data2.random(0L)); System.out.println(latest);
+            Assert.assertEquals(data.random(1L), latest = data2.random(1L)); System.out.println(latest);
+            Assert.assertEquals(data.random(2L), latest = data2.random(2L)); System.out.println(latest);
             Assert.assertEquals(data.stringSerialize(), data2.stringSerialize());
             Assert.assertEquals(data, data2);
         }
