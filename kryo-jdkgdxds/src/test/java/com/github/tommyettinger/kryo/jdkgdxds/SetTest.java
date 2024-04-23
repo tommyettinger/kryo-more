@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.Character.UnicodeScript;
 
 public class SetTest {
     @Test
@@ -97,6 +98,25 @@ public class SetTest {
             LongOrderedSet data2 = kryo.readObject(input, LongOrderedSet.class);
             Assert.assertEquals(data, data2);
             Assert.assertEquals(data.order(), data2.order());
+        }
+    }
+
+    @Test
+    public void testEnumSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(UnicodeScript.class);
+        kryo.register(Enum.class);
+        kryo.register(EnumSet.class, new EnumSetSerializer());
+
+        EnumSet data = EnumSet.with(UnicodeScript.LATIN, UnicodeScript.ARABIC, UnicodeScript.LAO, UnicodeScript.ARMENIAN);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            EnumSet data2 = kryo.readObject(input, EnumSet.class);
+            Assert.assertEquals(data, data2);
         }
     }
 
