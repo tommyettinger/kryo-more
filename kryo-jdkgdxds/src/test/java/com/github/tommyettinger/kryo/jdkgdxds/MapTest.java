@@ -307,6 +307,25 @@ public class MapTest {
     }
 
     @Test
+    public void testEnumMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(Character.UnicodeScript.class);
+        kryo.register(EnumMap.class, new EnumMapSerializer());
+
+        EnumMap<Integer> data = EnumMap.with(Character.UnicodeScript.LATIN, -123456, Character.UnicodeScript.ARABIC, Integer.MIN_VALUE,
+                Character.UnicodeScript.LAO, 456789012, Character.UnicodeScript.ARMENIAN, 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            EnumMap<?> data2 = kryo.readObject(input, EnumMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
     public void testObjectObjectMap() {
         Kryo kryo = new Kryo();
         kryo.register(ObjectObjectMap.class, new ObjectObjectMapSerializer());

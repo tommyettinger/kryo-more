@@ -18,15 +18,18 @@
 package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.CollectionSerializer;
-import com.github.tommyettinger.ds.EnumSet;
 import com.github.tommyettinger.ds.EnumSet;
 
 import java.util.Iterator;
 
-public class EnumSetSerializer extends CollectionSerializer<EnumSet> {
+/**
+ * Kryo {@link Serializer} for jdkgdxds {@link EnumSet}s.
+ * Requires the type of any enum values that are contained in an EnumSet to also be registered.
+ */
+public class EnumSetSerializer extends Serializer<EnumSet> {
 
     public EnumSetSerializer() {
         setAcceptsNull(false);
