@@ -35,7 +35,7 @@ subprojects {
     group = parent.group
     ext.projectName = 'kryo-more'
     repositories {
-        // mavenLocal()
+        mavenLocal()
         mavenCentral()
         maven { url 'https://s01.oss.sonatype.org' }
         google()
