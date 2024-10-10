@@ -25,7 +25,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
 
   - kryo-regexodus is currently version 0.1.16.0
   - kryo-digital is currently version 0.5.2.0
-  - kryo-jdkgdxds is currently version 1.6.4.0
+  - kryo-jdkgdxds is currently version 1.6.5.0
   - kryo-juniper is currently version 0.6.1.0
   - kryo-cringe is currently version 0.1.1.1
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
@@ -54,7 +54,7 @@ implementation "com.github.tommyettinger:kryo-digital:0.5.2.0"
 kryo-jdkgdxds:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-jdkgdxds:`1.6.4.0`"
+implementation "com.github.tommyettinger:kryo-jdkgdxds:`1.6.5.0`"
 ```
 
 kryo-juniper:
@@ -109,7 +109,7 @@ kryo-jdkgdxds:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-jdkgdxds</artifactId>
-  <version>1.6.4.0</version>
+  <version>1.6.5.0</version>
 </dependency>
 ```
 
