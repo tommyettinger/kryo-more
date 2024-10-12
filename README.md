@@ -27,7 +27,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
   - kryo-digital is currently version 0.5.2.1
   - kryo-jdkgdxds is currently version 1.6.5.0
   - kryo-juniper is currently version 0.6.1.0
-  - kryo-cringe is currently version 0.1.1.1
+  - kryo-cringe is currently version 0.1.1.2
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
     - This depends on simple-graphs v3.0.0, not the current 5.1.1, because versions since 4.0.0 don't make the edges on
       graphs serializable in any way (they use a lambda per-edge).
@@ -66,7 +66,7 @@ implementation "com.github.tommyettinger:kryo-juniper:0.6.1.0"
 kryo-cringe:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-cringe:0.1.1.1"
+implementation "com.github.tommyettinger:kryo-cringe:0.1.1.2"
 ```
 
 kryo-gand:
@@ -129,7 +129,7 @@ kryo-cringe:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-cringe</artifactId>
-  <version>0.1.1.1</version>
+  <version>0.1.1.2</version>
 </dependency>
 ```
 
