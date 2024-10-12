@@ -3,13 +3,12 @@
 version "$VERSION_NAME"
 
 eclipse.project.name = project.name
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
+//
+//java {
+//    toolchain {
+//        languageVersion = JavaLanguageVersion.of(17)
+//    }
+//}
 
 sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
 

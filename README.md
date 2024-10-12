@@ -2,7 +2,7 @@
 
 Kryo 5.x serializers for various libGDX-related libraries.
 
-This lets [Kryo](https://github.com/EsotericSoftware/kryo) 5.x (currently 5.6.0)
+This lets [Kryo](https://github.com/EsotericSoftware/kryo) 5.x (currently 5.6.2)
 de/serialize objects from [RegExodus](https://github.com/tommyettinger/RegExodus),
 [digital](https://github.com/tommyettinger/digital), [jdkgdxds](https://github.com/tommyettinger/jdkgdxds),
 [juniper](https://github.com/tommyettinger/juniper), [cringe](https://github.com/tommyettinger/cringe),
@@ -23,7 +23,7 @@ Each sub-library has its own version, linked to the version of the library it de
 The last component of the version is usually .0, but can be increased for bug-fixes to the same linked library version,
 or if Kryo itself had a (compatible) update available but the linked library did not have an update.
 
-  - kryo-regexodus is currently version 0.1.16.0
+  - kryo-regexodus is currently version 0.1.16.1
   - kryo-digital is currently version 0.5.2.0
   - kryo-jdkgdxds is currently version 1.6.5.0
   - kryo-juniper is currently version 0.6.1.0
@@ -42,7 +42,7 @@ Gradle dependency info:
 kryo-regexodus:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-regexodus:0.1.16.0"
+implementation "com.github.tommyettinger:kryo-regexodus:0.1.16.1"
 ```
 
 kryo-digital:
@@ -89,7 +89,7 @@ kryo-regexodus:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-regexodus</artifactId>
-  <version>0.1.16.0</version>
+  <version>0.1.16.1</version>
 </dependency>
 ```
 
