@@ -29,6 +29,29 @@ import java.io.ByteArrayOutputStream;
 public class NoiseTest {
 
     @Test
+    public void testCellularNoise() {
+        Kryo kryo = new Kryo();
+        CellularNoiseSerializer ser = new CellularNoiseSerializer();
+        kryo.register(CellularNoise.class, ser);
+
+        CellularNoise data = new CellularNoise(-12345, CellularNoise.NoiseType.DISTANCE_VALUE);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CellularNoise data2 = kryo.readObject(input, CellularNoise.class);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f), data2.getNoise(1.1f, 2.2f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f), data2.getNoise(1.1f, 2.2f, -3.3f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f, 6.6f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f, 6.6f), 0.00001f);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testSimplexNoise() {
         Kryo kryo = new Kryo();
         SimplexNoiseSerializer ser = new SimplexNoiseSerializer();
