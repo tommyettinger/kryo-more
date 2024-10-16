@@ -87,4 +87,100 @@ public final class PointSequenceSerializers {
             return original.copy();
         }
     }
+    
+    /**
+     * Kryo {@link Serializer} for cringe {@link Halton4}s.
+     */
+    public static class Halton4Serializer extends Serializer<Halton4> {
+
+        public Halton4Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final Halton4 data) {
+            output.writeInt(data.baseX, true);
+            output.writeInt(data.baseY, true);
+            output.writeInt(data.baseZ, true);
+            output.writeInt(data.baseW, true);
+            output.writeInt(data.index, false);
+        }
+
+        @Override
+        public Halton4 read(final Kryo kryo, final Input input, final Class<? extends Halton4> dataClass) {
+            return new Halton4(input.readInt(true), input.readInt(true), input.readInt(true),
+                    input.readInt(true), input.readInt(false));
+        }
+
+        @Override
+        public Halton4 copy(Kryo kryo, Halton4 original) {
+            return original.copy();
+        }
+    }
+    
+    /**
+     * Kryo {@link Serializer} for cringe {@link Halton5}s.
+     */
+    public static class Halton5Serializer extends Serializer<Halton5> {
+
+        public Halton5Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final Halton5 data) {
+            output.writeInt(data.baseX, true);
+            output.writeInt(data.baseY, true);
+            output.writeInt(data.baseZ, true);
+            output.writeInt(data.baseW, true);
+            output.writeInt(data.baseU, true);
+            output.writeInt(data.index, false);
+        }
+
+        @Override
+        public Halton5 read(final Kryo kryo, final Input input, final Class<? extends Halton5> dataClass) {
+            return new Halton5(input.readInt(true), input.readInt(true), input.readInt(true),
+                    input.readInt(true), input.readInt(true), input.readInt(false));
+        }
+
+        @Override
+        public Halton5 copy(Kryo kryo, Halton5 original) {
+            return original.copy();
+        }
+    }
+    
+    /**
+     * Kryo {@link Serializer} for cringe {@link Halton6}s.
+     */
+    public static class Halton6Serializer extends Serializer<Halton6> {
+
+        public Halton6Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final Halton6 data) {
+            output.writeInt(data.baseX, true);
+            output.writeInt(data.baseY, true);
+            output.writeInt(data.baseZ, true);
+            output.writeInt(data.baseW, true);
+            output.writeInt(data.baseU, true);
+            output.writeInt(data.baseV, true);
+            output.writeInt(data.index, false);
+        }
+
+        @Override
+        public Halton6 read(final Kryo kryo, final Input input, final Class<? extends Halton6> dataClass) {
+            return new Halton6(input.readInt(true), input.readInt(true), input.readInt(true),
+                    input.readInt(true), input.readInt(true), input.readInt(true), input.readInt(false));
+        }
+
+        @Override
+        public Halton6 copy(Kryo kryo, Halton6 original) {
+            return original.copy();
+        }
+    }
 }

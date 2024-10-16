@@ -49,6 +49,7 @@ public class PointTest {
             Assert.assertEquals(data.index, data2.index);
         }
     }
+    
     @Test
     public void testHalton3() {
         Kryo kryo = new Kryo();
@@ -68,6 +69,81 @@ public class PointTest {
             Assert.assertEquals(data.baseX, data2.baseX);
             Assert.assertEquals(data.baseY, data2.baseY);
             Assert.assertEquals(data.baseZ, data2.baseZ);
+            Assert.assertEquals(data.index, data2.index);
+        }
+    }
+    
+    @Test
+    public void testHalton4() {
+        Kryo kryo = new Kryo();
+        kryo.register(Halton4.class, new Halton4Serializer());
+
+        Halton4 data = new Halton4(2, 3, 5, 7, 100);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Halton4 data2 = kryo.readObject(input, Halton4.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.baseX, data2.baseX);
+            Assert.assertEquals(data.baseY, data2.baseY);
+            Assert.assertEquals(data.baseZ, data2.baseZ);
+            Assert.assertEquals(data.baseW, data2.baseW);
+            Assert.assertEquals(data.index, data2.index);
+        }
+    }
+    
+    @Test
+    public void testHalton5() {
+        Kryo kryo = new Kryo();
+        kryo.register(Halton5.class, new Halton5Serializer());
+
+        Halton5 data = new Halton5(2, 3, 5, 7, 11, 100);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Halton5 data2 = kryo.readObject(input, Halton5.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.baseX, data2.baseX);
+            Assert.assertEquals(data.baseY, data2.baseY);
+            Assert.assertEquals(data.baseZ, data2.baseZ);
+            Assert.assertEquals(data.baseW, data2.baseW);
+            Assert.assertEquals(data.baseU, data2.baseU);
+            Assert.assertEquals(data.index, data2.index);
+        }
+    }
+    
+    @Test
+    public void testHalton6() {
+        Kryo kryo = new Kryo();
+        kryo.register(Halton6.class, new Halton6Serializer());
+
+        Halton6 data = new Halton6(2, 3, 5, 7, 11, 13, 100);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Halton6 data2 = kryo.readObject(input, Halton6.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.baseX, data2.baseX);
+            Assert.assertEquals(data.baseY, data2.baseY);
+            Assert.assertEquals(data.baseZ, data2.baseZ);
+            Assert.assertEquals(data.baseW, data2.baseW);
+            Assert.assertEquals(data.baseU, data2.baseU);
+            Assert.assertEquals(data.baseV, data2.baseV);
             Assert.assertEquals(data.index, data2.index);
         }
     }
