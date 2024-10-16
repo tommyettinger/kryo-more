@@ -147,4 +147,47 @@ public class PointTest {
             Assert.assertEquals(data.index, data2.index);
         }
     }
+
+    @Test
+    public void testR2() {
+        Kryo kryo = new Kryo();
+        kryo.register(R2.class, new R2Serializer());
+
+        R2 data = new R2(0.1f, 0.2f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            R2 data2 = kryo.readObject(input, R2.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.x, data2.x, Float.MIN_NORMAL);
+            Assert.assertEquals(data.y, data2.y, Float.MIN_NORMAL);
+        }
+    }
+
+    @Test
+    public void testR3() {
+        Kryo kryo = new Kryo();
+        kryo.register(R3.class, new R3Serializer());
+
+        R3 data = new R3(0.1f, 0.2f, 0.3f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            R3 data2 = kryo.readObject(input, R3.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.x, data2.x, Float.MIN_NORMAL);
+            Assert.assertEquals(data.y, data2.y, Float.MIN_NORMAL);
+            Assert.assertEquals(data.z, data2.z, Float.MIN_NORMAL);
+        }
+    }
 }

@@ -183,4 +183,59 @@ public final class PointSequenceSerializers {
             return original.copy();
         }
     }
+    
+    /**
+     * Kryo {@link Serializer} for cringe {@link R2}s.
+     */
+    public static class R2Serializer extends Serializer<R2> {
+
+        public R2Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final R2 data) {
+            output.writeFloat(data.x);
+            output.writeFloat(data.y);
+        }
+
+        @Override
+        public R2 read(final Kryo kryo, final Input input, final Class<? extends R2> dataClass) {
+            return new R2(input.readFloat(), input.readFloat());
+        }
+
+        @Override
+        public R2 copy(Kryo kryo, R2 original) {
+            return original.copy();
+        }
+    }
+
+    /**
+     * Kryo {@link Serializer} for cringe {@link R3}s.
+     */
+    public static class R3Serializer extends Serializer<R3> {
+
+        public R3Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final R3 data) {
+            output.writeFloat(data.x);
+            output.writeFloat(data.y);
+            output.writeFloat(data.z);
+        }
+
+        @Override
+        public R3 read(final Kryo kryo, final Input input, final Class<? extends R3> dataClass) {
+            return new R3(input.readFloat(), input.readFloat(), input.readFloat());
+        }
+
+        @Override
+        public R3 copy(Kryo kryo, R3 original) {
+            return original.copy();
+        }
+    }
 }
