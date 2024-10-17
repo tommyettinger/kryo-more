@@ -167,6 +167,52 @@ public class NoiseTest {
     }
 
     @Test
+    public void testOpenSimplex2FastNoise() {
+        Kryo kryo = new Kryo();
+        OpenSimplex2FastNoiseSerializer ser = new OpenSimplex2FastNoiseSerializer();
+        kryo.register(OpenSimplex2FastNoise.class, ser);
+
+        OpenSimplex2FastNoise data = new OpenSimplex2FastNoise(-12345);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            OpenSimplex2FastNoise data2 = kryo.readObject(input, OpenSimplex2FastNoise.class);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f), data2.getNoise(1.1f, 2.2f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f), data2.getNoise(1.1f, 2.2f, -3.3f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f, 6.6f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f, 6.6f), 0.00001f);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testOpenSimplex2SmoothNoise() {
+        Kryo kryo = new Kryo();
+        OpenSimplex2SmoothNoiseSerializer ser = new OpenSimplex2SmoothNoiseSerializer();
+        kryo.register(OpenSimplex2SmoothNoise.class, ser);
+
+        OpenSimplex2SmoothNoise data = new OpenSimplex2SmoothNoise(-12345);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            OpenSimplex2SmoothNoise data2 = kryo.readObject(input, OpenSimplex2SmoothNoise.class);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f), data2.getNoise(1.1f, 2.2f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f), data2.getNoise(1.1f, 2.2f, -3.3f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f), 0.00001f);
+            Assert.assertEquals(data.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f, 6.6f), data2.getNoise(1.1f, 2.2f, -3.3f, -4.4f, 5.5f, 6.6f), 0.00001f);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testValueNoise() {
         Kryo kryo = new Kryo();
         ValueNoiseSerializer ser = new ValueNoiseSerializer();
