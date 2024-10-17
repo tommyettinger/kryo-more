@@ -15,6 +15,15 @@ javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).use(true)
 ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2024.")
 
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+
+mavenPublishing {
+    configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
+}
+
+mavenPlainJavadocJar.archiveBaseName.set("$POM_NAME")
+
 compileJava {
     sourceCompatibility = 8
     targetCompatibility = 8
