@@ -38,11 +38,19 @@ public class UniqueIdentifierGeneratorSerializer extends Serializer<UniqueIdenti
 
     @Override
     public void write(final Kryo kryo, final Output output, final UniqueIdentifier.Generator data) {
-        output.writeString(data.stringSerialize());
+        output.writeInt(data.getA());
+        output.writeInt(data.getB());
+        output.writeInt(data.getC());
+        output.writeInt(data.getD());
     }
 
     @Override
     public UniqueIdentifier.Generator read(final Kryo kryo, final Input input, final Class<? extends UniqueIdentifier.Generator> dataClass) {
-        return new UniqueIdentifier.Generator().stringDeserialize(input.readString());
+        return new UniqueIdentifier.Generator(input.readInt(), input.readInt(), input.readInt(), input.readInt());
+    }
+
+    @Override
+    public UniqueIdentifier.Generator copy(Kryo kryo, UniqueIdentifier.Generator original) {
+        return new UniqueIdentifier.Generator(original.getA(), original.getB(), original.getC(), original.getD());
     }
 }

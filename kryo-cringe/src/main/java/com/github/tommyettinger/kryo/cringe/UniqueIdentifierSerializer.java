@@ -34,17 +34,19 @@ public class UniqueIdentifierSerializer extends Serializer<UniqueIdentifier> {
 
     @Override
     public void write(final Kryo kryo, final Output output, final UniqueIdentifier data) {
-        output.writeLong(data.getHi());
-        output.writeLong(data.getLo());
+        output.writeInt(data.getA());
+        output.writeInt(data.getB());
+        output.writeInt(data.getC());
+        output.writeInt(data.getD());
     }
 
     @Override
     public UniqueIdentifier read(final Kryo kryo, final Input input, final Class<? extends UniqueIdentifier> dataClass) {
-        return new UniqueIdentifier(input.readLong(), input.readLong());
+        return new UniqueIdentifier(input.readInt(), input.readInt(), input.readInt(), input.readInt());
     }
 
     @Override
     public UniqueIdentifier copy(Kryo kryo, UniqueIdentifier original) {
-        return new UniqueIdentifier(original.getHi(), original.getLo());
+        return new UniqueIdentifier(original.getA(), original.getB(), original.getC(), original.getD());
     }
 }
