@@ -21,6 +21,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.cringe.PointSequence.*;
+import com.github.tommyettinger.cringe.Vector5;
+import com.github.tommyettinger.cringe.Vector6;
 import com.github.tommyettinger.kryo.cringe.PointSequenceSerializers.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -254,6 +256,40 @@ public class PointTest {
             Assert.assertEquals(data.x, data2.x, Float.MIN_NORMAL);
             Assert.assertEquals(data.y, data2.y, Float.MIN_NORMAL);
             Assert.assertEquals(data.z, data2.z, Float.MIN_NORMAL);
+        }
+    }
+    
+    @Test
+    public void testVector5() {
+        Kryo kryo = new Kryo();
+        kryo.register(Vector5.class, new Vector5Serializer());
+
+        Vector5 data = new Vector5(0.1f, 0.2f, 0.3f, 0.4f, 0.5f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Vector5 data2 = kryo.readObject(input, Vector5.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testVector6() {
+        Kryo kryo = new Kryo();
+        kryo.register(Vector6.class, new Vector6Serializer());
+
+        Vector6 data = new Vector6(0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Vector6 data2 = kryo.readObject(input, Vector6.class);
+            Assert.assertEquals(data, data2);
         }
     }
 }

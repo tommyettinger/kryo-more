@@ -33,7 +33,7 @@ public class IdentifierTest {
         UniqueIdentifierSerializer ser = new UniqueIdentifierSerializer();
         kryo.register(UniqueIdentifier.class, ser);
 
-        UniqueIdentifier.GENERATOR.stringDeserialize("FFFFFFFFFFFFFFFF$EEEEEEEEEEEEEEEE");
+        UniqueIdentifier.GENERATOR.stringDeserialize("FFFFFFFF$FFFFFFFF$EEEEEEEE$EEEEEEEE");
         UniqueIdentifier data = UniqueIdentifier.next();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
@@ -52,7 +52,7 @@ public class IdentifierTest {
         kryo.register(UniqueIdentifier.class, ser);
         kryo.register(UniqueIdentifier.Generator.class, ser);
 
-        UniqueIdentifier.GENERATOR.stringDeserialize("FFFFFFFFFFFFFFFF$EEEEEEEEEEEEEEEE");
+        UniqueIdentifier.GENERATOR.stringDeserialize("FFFFFFFF$FFFFFFFF$EEEEEEEE$EEEEEEEE");
         UniqueIdentifier.Generator data = UniqueIdentifier.GENERATOR;
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
