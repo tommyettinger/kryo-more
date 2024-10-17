@@ -190,4 +190,70 @@ public class PointTest {
             Assert.assertEquals(data.z, data2.z, Float.MIN_NORMAL);
         }
     }
+
+    @Test
+    public void testR4() {
+        Kryo kryo = new Kryo();
+        kryo.register(R4.class, new R4Serializer());
+
+        R4 data = new R4(0.1f, 0.2f, 0.3f, 0.4f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            R4 data2 = kryo.readObject(input, R4.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.x, data2.x, Float.MIN_NORMAL);
+            Assert.assertEquals(data.y, data2.y, Float.MIN_NORMAL);
+            Assert.assertEquals(data.z, data2.z, Float.MIN_NORMAL);
+        }
+    }
+
+    @Test
+    public void testR5() {
+        Kryo kryo = new Kryo();
+        kryo.register(R5.class, new R5Serializer());
+
+        R5 data = new R5(0.1f, 0.2f, 0.3f, 0.4f, 0.5f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            R5 data2 = kryo.readObject(input, R5.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.x, data2.x, Float.MIN_NORMAL);
+            Assert.assertEquals(data.y, data2.y, Float.MIN_NORMAL);
+            Assert.assertEquals(data.z, data2.z, Float.MIN_NORMAL);
+        }
+    }
+
+    @Test
+    public void testR6() {
+        Kryo kryo = new Kryo();
+        kryo.register(R6.class, new R6Serializer());
+
+        R6 data = new R6(0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            R6 data2 = kryo.readObject(input, R6.class);
+            Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data.next(), data2.next());
+            // point sequences don't implement equals() currently
+            Assert.assertEquals(data.x, data2.x, Float.MIN_NORMAL);
+            Assert.assertEquals(data.y, data2.y, Float.MIN_NORMAL);
+            Assert.assertEquals(data.z, data2.z, Float.MIN_NORMAL);
+        }
+    }
 }

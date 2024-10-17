@@ -238,4 +238,96 @@ public final class PointSequenceSerializers {
             return original.copy();
         }
     }
+
+    /**
+     * Kryo {@link Serializer} for cringe {@link R4}s.
+     */
+    public static class R4Serializer extends Serializer<R4> {
+
+        public R4Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final R4 data) {
+            output.writeFloat(data.x);
+            output.writeFloat(data.y);
+            output.writeFloat(data.z);
+            output.writeFloat(data.w);
+        }
+
+        @Override
+        public R4 read(final Kryo kryo, final Input input, final Class<? extends R4> dataClass) {
+            return new R4(input.readFloat(), input.readFloat(), input.readFloat(), input.readFloat());
+        }
+
+        @Override
+        public R4 copy(Kryo kryo, R4 original) {
+            return original.copy();
+        }
+    }
+
+    /**
+     * Kryo {@link Serializer} for cringe {@link R5}s.
+     */
+    public static class R5Serializer extends Serializer<R5> {
+
+        public R5Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final R5 data) {
+            output.writeFloat(data.x);
+            output.writeFloat(data.y);
+            output.writeFloat(data.z);
+            output.writeFloat(data.w);
+            output.writeFloat(data.u);
+        }
+
+        @Override
+        public R5 read(final Kryo kryo, final Input input, final Class<? extends R5> dataClass) {
+            return new R5(input.readFloat(), input.readFloat(), input.readFloat(),
+                    input.readFloat(), input.readFloat());
+        }
+
+        @Override
+        public R5 copy(Kryo kryo, R5 original) {
+            return original.copy();
+        }
+    }
+
+    /**
+     * Kryo {@link Serializer} for cringe {@link R6}s.
+     */
+    public static class R6Serializer extends Serializer<R6> {
+
+        public R6Serializer() {
+            setImmutable(false);
+            setAcceptsNull(false);
+        }
+
+        @Override
+        public void write(final Kryo kryo, final Output output, final R6 data) {
+            output.writeFloat(data.x);
+            output.writeFloat(data.y);
+            output.writeFloat(data.z);
+            output.writeFloat(data.w);
+            output.writeFloat(data.u);
+            output.writeFloat(data.v);
+        }
+
+        @Override
+        public R6 read(final Kryo kryo, final Input input, final Class<? extends R6> dataClass) {
+            return new R6(input.readFloat(), input.readFloat(), input.readFloat(),
+                    input.readFloat(), input.readFloat(), input.readFloat());
+        }
+
+        @Override
+        public R6 copy(Kryo kryo, R6 original) {
+            return original.copy();
+        }
+    }
 }
