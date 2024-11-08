@@ -178,6 +178,44 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+    
+    @Test
+    public void testPcgRXSMXSRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(PcgRXSMXSRandom.class, new PcgRXSMXSRandomSerializer());
+
+        PcgRXSMXSRandom data = new PcgRXSMXSRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            PcgRXSMXSRandom data2 = kryo.readObject(input, PcgRXSMXSRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testTaxon32Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Taxon32Random.class, new Taxon32RandomSerializer());
+
+        Taxon32Random data = new Taxon32Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Taxon32Random data2 = kryo.readObject(input, Taxon32Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
 
     @Test
     public void testRomuTrioRandom() {
@@ -216,7 +254,25 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
-    
+
+    @Test
+    public void testChoo32Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Choo32Random.class, new Choo32RandomSerializer());
+
+        Choo32Random data = new Choo32Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Choo32Random data2 = kryo.readObject(input, Choo32Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
     @Test
     public void testFourWheelRandom() {
         Kryo kryo = new Kryo();
@@ -496,6 +552,44 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             Jsf32Random data2 = kryo.readObject(input, Jsf32Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testBear32Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Bear32Random.class, new Bear32RandomSerializer());
+
+        Bear32Random data = new Bear32Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Bear32Random data2 = kryo.readObject(input, Bear32Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testChill32Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Chill32Random.class, new Chill32RandomSerializer());
+
+        Chill32Random data = new Chill32Random(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Chill32Random data2 = kryo.readObject(input, Chill32Random.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
             Assert.assertEquals(data, data2);
