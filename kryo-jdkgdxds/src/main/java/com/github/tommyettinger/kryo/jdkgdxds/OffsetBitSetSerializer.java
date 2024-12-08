@@ -34,12 +34,12 @@ public class OffsetBitSetSerializer extends Serializer<OffsetBitSet> {
 
     @Override
     public void write(final Kryo kryo, final Output output, final OffsetBitSet data) {
-        long[] bits = data.getRawBits();
+        int[] bits = data.getRawBits();
         int length = bits.length;
         int off = data.getOffset();
         output.writeInt(off);
         output.writeInt(length, true);
-        output.writeLongs(bits, 0, length);
+        output.writeInts(bits, 0, length);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class OffsetBitSetSerializer extends Serializer<OffsetBitSet> {
         int off = input.readInt();
         int length = input.readInt(true);
         OffsetBitSet data = new OffsetBitSet();
-        data.setRawBits(input.readLongs(length));
+        data.setRawBits(input.readInts(length));
         data.setOffset(off);
         return data;
     }
