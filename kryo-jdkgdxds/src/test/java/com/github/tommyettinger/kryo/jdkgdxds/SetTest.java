@@ -345,10 +345,10 @@ public class SetTest {
         kryo.register(FilteredIterableOrderedSet.class, new FilteredIterableOrderedSetSerializer());
 
         FilteredIterableOrderedSet<String, Iterable<String>> data = FilteredIterableOrderedSet.with(
-                (String s) -> s.length() > 3, String::toUpperCase,
+                (String s) -> s.length() > 3, String::toUpperCase, new Iterable[]{
                 ObjectList.with("zzz", "bee", "binturong"),
                 ObjectList.with("hm?", "bee", "BINTURONG"),
-                ObjectList.with(":D", "bee", "Aardvark", "bandicoot")
+                ObjectList.with(":D", "bee", "Aardvark", "bandicoot") }
         );
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);

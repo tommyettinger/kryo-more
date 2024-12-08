@@ -557,9 +557,9 @@ public class MapTest {
 
         FilteredIterableMap<String, ObjectList<String>, Integer> data = FilteredIterableMap.with(
                 (String s) -> s.length() > 3, String::toUpperCase,
-                ObjectList.with("zzz", "bee", "binturong"), 1234,
+                ObjectList.with("zzz", "bee", "binturong"), 1234, new Object[]{
                 ObjectList.with("hm?", "bee", "BINTURONG"), -5678,
-                ObjectList.with(":D", "bee", "Aardvark", "bandicoot"), Integer.MIN_VALUE
+                ObjectList.with(":D", "bee", "Aardvark", "bandicoot"), Integer.MIN_VALUE}
         );
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
@@ -583,9 +583,9 @@ public class MapTest {
 
         FilteredIterableOrderedMap<String, ObjectList<String>, Integer> data = FilteredIterableOrderedMap.with(
                 (String s) -> s.length() > 3, String::toUpperCase,
-                ObjectList.with("zzz", "bee", "binturong"), 1234,
+                ObjectList.with("zzz", "bee", "binturong"), 1234, new Object[]{
                 ObjectList.with("hm?", "bee", "BINTURONG"), -5678,
-                ObjectList.with(":D", "bee", "Aardvark", "bandicoot"), Integer.MIN_VALUE
+                ObjectList.with(":D", "bee", "Aardvark", "bandicoot"), Integer.MIN_VALUE }
         );
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
