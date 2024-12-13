@@ -148,13 +148,7 @@ public class AutoTest {
     public void testJunction() {
         Kryo kryo = new Kryo();
         kryo.setRegistrationRequired(true);
-        kryo.register(ObjectList.class);
-        kryo.register(Junction.class);
-        kryo.register(Junction.Any.class);
-        kryo.register(Junction.All.class);
-        kryo.register(Junction.One.class);
-        kryo.register(Junction.Not.class);
-        kryo.register(Junction.Leaf.class);
+        JunctionSupport.registerJunction(kryo);
 
         Junction<String> data = Junction.parse("(foo|bar|baz)^QUUX^woop woop");
 
