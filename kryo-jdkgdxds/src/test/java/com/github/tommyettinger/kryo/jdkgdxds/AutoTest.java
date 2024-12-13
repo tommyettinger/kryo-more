@@ -20,10 +20,7 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.ds.IntBag;
-import com.github.tommyettinger.ds.LongDeque;
-import com.github.tommyettinger.ds.ObjectFloatOrderedMap;
-import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.ds.*;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -130,4 +127,44 @@ public class AutoTest {
         }
     }
 
+    @Test
+    public void testAutoJunction() {
+        Kryo kryo = new Kryo();
+        kryo.setRegistrationRequired(false);
+
+        Junction<String> data = Junction.parse("(foo|bar|baz)^QUUX^woop woop");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Junction data2 = kryo.readObject(input, Junction.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testJunction() {
+        Kryo kryo = new Kryo();
+        kryo.setRegistrationRequired(true);
+        kryo.register(ObjectList.class);
+        kryo.register(Junction.class);
+        kryo.register(Junction.Any.class);
+        kryo.register(Junction.All.class);
+        kryo.register(Junction.One.class);
+        kryo.register(Junction.Not.class);
+        kryo.register(Junction.Leaf.class);
+
+        Junction<String> data = Junction.parse("(foo|bar|baz)^QUUX^woop woop");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Junction data2 = kryo.readObject(input, Junction.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
