@@ -121,6 +121,25 @@ public class SetTest {
     }
 
     @Test
+    public void testEnumOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(UnicodeScript.class);
+        kryo.register(Enum.class);
+        kryo.register(EnumOrderedSet.class, new EnumOrderedSetSerializer());
+
+        EnumOrderedSet data = EnumOrderedSet.with(UnicodeScript.LATIN, UnicodeScript.ARABIC, UnicodeScript.LAO, UnicodeScript.ARMENIAN);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            EnumOrderedSet data2 = kryo.readObject(input, EnumOrderedSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testObjectSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);

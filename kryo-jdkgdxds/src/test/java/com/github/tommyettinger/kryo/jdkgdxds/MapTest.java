@@ -324,6 +324,25 @@ public class MapTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testEnumOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(Character.UnicodeScript.class);
+        kryo.register(EnumOrderedMap.class, new EnumOrderedMapSerializer());
+
+        EnumOrderedMap<Integer> data = EnumOrderedMap.with(Character.UnicodeScript.LATIN, -123456, Character.UnicodeScript.ARABIC, Integer.MIN_VALUE,
+                Character.UnicodeScript.LAO, 456789012, Character.UnicodeScript.ARMENIAN, 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            EnumOrderedMap<?> data2 = kryo.readObject(input, EnumOrderedMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
     
     @Test
     public void testObjectObjectMap() {

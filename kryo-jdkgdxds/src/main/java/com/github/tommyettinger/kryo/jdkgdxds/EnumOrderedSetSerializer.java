@@ -21,40 +21,40 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.ds.EnumSet;
+import com.github.tommyettinger.ds.EnumOrderedSet;
 
 import java.util.Iterator;
 
 /**
- * Kryo {@link Serializer} for jdkgdxds {@link EnumSet}s.
- * Requires the type of any enum values that are contained in an EnumSet to also be registered.
+ * Kryo {@link Serializer} for jdkgdxds {@link EnumOrderedSet}s.
+ * Requires the type of any enum values that are contained in an EnumOrderedSet to also be registered.
  */
-public class EnumSetSerializer extends Serializer<EnumSet> {
+public class EnumOrderedSetSerializer extends Serializer<EnumOrderedSet> {
 
-    public EnumSetSerializer() {
+    public EnumOrderedSetSerializer() {
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final EnumSet data) {
+    public void write(final Kryo kryo, final Output output, final EnumOrderedSet data) {
         int length = data.size();
         output.writeInt(length, true);
-        for (Iterator<Enum<?>> it = new EnumSet.EnumSetIterator(data); it.hasNext(); )
+        for (Iterator<Enum<?>> it = new EnumOrderedSet.EnumOrderedSetIterator(data); it.hasNext(); )
             kryo.writeClassAndObject(output, it.next());
     }
 
     @Override
-    public EnumSet read(final Kryo kryo, final Input input, final Class<? extends EnumSet> dataClass) {
+    public EnumOrderedSet read(final Kryo kryo, final Input input, final Class<? extends EnumOrderedSet> dataClass) {
         int length = input.readInt(true);
-        EnumSet data;
-        data = new EnumSet();
+        EnumOrderedSet data;
+        data = new EnumOrderedSet();
         for (int i = 0; i < length; i++)
             data.add((Enum<?>)kryo.readClassAndObject(input));
         return data;
     }
 
     @Override
-    public EnumSet copy(Kryo kryo, EnumSet original) {
-        return new EnumSet(original);
+    public EnumOrderedSet copy(Kryo kryo, EnumOrderedSet original) {
+        return new EnumOrderedSet(original);
     }
 }
