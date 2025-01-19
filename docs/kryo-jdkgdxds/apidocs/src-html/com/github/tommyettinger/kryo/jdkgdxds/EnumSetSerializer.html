@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39">    public void write(final Kryo kryo, final Output output, final EnumSet data) {</span>
 <span class="source-line-no">040</span><span id="line-40">        int length = data.size();</span>
 <span class="source-line-no">041</span><span id="line-41">        output.writeInt(length, true);</span>
-<span class="source-line-no">042</span><span id="line-42">        for (Iterator&lt;Enum&lt;?&gt;&gt; it = new EnumSet.ESetIterator(data); it.hasNext(); )</span>
+<span class="source-line-no">042</span><span id="line-42">        for (Iterator&lt;Enum&lt;?&gt;&gt; it = new EnumSet.EnumSetIterator(data); it.hasNext(); )</span>
 <span class="source-line-no">043</span><span id="line-43">            kryo.writeClassAndObject(output, it.next());</span>
 <span class="source-line-no">044</span><span id="line-44">    }</span>
 <span class="source-line-no">045</span><span id="line-45"></span>
