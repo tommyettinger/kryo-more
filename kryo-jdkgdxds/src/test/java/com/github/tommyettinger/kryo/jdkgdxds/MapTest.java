@@ -343,7 +343,45 @@ public class MapTest {
             Assert.assertEquals(data, data2);
         }
     }
-    
+
+    @Test
+    public void testEnumLongMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(Character.UnicodeScript.class);
+        kryo.register(EnumLongMap.class, new EnumLongMapSerializer());
+
+        EnumLongMap data = EnumLongMap.with(Character.UnicodeScript.LATIN, -123456, Character.UnicodeScript.ARABIC, Integer.MIN_VALUE,
+                Character.UnicodeScript.LAO, 456789012, Character.UnicodeScript.ARMENIAN, 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            EnumLongMap data2 = kryo.readObject(input, EnumLongMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testEnumLongOrderedMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(Character.UnicodeScript.class);
+        kryo.register(EnumLongOrderedMap.class, new EnumLongOrderedMapSerializer());
+
+        EnumLongOrderedMap data = EnumLongOrderedMap.with(Character.UnicodeScript.LATIN, -123456, Character.UnicodeScript.ARABIC, Integer.MIN_VALUE,
+                Character.UnicodeScript.LAO, 456789012, Character.UnicodeScript.ARMENIAN, 0);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            EnumLongOrderedMap data2 = kryo.readObject(input, EnumLongOrderedMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
     @Test
     public void testObjectObjectMap() {
         Kryo kryo = new Kryo();
