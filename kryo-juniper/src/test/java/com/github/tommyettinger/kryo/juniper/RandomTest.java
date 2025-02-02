@@ -178,6 +178,25 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testOrbitalRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(OrbitalRandom.class, new OrbitalRandomSerializer());
+
+        OrbitalRandom data = new OrbitalRandom(-12345L);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            OrbitalRandom data2 = kryo.readObject(input, OrbitalRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
     
     @Test
     public void testPcgRXSMXSRandom() {
