@@ -273,10 +273,10 @@ public class GandTest {
     }
 
     @Test
-    @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
+//    @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
     public void testInt3DirectedGraph() {
         Kryo kryo = new Kryo();
-        kryo.register(PointI3.class, new PointI3FallbackSerializer());
+        kryo.register(PointI3.class, new PointI3Serializer());
         kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 
         int n = 5;
