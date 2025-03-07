@@ -296,6 +296,7 @@ public class GandTest {
         Kryo kryo = new Kryo();
         kryo.setReferences(false);
         kryo.register(PointI3.class);
+        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 //        kryo.register(java.lang.Object[].class);
 //        kryo.register(ArrayList.class);
 //        kryo.register(ObjectMap.class);
@@ -306,11 +307,12 @@ public class GandTest {
 //        kryo.register(NodeMap.class);
 //        kryo.register(NodeCollection.class);
 //        kryo.register(VertexSet.class);
-        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
+//        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 
         int n = 5;
         Int3DirectedGraph data = new Int3DirectedGraph();
         makeGridGraph3D(data, n, new com.github.tommyettinger.gdcrux.PointI3());
+
         System.out.println("Initial graph with length " + data.getVertices().size() + ", edge count " + data.getEdgeCount() + ": ");
         System.out.println(data.getVertices());
         System.out.println(data);
@@ -333,6 +335,54 @@ public class GandTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+//    @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
+    public void testInt3List() {
+        Kryo kryo = new Kryo();
+        kryo.setReferences(false);
+        kryo.register(PointI3.class);
+        kryo.register(ArrayList.class);
+//        kryo.register(java.lang.Object[].class);
+//        kryo.register(ArrayList.class);
+//        kryo.register(ObjectMap.class);
+//        kryo.register(ObjectOrderedSet.class);
+//        kryo.register(Connection.DirectedConnection.class);
+//        kryo.register(Node.class);
+//        kryo.register(Node[].class);
+//        kryo.register(NodeMap.class);
+//        kryo.register(NodeCollection.class);
+//        kryo.register(VertexSet.class);
+//        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
+
+        int n = 12; // passes with: int n = 11;
+        Int3DirectedGraph data = new Int3DirectedGraph();
+        makeGridGraph3D(data, n, new com.github.tommyettinger.gdcrux.PointI3());
+        ArrayList<PointI3> list = new ArrayList<>(data.getVertices());
+        System.out.println("List with length " + list.size() + ": ");
+        System.out.println(list);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
+        Output output = new Output(baos);
+        kryo.writeObject(output, list);
+        byte[] bytes = output.toBytes();
+        System.out.println("ArrayList byte length: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            ArrayList list2 = kryo.readObject(input, ArrayList.class);
+
+            System.out.println("Read back in with length " + list2.size() + ": ");
+            System.out.println(list2);
+            Assert.assertEquals(list.size(), list2.size());
+            Assert.assertEquals(list, list2);
+        }
+    }
+    /*
+Graph has 1211 vertices and 5550 edges.
+List with length 1211:
+// a really long line
+ArrayList byte length: 3637
+Read back in with length 1211:
+// it's the same as the above long line
+     */
 
     @Test
     public void testPath() {
