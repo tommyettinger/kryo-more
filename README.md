@@ -31,8 +31,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
     - This depends on simple-graphs v3.0.0, not the current 5.1.1, because versions since 4.0.0 don't make the edges on
       graphs serializable in any way (they use a lambda per-edge).
-  - kryo-gand is at 0.1.1.1
-    - This release has a known bug that seems to be in Kryo itself; `PointI3` is unusable for serialization with Kryo.
+  - kryo-gand is currently version 0.1.1.1
 
 All of these sub-libraries depend on Java 8 or higher, except for kryo-regexodus (which depends on Java 7 or higher) and
 some older versions of kryo-digital and kryo-juniper.

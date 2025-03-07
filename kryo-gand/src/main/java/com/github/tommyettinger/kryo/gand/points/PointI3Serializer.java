@@ -25,9 +25,6 @@ import com.github.tommyettinger.gdcrux.PointI3;
 
 /**
  * Kryo {@link Serializer} for gand {@link PointI3}s.
- * <br>
- * This currently doesn't work reliably, despite being very simple.
- * It looks like a bug in Kryo 5.x, but I can't be sure.
  */
 public class PointI3Serializer extends Serializer<PointI3> {
 
