@@ -26,7 +26,6 @@ import space.earlygrey.simplegraphs.DirectedGraph;
 import space.earlygrey.simplegraphs.Graph;
 import space.earlygrey.simplegraphs.UndirectedGraph;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -40,8 +39,7 @@ public class SimpleGraphsTest {
         int n = 5;
         Graph<Vector2> data = Vector2.makeGridGraph(new UndirectedGraph<>(), n);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("Undirected byte length: " + bytes.length);
@@ -64,8 +62,7 @@ public class SimpleGraphsTest {
         int n = 5;
         Graph<Vector2> data = Vector2.makeGridGraph(new DirectedGraph<>(), n);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("Directed byte length: " + bytes.length);

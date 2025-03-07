@@ -24,8 +24,6 @@ import com.github.tommyettinger.cringe.UniqueIdentifier;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-
 public class IdentifierTest {
     @Test
     public void testUniqueIdentifier() {
@@ -36,8 +34,7 @@ public class IdentifierTest {
         UniqueIdentifier.GENERATOR.stringDeserialize("FFFFFFFF$FFFFFFFF$EEEEEEEE$EEEEEEEE");
         UniqueIdentifier data = UniqueIdentifier.next();
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -55,8 +52,7 @@ public class IdentifierTest {
         UniqueIdentifier.GENERATOR.stringDeserialize("FFFFFFFF$FFFFFFFF$EEEEEEEE$EEEEEEEE");
         UniqueIdentifier.Generator data = UniqueIdentifier.GENERATOR;
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
 

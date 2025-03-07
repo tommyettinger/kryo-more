@@ -99,8 +99,7 @@ public class DistributionTest {
 
         Distribution data = new KumaraswamyDistribution(new DistinctRandom(123L), 2.5, 2.0);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -120,8 +119,7 @@ public class DistributionTest {
         DistributedRandom random = new DistributedRandom(
                 new KumaraswamyDistribution(new DistinctRandom(123L), 2.5, 2.0), DistributedRandom.ReductionMode.FRACTION);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, random);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -141,8 +139,7 @@ public class DistributionTest {
 
         BernoulliDistribution data = new BernoulliDistribution();
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

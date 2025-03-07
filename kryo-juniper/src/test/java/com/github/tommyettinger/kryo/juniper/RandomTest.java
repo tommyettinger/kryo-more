@@ -25,8 +25,6 @@ import com.github.tommyettinger.random.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-
 public class RandomTest {
     @Test
     public void testDistinctRandom() {
@@ -35,8 +33,7 @@ public class RandomTest {
 
         DistinctRandom data = new DistinctRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -53,8 +50,7 @@ public class RandomTest {
 
         VanDerCorputQuasiRandom data = new VanDerCorputQuasiRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -72,8 +68,7 @@ public class RandomTest {
 
         GoldenQuasiRandom data = new GoldenQuasiRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -91,8 +86,7 @@ public class RandomTest {
 
         LowChangeQuasiRandom data = new LowChangeQuasiRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -110,8 +104,7 @@ public class RandomTest {
 
         TupleQuasiRandom data = new TupleQuasiRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -129,8 +122,7 @@ public class RandomTest {
 
         LaserRandom data = new LaserRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -148,8 +140,7 @@ public class RandomTest {
 
         MizuchiRandom data = new MizuchiRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -167,8 +158,7 @@ public class RandomTest {
 
         FlowRandom data = new FlowRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -186,8 +176,7 @@ public class RandomTest {
 
         OrbitalRandom data = new OrbitalRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -205,8 +194,7 @@ public class RandomTest {
 
         PcgRXSMXSRandom data = new PcgRXSMXSRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -224,8 +212,7 @@ public class RandomTest {
 
         Taxon32Random data = new Taxon32Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -243,8 +230,7 @@ public class RandomTest {
 
         RomuTrioRandom data = new RomuTrioRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -262,8 +248,7 @@ public class RandomTest {
 
         TricycleRandom data = new TricycleRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -281,8 +266,7 @@ public class RandomTest {
 
         Choo32Random data = new Choo32Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -299,8 +283,7 @@ public class RandomTest {
 
         FourWheelRandom data = new FourWheelRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -318,8 +301,7 @@ public class RandomTest {
 
         StrangerRandom data = new StrangerRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -337,8 +319,7 @@ public class RandomTest {
 
         TrimRandom data = new TrimRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -356,8 +337,7 @@ public class RandomTest {
 
         WhiskerRandom data = new WhiskerRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -375,8 +355,7 @@ public class RandomTest {
 
         ScruffRandom data = new ScruffRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -394,8 +373,7 @@ public class RandomTest {
 
         PouchRandom data = new PouchRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -413,8 +391,7 @@ public class RandomTest {
 
         Sfc64Random data = new Sfc64Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -432,8 +409,7 @@ public class RandomTest {
 
         PasarRandom data = new PasarRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -451,8 +427,7 @@ public class RandomTest {
 
         Crand64Random data = new Crand64Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -470,8 +445,7 @@ public class RandomTest {
 
         AceRandom data = new AceRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -489,8 +463,7 @@ public class RandomTest {
 
         Xoshiro256StarStarRandom data = new Xoshiro256StarStarRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -508,8 +481,7 @@ public class RandomTest {
 
         Xoshiro256MX3Random data = new Xoshiro256MX3Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -527,8 +499,7 @@ public class RandomTest {
 
         Xoroshiro128StarStarRandom data = new Xoroshiro128StarStarRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -546,8 +517,7 @@ public class RandomTest {
 
         ChopRandom data = new ChopRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -565,8 +535,7 @@ public class RandomTest {
 
         Jsf32Random data = new Jsf32Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -584,8 +553,7 @@ public class RandomTest {
 
         Bear32Random data = new Bear32Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -603,8 +571,7 @@ public class RandomTest {
 
         Chill32Random data = new Chill32Random(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -622,8 +589,7 @@ public class RandomTest {
 
         Xoshiro128PlusPlusRandom data = new Xoshiro128PlusPlusRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -643,8 +609,7 @@ public class RandomTest {
         InterpolatedRandom random = new InterpolatedRandom(Interpolations.kumaraswamyExtremeB,
                 new DistinctRandom(123L));
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, random);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -664,8 +629,7 @@ public class RandomTest {
 
         KnownSequenceRandom data = new KnownSequenceRandom(LongSequence.with(0L, 1L, -2L, -3L, 4L, 5L));
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -684,8 +648,7 @@ public class RandomTest {
 
         ReverseWrapper data = new ReverseWrapper(new DistinctRandom(-12345L));
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -704,8 +667,7 @@ public class RandomTest {
 
         ArchivalWrapper data = new ArchivalWrapper(new DistinctRandom(-12345L));
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -728,8 +690,7 @@ public class RandomTest {
 
         EnhancedRandom data = new Xoshiro128PlusPlusRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -747,8 +708,7 @@ public class RandomTest {
 
         LongSequence data = LongSequence.with(-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

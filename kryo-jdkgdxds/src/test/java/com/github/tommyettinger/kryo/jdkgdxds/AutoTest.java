@@ -26,7 +26,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
-import java.io.ByteArrayOutputStream;
 import java.util.EnumMap;
 
 public class AutoTest {
@@ -37,8 +36,7 @@ public class AutoTest {
 
         LongDeque data = LongDeque.with(-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -54,8 +52,7 @@ public class AutoTest {
 
         IntBag data = IntBag.with(-123, 0, 456, 0, 1, -1, 0);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -74,8 +71,7 @@ public class AutoTest {
                 4.56789f, ObjectList.with("in"), 0.0001f, ObjectList.with("Rl'yeh"), 1f, ObjectList.with("dreaming"), 1,
                 ObjectList.with("of"), -1, ObjectList.with("waffles"), 0);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -100,8 +96,7 @@ public class AutoTest {
         data.put(Character.UnicodeScript.GREEK, "Zeus");
         data.put(Character.UnicodeScript.RUNIC, "Odin");
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -117,8 +112,7 @@ public class AutoTest {
 
         ObjectList<String> data = ObjectList.with("-123.123", "0", "Four-Fifty Six", "0", "1.0", "-1.0", "0.000001");
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -134,8 +128,7 @@ public class AutoTest {
 
         Junction<String> data = Junction.parse("(foo|bar|baz)^QUUX^woop woop");
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -152,8 +145,7 @@ public class AutoTest {
 
         Junction<String> data = Junction.parse("(foo|bar|baz)^QUUX^woop woop");
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

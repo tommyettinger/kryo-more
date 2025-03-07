@@ -27,8 +27,6 @@ import com.github.tommyettinger.kryo.cringe.PointSequenceSerializers.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-
 public class PointTest {
     @Test
     public void testHalton2() {
@@ -37,8 +35,7 @@ public class PointTest {
 
         Halton2 data = new Halton2(2, 3, 100);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -59,8 +56,7 @@ public class PointTest {
 
         Halton3 data = new Halton3(2, 3, 5, 100);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -82,8 +78,7 @@ public class PointTest {
 
         Halton4 data = new Halton4(2, 3, 5, 7, 100);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -106,8 +101,7 @@ public class PointTest {
 
         Halton5 data = new Halton5(2, 3, 5, 7, 11, 100);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -131,8 +125,7 @@ public class PointTest {
 
         Halton6 data = new Halton6(2, 3, 5, 7, 11, 13, 100);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -157,8 +150,7 @@ public class PointTest {
 
         R2 data = new R2(0.1f, 0.2f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -178,8 +170,7 @@ public class PointTest {
 
         R3 data = new R3(0.1f, 0.2f, 0.3f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -200,8 +191,7 @@ public class PointTest {
 
         R4 data = new R4(0.1f, 0.2f, 0.3f, 0.4f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -222,8 +212,7 @@ public class PointTest {
 
         R5 data = new R5(0.1f, 0.2f, 0.3f, 0.4f, 0.5f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -244,8 +233,7 @@ public class PointTest {
 
         R6 data = new R6(0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -266,8 +254,7 @@ public class PointTest {
 
         Vector5 data = new Vector5(0.1f, 0.2f, 0.3f, 0.4f, 0.5f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -283,8 +270,7 @@ public class PointTest {
 
         Vector6 data = new Vector6(0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

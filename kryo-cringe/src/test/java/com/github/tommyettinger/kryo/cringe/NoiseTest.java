@@ -24,8 +24,6 @@ import com.github.tommyettinger.cringe.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-
 public class NoiseTest {
 
     @Test
@@ -36,8 +34,7 @@ public class NoiseTest {
 
         CellularNoise data = new CellularNoise(-12345, CellularNoise.NoiseType.DISTANCE_VALUE);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -59,8 +56,7 @@ public class NoiseTest {
 
         SimplexNoise data = new SimplexNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -82,8 +78,7 @@ public class NoiseTest {
 
         FoamNoise data = new FoamNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -105,8 +100,7 @@ public class NoiseTest {
 
         HoneyNoise data = new HoneyNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -128,8 +122,7 @@ public class NoiseTest {
 
         PerlinNoise data = new PerlinNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -151,8 +144,7 @@ public class NoiseTest {
 
         PerlueNoise data = new PerlueNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -174,8 +166,7 @@ public class NoiseTest {
 
         OpenSimplex2FastNoise data = new OpenSimplex2FastNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -197,8 +188,7 @@ public class NoiseTest {
 
         OpenSimplex2SmoothNoise data = new OpenSimplex2SmoothNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -220,8 +210,7 @@ public class NoiseTest {
 
         ValueNoise data = new ValueNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -243,8 +232,7 @@ public class NoiseTest {
 
         CyclicNoise data = new CyclicNoise(-12345, 4, 1.4f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -266,8 +254,7 @@ public class NoiseTest {
 
         SorbetNoise data = new SorbetNoise(-12345, 4, 1.4f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -289,8 +276,7 @@ public class NoiseTest {
 
         RawNoise data = new SimplexNoise(-12345);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -313,8 +299,7 @@ public class NoiseTest {
 
         ContinuousNoise data = new ContinuousNoise(new SimplexNoise(-12345), 1.4f, ContinuousNoise.RIDGED, 4);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data, ser);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

@@ -25,8 +25,6 @@ import org.junit.Test;
 import regexodus.Pattern;
 import regexodus.REFlags;
 
-import java.io.ByteArrayOutputStream;
-
 public class RegexodusTest {
     @Test
     public void testPattern() {
@@ -35,8 +33,7 @@ public class RegexodusTest {
 
         Pattern data = Pattern.compile("[a-z0-9_\\p{Sc}]+", REFlags.IGNORE_CASE | REFlags.UNICODE);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

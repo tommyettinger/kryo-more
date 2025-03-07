@@ -35,8 +35,7 @@ public class DigitalTest {
 
         Base data = Base.scrambledBase(new Random(123456789L));
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -54,8 +53,7 @@ public class DigitalTest {
 
         AlternateRandom data = new AlternateRandom(-12345L);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -74,8 +72,7 @@ public class DigitalTest {
         long seed = Hasher.randomize3(System.nanoTime());
         Hasher data = new Hasher(seed);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

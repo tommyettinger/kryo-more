@@ -28,8 +28,6 @@ import com.github.tommyettinger.gdcrux.PointI3;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-
 public class PointTest {
 
     @Test
@@ -39,8 +37,7 @@ public class PointTest {
 
         PointF2 data = new PointF2(1.23f, 2.34f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -56,8 +53,7 @@ public class PointTest {
 
         PointF3 data = new PointF3(1.23f, 2.34f, 3.45f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -73,8 +69,7 @@ public class PointTest {
 
         PointI2 data = new PointI2(12, 23);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -90,8 +85,7 @@ public class PointTest {
 
         PointI3 data = new PointI3(12, 23, 34);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
@@ -107,8 +101,7 @@ public class PointTest {
         kryo.register(PointPair.class, new PointPairSerializer());
         PointPair<PointI2> data = new PointPair<>(new PointI2(0, 0), new PointI2(1, 1));
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {

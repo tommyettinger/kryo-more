@@ -26,15 +26,11 @@ import com.github.tommyettinger.crux.Point2;
 import com.github.tommyettinger.crux.Point3;
 import com.github.tommyettinger.gand.*;
 import com.github.tommyettinger.gdcrux.*;
-import com.github.tommyettinger.kryo.gand.points.PointF2Serializer;
-import com.github.tommyettinger.kryo.gand.points.PointI2Serializer;
-import com.github.tommyettinger.kryo.gand.points.PointI3FallbackSerializer;
-import com.github.tommyettinger.kryo.gand.points.PointI3Serializer;
+import com.github.tommyettinger.kryo.gand.points.*;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -162,8 +158,7 @@ public class GandTest {
         int n = 5;
         Graph<Vector2> data = makeGridGraph(new UndirectedGraph<>(), n);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("UndirectedGraph byte length: " + bytes.length);
@@ -187,8 +182,7 @@ public class GandTest {
         int n = 5;
         Graph<Vector2> data = makeGridGraph(new DirectedGraph<>(), n);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("DirectedGraph byte length: " + bytes.length);
@@ -204,7 +198,6 @@ public class GandTest {
     }
 
     @Test
-    @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
     public void testDirectedGraphAgain() {
         Kryo kryo = new Kryo();
         kryo.setRegistrationRequired(false);
@@ -215,8 +208,7 @@ public class GandTest {
         DirectedGraph<PointI3> data = new DirectedGraph<>();
         makeGridGraph3D(data, n, new PointI3());
         System.out.println("Initial graph with length " + data.getVertices().size() + ", edge count " + data.getEdgeCount() + ": ");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("DirectedGraph byte length: " + bytes.length);
@@ -244,8 +236,7 @@ public class GandTest {
         System.out.println("Initial graph with length " + data.getVertices().size() + ": ");
         System.out.println(data.getVertices());
         System.out.println(data);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("Int2DirectedGraph byte length: " + bytes.length);
@@ -272,8 +263,7 @@ public class GandTest {
         int n = 5;
         Graph<PointF2> data = makeGridGraph2D(new Float2DirectedGraph(), n, new PointF2());
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("Float2DirectedGraph byte length: " + bytes.length);
@@ -322,13 +312,46 @@ public class GandTest {
     }
 
     @Test
+    public void testFloat3DirectedGraph() {
+        Kryo kryo = new Kryo();
+        kryo.setReferences(false);
+        kryo.register(PointF3.class, new PointF3Serializer());
+        kryo.register(Float3DirectedGraph.class, new Float3DirectedGraphSerializer());
+
+        int n = 5;
+        Float3DirectedGraph data = new Float3DirectedGraph();
+        makeGridGraph3D(data, n, new com.github.tommyettinger.gdcrux.PointF3());
+
+        System.out.println("Initial graph with length " + data.getVertices().size() + ", edge count " + data.getEdgeCount() + ": ");
+        System.out.println(data.getVertices());
+        System.out.println(data);
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Float3DirectedGraph byte length: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Float3DirectedGraph data2 = kryo.readObject(input, Float3DirectedGraph.class);
+
+            System.out.println("Read back in with length " + data2.getVertices().size() + ", edge count " + data2.getEdgeCount() + ": ");
+            System.out.println(data2.getVertices());
+            System.out.println(data2);
+            Assert.assertEquals(data.numberOfComponents(), data2.numberOfComponents());
+            Assert.assertEquals(data.getEdgeCount(), data2.getEdgeCount());
+            Assert.assertEquals(new ArrayList<>(data.getVertices()), new ArrayList<>(data2.getVertices()));
+            Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
+                    data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testInt3List() {
         Kryo kryo = new Kryo();
         kryo.setReferences(false);
         kryo.register(PointI3.class);
         kryo.register(ArrayList.class);
 
-        int n = 12; // passes with: int n = 11;
+        int n = 12;
         Int3DirectedGraph data = new Int3DirectedGraph();
         makeGridGraph3D(data, n, new com.github.tommyettinger.gdcrux.PointI3());
         ArrayList<PointI3> list = new ArrayList<>(data.getVertices());
@@ -358,8 +381,7 @@ public class GandTest {
         Path<PointI2> data = Path.with(pt(1, 1), pt(1, 2), pt(1, 3), pt(2, 3), pt(2, 4));
         data.setLength(4f);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
