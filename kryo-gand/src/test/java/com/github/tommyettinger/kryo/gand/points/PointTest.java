@@ -21,10 +21,10 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.crux.PointPair;
-import com.github.tommyettinger.gand.points.PointF2;
-import com.github.tommyettinger.gand.points.PointF3;
-import com.github.tommyettinger.gand.points.PointI2;
-import com.github.tommyettinger.gand.points.PointI3;
+import com.github.tommyettinger.gdcrux.PointF2;
+import com.github.tommyettinger.gdcrux.PointF3;
+import com.github.tommyettinger.gdcrux.PointI2;
+import com.github.tommyettinger.gdcrux.PointI3;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -17,16 +17,17 @@
 
 package com.github.tommyettinger.kryo.gand;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.crux.Point2;
 import com.github.tommyettinger.crux.Point3;
 import com.github.tommyettinger.gand.*;
-import com.github.tommyettinger.gand.points.PointF2;
-import com.github.tommyettinger.gand.points.PointI2;
-import com.github.tommyettinger.gand.points.PointI3;
+import com.github.tommyettinger.gand.ds.ObjectOrderedSet;
+import com.github.tommyettinger.gdcrux.*;
 import com.github.tommyettinger.kryo.gand.points.PointF2Serializer;
 import com.github.tommyettinger.kryo.gand.points.PointI2Serializer;
 import com.github.tommyettinger.kryo.gand.points.PointI3FallbackSerializer;
@@ -39,7 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import static com.github.tommyettinger.gand.points.PointMaker.pt;
+import static com.github.tommyettinger.gdcrux.PointMaker.pt;
 
 public class GandTest {
     public static Graph<Vector2> makeGridGraph(Graph<Vector2> graph, int sideLength) {
@@ -72,23 +73,30 @@ public class GandTest {
     }
 
     public static<V extends Point2<V>> Graph<V> makeGridGraph2D(Graph<V> graph, int sideLength, V basis) {
-
+        MathUtils.random.setSeed(sideLength);
         for (int i = 0; i < sideLength; i++) {
             for (int j = 0; j < sideLength; j++) {
-                graph.addVertex(basis.cpy().set(i, j));
+                if(MathUtils.randomBoolean(0.7f))
+                    graph.addVertex(basis.cpy().set(i, j));
             }
         }
 
         for (int i = 0; i < sideLength; i++) {
             for (int j = 0; j < sideLength; j++) {
                 if (i<sideLength-1) {
-                    V v1 = basis.cpy().set(i, j), v2 = basis.cpy().set(i+1,j);
+                    V v1 = basis.cpy().set(i, j);
+                    if(!graph.contains(v1)) continue;
+                    V v2 = basis.cpy().set(i+1,j);
+                    if(!graph.contains(v2)) continue;
                     float dst = v1.dst(v2);
                     graph.addEdge(v1, v2, dst);
                     if (graph.isDirected()) graph.addEdge(v2, v1, dst);
                 }
                 if (j<sideLength-1) {
-                    V v1 = basis.cpy().set(i, j), v2 = basis.cpy().set(i,j+1);
+                    V v1 = basis.cpy().set(i, j);
+                    if(!graph.contains(v1)) continue;
+                    V v2 = basis.cpy().set(i,j+1);
+                    if(!graph.contains(v2)) continue;
                     float dst = v1.dst(v2);
                     graph.addEdge(v1, v2, dst);
                     if (graph.isDirected()) graph.addEdge(v2, v1, dst);
@@ -100,11 +108,12 @@ public class GandTest {
     }
 
     public static<V extends Point3<V>> Graph<V> makeGridGraph3D(Graph<V> graph, int sideLength, V basis) {
-
+        MathUtils.random.setSeed(sideLength);
         for (int i = 0; i < sideLength; i++) {
             for (int j = 0; j < sideLength; j++) {
                 for (int k = 0; k < sideLength; k++) {
-                    graph.addVertex(basis.cpy().set(i, j, k));
+                    if(MathUtils.randomBoolean(0.9f))
+                        graph.addVertex(basis.cpy().set(i, j, k));
                 }
             }
         }
@@ -113,19 +122,28 @@ public class GandTest {
             for (int j = 0; j < sideLength; j++) {
                 for (int k = 0; k < sideLength; k++) {
                     if (i < sideLength - 1) {
-                        V v1 = basis.cpy().set(i, j, k), v2 = basis.cpy().set(i + 1, j, k);
+                        V v1 = basis.cpy().set(i, j, k);
+                        if(!graph.contains(v1)) continue;
+                        V v2 = basis.cpy().set(i + 1, j, k);
+                        if(!graph.contains(v2)) continue;
                         float dst = v1.dst(v2);
                         graph.addEdge(v1, v2, dst);
                         if (graph.isDirected()) graph.addEdge(v2, v1, dst);
                     }
                     if (j < sideLength - 1) {
-                        V v1 = basis.cpy().set(i, j, k), v2 = basis.cpy().set(i, j + 1, k);
+                        V v1 = basis.cpy().set(i, j, k);
+                        if(!graph.contains(v1)) continue;
+                        V v2 = basis.cpy().set(i, j + 1, k);
+                        if(!graph.contains(v2)) continue;
                         float dst = v1.dst(v2);
                         graph.addEdge(v1, v2, dst);
                         if (graph.isDirected()) graph.addEdge(v2, v1, dst);
                     }
                     if (k < sideLength - 1) {
-                        V v1 = basis.cpy().set(i, j, k), v2 = basis.cpy().set(i, j, k + 1);
+                        V v1 = basis.cpy().set(i, j, k);
+                        if(!graph.contains(v1)) continue;
+                        V v2 = basis.cpy().set(i, j, k + 1);
+                        if(!graph.contains(v2)) continue;
                         float dst = v1.dst(v2);
                         graph.addEdge(v1, v2, dst);
                         if (graph.isDirected()) graph.addEdge(v2, v1, dst);
@@ -276,12 +294,23 @@ public class GandTest {
 //    @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
     public void testInt3DirectedGraph() {
         Kryo kryo = new Kryo();
-        kryo.register(PointI3.class, new PointI3Serializer());
+        kryo.setReferences(false);
+        kryo.register(PointI3.class);
+//        kryo.register(java.lang.Object[].class);
+//        kryo.register(ArrayList.class);
+//        kryo.register(ObjectMap.class);
+//        kryo.register(ObjectOrderedSet.class);
+//        kryo.register(Connection.DirectedConnection.class);
+//        kryo.register(Node.class);
+//        kryo.register(Node[].class);
+//        kryo.register(NodeMap.class);
+//        kryo.register(NodeCollection.class);
+//        kryo.register(VertexSet.class);
         kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 
         int n = 5;
         Int3DirectedGraph data = new Int3DirectedGraph();
-        makeGridGraph3D(data, n, new PointI3());
+        makeGridGraph3D(data, n, new com.github.tommyettinger.gdcrux.PointI3());
         System.out.println("Initial graph with length " + data.getVertices().size() + ", edge count " + data.getEdgeCount() + ": ");
         System.out.println(data.getVertices());
         System.out.println(data);
@@ -292,6 +321,7 @@ public class GandTest {
         System.out.println("Int3DirectedGraph byte length: " + bytes.length);
         try (Input input = new Input(bytes)) {
             Int3DirectedGraph data2 = kryo.readObject(input, Int3DirectedGraph.class);
+
             System.out.println("Read back in with length " + data2.getVertices().size() + ", edge count " + data2.getEdgeCount() + ": ");
             System.out.println(data2.getVertices());
             System.out.println(data2);

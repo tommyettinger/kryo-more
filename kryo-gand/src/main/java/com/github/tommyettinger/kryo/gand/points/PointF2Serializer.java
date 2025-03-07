@@ -21,7 +21,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.gand.points.PointF2;
+import com.github.tommyettinger.gdcrux.PointF2;
 
 /**
  * Kryo {@link Serializer} for gand {@link PointF2}s.

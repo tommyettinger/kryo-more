@@ -27,7 +27,7 @@ import com.github.tommyettinger.crux.PointPair;
 /**
  * Kryo {@link Serializer} for crux {@link PointPair}s, which are used by gand.
  * Needs the type of the points to be registered, such as with
- * {@link PointF2Serializer} for {@link com.github.tommyettinger.gand.points.PointF2}.
+ * {@link PointF2Serializer} for {@link com.github.tommyettinger.gdcrux.PointF2}.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class PointPairSerializer extends com.esotericsoftware.kryo.Serializer<PointPair> {

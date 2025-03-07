@@ -23,7 +23,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.gand.Connection;
 import com.github.tommyettinger.gand.Float3UndirectedGraph;
-import com.github.tommyettinger.gand.points.PointF3;
+import com.github.tommyettinger.gdcrux.PointF3;
 
 import java.util.Collection;
 
