@@ -19,14 +19,12 @@ package com.github.tommyettinger.kryo.gand;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.crux.Point2;
 import com.github.tommyettinger.crux.Point3;
 import com.github.tommyettinger.gand.*;
-import com.github.tommyettinger.gand.ds.ObjectOrderedSet;
 import com.github.tommyettinger.gdcrux.*;
 import com.github.tommyettinger.kryo.gand.points.PointF2Serializer;
 import com.github.tommyettinger.kryo.gand.points.PointI2Serializer;
@@ -291,23 +289,11 @@ public class GandTest {
     }
 
     @Test
-//    @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
     public void testInt3DirectedGraph() {
         Kryo kryo = new Kryo();
         kryo.setReferences(false);
-        kryo.register(PointI3.class);
+        kryo.register(PointI3.class, new PointI3Serializer());
         kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
-//        kryo.register(java.lang.Object[].class);
-//        kryo.register(ArrayList.class);
-//        kryo.register(ObjectMap.class);
-//        kryo.register(ObjectOrderedSet.class);
-//        kryo.register(Connection.DirectedConnection.class);
-//        kryo.register(Node.class);
-//        kryo.register(Node[].class);
-//        kryo.register(NodeMap.class);
-//        kryo.register(NodeCollection.class);
-//        kryo.register(VertexSet.class);
-//        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 
         int n = 5;
         Int3DirectedGraph data = new Int3DirectedGraph();
@@ -316,8 +302,7 @@ public class GandTest {
         System.out.println("Initial graph with length " + data.getVertices().size() + ", edge count " + data.getEdgeCount() + ": ");
         System.out.println(data.getVertices());
         System.out.println(data);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+        Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         System.out.println("Int3DirectedGraph byte length: " + bytes.length);
@@ -337,23 +322,11 @@ public class GandTest {
     }
 
     @Test
-//    @Ignore("There appears to be a bug in Kryo 5.x that breaks PointI3 in particular.")
     public void testInt3List() {
         Kryo kryo = new Kryo();
         kryo.setReferences(false);
         kryo.register(PointI3.class);
         kryo.register(ArrayList.class);
-//        kryo.register(java.lang.Object[].class);
-//        kryo.register(ArrayList.class);
-//        kryo.register(ObjectMap.class);
-//        kryo.register(ObjectOrderedSet.class);
-//        kryo.register(Connection.DirectedConnection.class);
-//        kryo.register(Node.class);
-//        kryo.register(Node[].class);
-//        kryo.register(NodeMap.class);
-//        kryo.register(NodeCollection.class);
-//        kryo.register(VertexSet.class);
-//        kryo.register(Int3DirectedGraph.class, new Int3DirectedGraphSerializer());
 
         int n = 12; // passes with: int n = 11;
         Int3DirectedGraph data = new Int3DirectedGraph();
@@ -361,8 +334,8 @@ public class GandTest {
         ArrayList<PointI3> list = new ArrayList<>(data.getVertices());
         System.out.println("List with length " + list.size() + ": ");
         System.out.println(list);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
-        Output output = new Output(baos);
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream(8192); // no longer needed!
+        Output output = new Output(32, -1); // changed line, important!
         kryo.writeObject(output, list);
         byte[] bytes = output.toBytes();
         System.out.println("ArrayList byte length: " + bytes.length);
@@ -375,14 +348,6 @@ public class GandTest {
             Assert.assertEquals(list, list2);
         }
     }
-    /*
-Graph has 1211 vertices and 5550 edges.
-List with length 1211:
-// a really long line
-ArrayList byte length: 3637
-Read back in with length 1211:
-// it's the same as the above long line
-     */
 
     @Test
     public void testPath() {
