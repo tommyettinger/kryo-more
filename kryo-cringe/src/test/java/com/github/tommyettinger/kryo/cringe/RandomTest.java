@@ -17,12 +17,14 @@
 
 package com.github.tommyettinger.kryo.cringe;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.cringe.*;
 import com.github.tommyettinger.kryo.gdx.ArraySerializer;
+import com.github.tommyettinger.kryo.gdx.GdxArraySerializer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -97,6 +99,120 @@ public class RandomTest {
             GapShuffler data2 = kryo.readObject(input, GapShuffler.class);
             Assert.assertEquals(data.next(), data2.next());
             Assert.assertEquals(data.next(), data2.next());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    /**
+     * Length in bytes of 100000 Vector2 items: 900004
+     */
+    @Test
+    public void testArrayVector2() {
+        final int LIMIT = 100000;
+
+        Kryo kryo = new Kryo();
+        kryo.register(com.badlogic.gdx.math.Vector2.class);
+        kryo.register(Array.class, new ArraySerializer());
+        RandomAce320 random = new RandomAce320(1234567890L);
+
+        Array<Vector2> data = new Array<>(LIMIT);
+        for (int i = 0; i < LIMIT; i++) {
+            data.add(random.nextVector2(100f));
+        }
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Length in bytes of " + LIMIT + " Vector2 items: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Array data2 = kryo.readObject(input, Array.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    /**
+     * Length in bytes of 100000 String items: 2173740
+     */
+    @Test
+    public void testArrayString() {
+        final int LIMIT = 100000;
+
+        Kryo kryo = new Kryo();
+        kryo.register(Array.class, new ArraySerializer());
+        RandomAce320 random = new RandomAce320(1234567890L);
+
+        Array<String> data = new Array<>(LIMIT);
+        Vector2 vec = new Vector2();
+        for (int i = 0; i < LIMIT; i++) {
+            data.add(random.nextVector2InPlace(vec, 100f).toString());
+        }
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Length in bytes of " + LIMIT + " String items: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Array data2 = kryo.readObject(input, Array.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    /**
+     * Default settings:
+     * Length in bytes of 100000 Vector2 items: 800005
+     * With {@code ser.setElementClass(Vector2.class); ser.setElementsCanBeNull(false);}:
+     * Length in bytes of 100000 Vector2 items: 800004
+     */
+    @Test
+    public void testGdxArrayVector2() {
+        final int LIMIT = 100000;
+
+        Kryo kryo = new Kryo();
+        kryo.register(com.badlogic.gdx.math.Vector2.class);
+        GdxArraySerializer ser = new GdxArraySerializer();
+        ser.setElementClass(Vector2.class); ser.setElementsCanBeNull(false);
+        kryo.register(Array.class, ser);
+        RandomAce320 random = new RandomAce320(1234567890L);
+
+        Array<Vector2> data = new Array<>(LIMIT);
+        for (int i = 0; i < LIMIT; i++) {
+            data.add(random.nextVector2(100f));
+        }
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Length in bytes of " + LIMIT + " Vector2 items: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Array data2 = kryo.readObject(input, Array.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    /**
+     * Default settings:
+     * Length in bytes of 100000 String items: 2073741
+     * With {@code ser.setElementClass(String.class); ser.setElementsCanBeNull(false);}:
+     * Length in bytes of 100000 String items: 2073740
+     */
+    @Test
+    public void testGdxArrayString() {
+        final int LIMIT = 100000;
+
+        Kryo kryo = new Kryo();
+        GdxArraySerializer ser = new GdxArraySerializer();
+        ser.setElementClass(String.class); ser.setElementsCanBeNull(false);
+        kryo.register(Array.class, ser);
+        RandomAce320 random = new RandomAce320(1234567890L);
+
+        Array<String> data = new Array<>(LIMIT);
+        Vector2 vec = new Vector2();
+        for (int i = 0; i < LIMIT; i++) {
+            data.add(random.nextVector2InPlace(vec, 100f).toString());
+        }
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Length in bytes of " + LIMIT + " String items: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Array data2 = kryo.readObject(input, Array.class);
             Assert.assertEquals(data, data2);
         }
     }
