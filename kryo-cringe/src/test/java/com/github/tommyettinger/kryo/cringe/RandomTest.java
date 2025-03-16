@@ -65,6 +65,25 @@ public class RandomTest {
         }
     }
 
+
+    @Test
+    public void testRandomChop128() {
+        Kryo kryo = new Kryo();
+        kryo.register(RandomChop128.class, new RandomChop128Serializer());
+
+        RandomChop128 data = new RandomChop128(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            RandomChop128 data2 = kryo.readObject(input, RandomChop128.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
     @Test
     public void testRandomXMX256() {
         Kryo kryo = new Kryo();
