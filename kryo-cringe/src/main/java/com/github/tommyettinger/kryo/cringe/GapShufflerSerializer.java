@@ -24,9 +24,10 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.cringe.GapShuffler;
 import com.github.tommyettinger.cringe.GdxRandom;
+import com.github.tommyettinger.kryo.gdx.ArraySerializer;
 
 /**
- * Needs {@link com.github.tommyettinger.kryo.gdx.ArraySerializer} to be registered for {@link Array},
+ * Needs {@link ArraySerializer} to be registered for {@link Array},
  * the concrete subclass of {@link GdxRandom} registered, and
  * the type of whatever items are in the GapShuffler registered.
  */

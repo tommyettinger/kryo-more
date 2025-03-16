@@ -23,8 +23,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.cringe.*;
+import com.github.tommyettinger.kryo.gdx.OldArraySerializer;
 import com.github.tommyettinger.kryo.gdx.ArraySerializer;
-import com.github.tommyettinger.kryo.gdx.GdxArraySerializer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -106,7 +106,7 @@ public class RandomTest {
     public void testGapShuffler() {
         Kryo kryo = new Kryo();
         kryo.register(RandomAce320.class, new RandomAce320Serializer());
-        kryo.register(Array.class, new ArraySerializer());
+        kryo.register(Array.class, new OldArraySerializer());
         kryo.register(GapShuffler.class, new GapShufflerSerializer());
 
         GapShuffler<String> data = new GapShuffler<>(new String[]{"Foo", "Bar", "Baz", "Quux"}, new RandomAce320(123));
@@ -115,7 +115,7 @@ public class RandomTest {
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            GapShuffler data2 = kryo.readObject(input, GapShuffler.class);
+            GapShuffler<?> data2 = kryo.readObject(input, GapShuffler.class);
             Assert.assertEquals(data.next(), data2.next());
             Assert.assertEquals(data.next(), data2.next());
             Assert.assertEquals(data, data2);
@@ -131,7 +131,7 @@ public class RandomTest {
 
         Kryo kryo = new Kryo();
         kryo.register(com.badlogic.gdx.math.Vector2.class);
-        kryo.register(Array.class, new ArraySerializer());
+        kryo.register(Array.class, new OldArraySerializer());
         RandomAce320 random = new RandomAce320(1234567890L);
 
         Array<Vector2> data = new Array<>(LIMIT);
@@ -143,7 +143,7 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         System.out.println("Length in bytes of " + LIMIT + " Vector2 items: " + bytes.length);
         try (Input input = new Input(bytes)) {
-            Array data2 = kryo.readObject(input, Array.class);
+            Array<?> data2 = kryo.readObject(input, Array.class);
             Assert.assertEquals(data, data2);
         }
     }
@@ -156,7 +156,7 @@ public class RandomTest {
         final int LIMIT = 100000;
 
         Kryo kryo = new Kryo();
-        kryo.register(Array.class, new ArraySerializer());
+        kryo.register(Array.class, new OldArraySerializer());
         RandomAce320 random = new RandomAce320(1234567890L);
 
         Array<String> data = new Array<>(LIMIT);
@@ -169,7 +169,7 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         System.out.println("Length in bytes of " + LIMIT + " String items: " + bytes.length);
         try (Input input = new Input(bytes)) {
-            Array data2 = kryo.readObject(input, Array.class);
+            Array<?>data2 = kryo.readObject(input, Array.class);
             Assert.assertEquals(data, data2);
         }
     }
@@ -186,7 +186,7 @@ public class RandomTest {
 
         Kryo kryo = new Kryo();
         kryo.register(com.badlogic.gdx.math.Vector2.class);
-        GdxArraySerializer ser = new GdxArraySerializer();
+        ArraySerializer ser = new ArraySerializer();
         ser.setElementClass(Vector2.class); ser.setElementsCanBeNull(false);
         kryo.register(Array.class, ser);
         RandomAce320 random = new RandomAce320(1234567890L);
@@ -200,7 +200,7 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         System.out.println("Length in bytes of " + LIMIT + " Vector2 items: " + bytes.length);
         try (Input input = new Input(bytes)) {
-            Array data2 = kryo.readObject(input, Array.class);
+            Array<?>data2 = kryo.readObject(input, Array.class);
             Assert.assertEquals(data, data2);
         }
     }
@@ -216,7 +216,7 @@ public class RandomTest {
         final int LIMIT = 100000;
 
         Kryo kryo = new Kryo();
-        GdxArraySerializer ser = new GdxArraySerializer();
+        ArraySerializer ser = new ArraySerializer();
         ser.setElementClass(String.class); ser.setElementsCanBeNull(false);
         kryo.register(Array.class, ser);
         RandomAce320 random = new RandomAce320(1234567890L);
@@ -231,11 +231,65 @@ public class RandomTest {
         byte[] bytes = output.toBytes();
         System.out.println("Length in bytes of " + LIMIT + " String items: " + bytes.length);
         try (Input input = new Input(bytes)) {
-            Array data2 = kryo.readObject(input, Array.class);
+            Array<?>data2 = kryo.readObject(input, Array.class);
             Assert.assertEquals(data, data2);
         }
     }
 
+
+    /**
+     * Length in bytes of 100000 Vector2 items: 900010
+     */
+    @Test
+    public void testArrayDefaultVector2() {
+        final int LIMIT = 100000;
+
+        Kryo kryo = new Kryo();
+        kryo.register(com.badlogic.gdx.math.Vector2.class);
+        kryo.register(java.lang.Object[].class);
+        kryo.register(Array.class);
+        RandomAce320 random = new RandomAce320(1234567890L);
+
+        Array<Vector2> data = new Array<>(LIMIT);
+        for (int i = 0; i < LIMIT; i++) {
+            data.add(random.nextVector2(100f));
+        }
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Length in bytes of " + LIMIT + " Vector2 items: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Array<?>data2 = kryo.readObject(input, Array.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    /**
+     * Length in bytes of 100000 String items: 2173746
+     */
+    @Test
+    public void testArrayDefaultString() {
+        final int LIMIT = 100000;
+
+        Kryo kryo = new Kryo();
+        kryo.register(java.lang.Object[].class);
+        kryo.register(Array.class);
+        RandomAce320 random = new RandomAce320(1234567890L);
+
+        Array<String> data = new Array<>(LIMIT);
+        Vector2 vec = new Vector2();
+        for (int i = 0; i < LIMIT; i++) {
+            data.add(random.nextVector2InPlace(vec, 100f).toString());
+        }
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        System.out.println("Length in bytes of " + LIMIT + " String items: " + bytes.length);
+        try (Input input = new Input(bytes)) {
+            Array<?>data2 = kryo.readObject(input, Array.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 
     @Test
     public void testWeightedTable() {
