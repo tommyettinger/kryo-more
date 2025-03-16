@@ -11,71 +11,257 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
-<span class="source-line-no">002</span><span id="line-2"> * Copyright (c) 2024 See AUTHORS file.</span>
-<span class="source-line-no">003</span><span id="line-3"> *</span>
-<span class="source-line-no">004</span><span id="line-4"> * Licensed under the Apache License, Version 2.0 (the "License");</span>
-<span class="source-line-no">005</span><span id="line-5"> * you may not use this file except in compliance with the License.</span>
-<span class="source-line-no">006</span><span id="line-6"> * You may obtain a copy of the License at</span>
-<span class="source-line-no">007</span><span id="line-7"> *</span>
-<span class="source-line-no">008</span><span id="line-8"> *   http://www.apache.org/licenses/LICENSE-2.0</span>
-<span class="source-line-no">009</span><span id="line-9"> *</span>
-<span class="source-line-no">010</span><span id="line-10"> * Unless required by applicable law or agreed to in writing, software</span>
-<span class="source-line-no">011</span><span id="line-11"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
-<span class="source-line-no">012</span><span id="line-12"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="source-line-no">013</span><span id="line-13"> * See the License for the specific language governing permissions and</span>
-<span class="source-line-no">014</span><span id="line-14"> * limitations under the License.</span>
-<span class="source-line-no">015</span><span id="line-15"> *</span>
-<span class="source-line-no">016</span><span id="line-16"> */</span>
-<span class="source-line-no">017</span><span id="line-17">package com.github.tommyettinger.kryo.gdx;</span>
-<span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import com.badlogic.gdx.utils.Array;</span>
-<span class="source-line-no">020</span><span id="line-20">import com.esotericsoftware.kryo.Kryo;</span>
-<span class="source-line-no">021</span><span id="line-21">import com.esotericsoftware.kryo.Serializer;</span>
-<span class="source-line-no">022</span><span id="line-22">import com.esotericsoftware.kryo.io.Input;</span>
-<span class="source-line-no">023</span><span id="line-23">import com.esotericsoftware.kryo.io.Output;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * A Serializer for libGDX {@link Array} objects.</span>
-<span class="source-line-no">027</span><span id="line-27"> * This was copied almost-directly from &lt;a href="https://github.com/CypherCove/GdxToKryo/blob/d6c626ee0b06476877e75f22393572007aaf69fe/library/src/main/java/com/cyphercove/gdxtokryo/gdxserializers/utils/ArraySerializer.java"&gt;CypherCove's GdxToKryo repo&lt;/a&gt;.</span>
-<span class="source-line-no">028</span><span id="line-28"> * This is not recommended for use from outside code, because it could be moved into a different project.</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;br&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * Unlike the original, this does not record the Class of items of an Array. That requires registering Object for most</span>
-<span class="source-line-no">031</span><span id="line-31"> * Array instances, and I'm not sure if that's a good idea.</span>
-<span class="source-line-no">032</span><span id="line-32"> */</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/* Copyright (c) 2008-2023, Nathan Sweet</span>
+<span class="source-line-no">002</span><span id="line-2"> * All rights reserved.</span>
+<span class="source-line-no">003</span><span id="line-3"> * </span>
+<span class="source-line-no">004</span><span id="line-4"> * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following</span>
+<span class="source-line-no">005</span><span id="line-5"> * conditions are met:</span>
+<span class="source-line-no">006</span><span id="line-6"> * </span>
+<span class="source-line-no">007</span><span id="line-7"> * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</span>
+<span class="source-line-no">008</span><span id="line-8"> * - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following</span>
+<span class="source-line-no">009</span><span id="line-9"> * disclaimer in the documentation and/or other materials provided with the distribution.</span>
+<span class="source-line-no">010</span><span id="line-10"> * - Neither the name of Esoteric Software nor the names of its contributors may be used to endorse or promote products derived</span>
+<span class="source-line-no">011</span><span id="line-11"> * from this software without specific prior written permission.</span>
+<span class="source-line-no">012</span><span id="line-12"> * </span>
+<span class="source-line-no">013</span><span id="line-13"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,</span>
+<span class="source-line-no">014</span><span id="line-14"> * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT</span>
+<span class="source-line-no">015</span><span id="line-15"> * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</span>
+<span class="source-line-no">016</span><span id="line-16"> * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</span>
+<span class="source-line-no">017</span><span id="line-17"> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING</span>
+<span class="source-line-no">018</span><span id="line-18"> * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">package com.github.tommyettinger.kryo.gdx;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import static com.esotericsoftware.kryo.Kryo.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import com.badlogic.gdx.utils.Array;</span>
+<span class="source-line-no">025</span><span id="line-25">import com.esotericsoftware.kryo.Kryo;</span>
+<span class="source-line-no">026</span><span id="line-26">import com.esotericsoftware.kryo.Registration;</span>
+<span class="source-line-no">027</span><span id="line-27">import com.esotericsoftware.kryo.Serializer;</span>
+<span class="source-line-no">028</span><span id="line-28">import com.esotericsoftware.kryo.io.Input;</span>
+<span class="source-line-no">029</span><span id="line-29">import com.esotericsoftware.kryo.io.Output;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">/** Serializes libGDX {@link Array} objects.</span>
+<span class="source-line-no">032</span><span id="line-32"> * @author Nathan Sweet */</span>
 <span class="source-line-no">033</span><span id="line-33">public class ArraySerializer extends Serializer&lt;Array&gt; {</span>
-<span class="source-line-no">034</span><span id="line-34">    @Override</span>
-<span class="source-line-no">035</span><span id="line-35">    public void write(Kryo kryo, Output output, Array array) {</span>
-<span class="source-line-no">036</span><span id="line-36">        output.writeVarInt(array.size, true);</span>
-<span class="source-line-no">037</span><span id="line-37">        output.writeBoolean(array.ordered);</span>
-<span class="source-line-no">038</span><span id="line-38">        for (Object element : array)</span>
-<span class="source-line-no">039</span><span id="line-39">            kryo.writeClassAndObject(output, element);</span>
-<span class="source-line-no">040</span><span id="line-40">    }</span>
+<span class="source-line-no">034</span><span id="line-34">        private boolean elementsCanBeNull = true;</span>
+<span class="source-line-no">035</span><span id="line-35">        private Serializer elementSerializer;</span>
+<span class="source-line-no">036</span><span id="line-36">        private Class elementClass;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">        public ArraySerializer() {</span>
+<span class="source-line-no">039</span><span id="line-39">                setAcceptsNull(true);</span>
+<span class="source-line-no">040</span><span id="line-40">        }</span>
 <span class="source-line-no">041</span><span id="line-41"></span>
-<span class="source-line-no">042</span><span id="line-42">    protected Array&lt;?&gt; create (boolean ordered, int capacity) {</span>
-<span class="source-line-no">043</span><span id="line-43">        return (new Array&lt;&gt;(ordered, capacity));</span>
-<span class="source-line-no">044</span><span id="line-44">    }</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">    @Override</span>
-<span class="source-line-no">047</span><span id="line-47">    public Array read(Kryo kryo, Input input, Class&lt;? extends Array&gt; type) {</span>
-<span class="source-line-no">048</span><span id="line-48">        int length = input.readVarInt(true);</span>
-<span class="source-line-no">049</span><span id="line-49">        boolean ordered = input.readBoolean();</span>
-<span class="source-line-no">050</span><span id="line-50">        Array array = create(ordered, length);</span>
-<span class="source-line-no">051</span><span id="line-51">        kryo.reference(array);</span>
-<span class="source-line-no">052</span><span id="line-52">        for (int i = 0; i &lt; length; i++)</span>
-<span class="source-line-no">053</span><span id="line-53">            array.add(kryo.readClassAndObject(input));</span>
-<span class="source-line-no">054</span><span id="line-54">        return array;</span>
-<span class="source-line-no">055</span><span id="line-55">    }</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">    @Override</span>
-<span class="source-line-no">058</span><span id="line-58">    public Array copy (Kryo kryo, Array original) {</span>
-<span class="source-line-no">059</span><span id="line-59">        Class cls = original.items.getClass().getComponentType();</span>
-<span class="source-line-no">060</span><span id="line-60">        Array&lt;?&gt; copy = new Array&lt;&gt;(original.ordered, original.size, cls);</span>
-<span class="source-line-no">061</span><span id="line-61">        kryo.reference(copy);</span>
-<span class="source-line-no">062</span><span id="line-62">        copy.addAll(original);</span>
-<span class="source-line-no">063</span><span id="line-63">        return copy;</span>
-<span class="source-line-no">064</span><span id="line-64">    }</span>
-<span class="source-line-no">065</span><span id="line-65">}</span>
+<span class="source-line-no">042</span><span id="line-42">        /** @param elementsCanBeNull False if all elements are not null. This saves 1 byte per element if elementClass is set. True if</span>
+<span class="source-line-no">043</span><span id="line-43">         *           it is not known (default). */</span>
+<span class="source-line-no">044</span><span id="line-44">        public void setElementsCanBeNull (boolean elementsCanBeNull) {</span>
+<span class="source-line-no">045</span><span id="line-45">                this.elementsCanBeNull = elementsCanBeNull;</span>
+<span class="source-line-no">046</span><span id="line-46">        }</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">        /** The concrete class of the collection elements, or null if it is not known. This saves 1-2 bytes per element. Only set to a</span>
+<span class="source-line-no">049</span><span id="line-49">         * non-null value if the elements in the collection are known to all be instances of this class (or null). */</span>
+<span class="source-line-no">050</span><span id="line-50">        public void setElementClass (Class elementClass) {</span>
+<span class="source-line-no">051</span><span id="line-51">                this.elementClass = elementClass;</span>
+<span class="source-line-no">052</span><span id="line-52">        }</span>
+<span class="source-line-no">053</span><span id="line-53"></span>
+<span class="source-line-no">054</span><span id="line-54">        public Class getElementClass () {</span>
+<span class="source-line-no">055</span><span id="line-55">                return elementClass;</span>
+<span class="source-line-no">056</span><span id="line-56">        }</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">        /** Sets both {@link #setElementClass(Class)} and {@link #setElementSerializer(Serializer)}. */</span>
+<span class="source-line-no">059</span><span id="line-59">        public void setElementClass (Class elementClass, Serializer serializer) {</span>
+<span class="source-line-no">060</span><span id="line-60">                this.elementClass = elementClass;</span>
+<span class="source-line-no">061</span><span id="line-61">                this.elementSerializer = serializer;</span>
+<span class="source-line-no">062</span><span id="line-62">        }</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">        /** The serializer to be used for elements in collection, or null to use the serializer registered with {@link Kryo} for each</span>
+<span class="source-line-no">065</span><span id="line-65">         * element's type. Default is null. */</span>
+<span class="source-line-no">066</span><span id="line-66">        public void setElementSerializer (Serializer elementSerializer) {</span>
+<span class="source-line-no">067</span><span id="line-67">                this.elementSerializer = elementSerializer;</span>
+<span class="source-line-no">068</span><span id="line-68">        }</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">        public Serializer getElementSerializer () {</span>
+<span class="source-line-no">071</span><span id="line-71">                return this.elementSerializer;</span>
+<span class="source-line-no">072</span><span id="line-72">        }</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">        public void write (Kryo kryo, Output output, Array collection) {</span>
+<span class="source-line-no">075</span><span id="line-75">                if (collection == null) {</span>
+<span class="source-line-no">076</span><span id="line-76">                        output.writeByte(NULL);</span>
+<span class="source-line-no">077</span><span id="line-77">                        return;</span>
+<span class="source-line-no">078</span><span id="line-78">                }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">                int length = collection.size;</span>
+<span class="source-line-no">081</span><span id="line-81">                if (length == 0) {</span>
+<span class="source-line-no">082</span><span id="line-82">                        output.writeByte(1);</span>
+<span class="source-line-no">083</span><span id="line-83">                        writeHeader(kryo, output, collection);</span>
+<span class="source-line-no">084</span><span id="line-84">                        return;</span>
+<span class="source-line-no">085</span><span id="line-85">                }</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">                boolean elementsCanBeNull = this.elementsCanBeNull;</span>
+<span class="source-line-no">088</span><span id="line-88">                Serializer elementSerializer = this.elementSerializer;</span>
+<span class="source-line-no">089</span><span id="line-89">                if (elementSerializer == null) {</span>
+<span class="source-line-no">090</span><span id="line-90">                        Class genericClass = kryo.getGenerics().nextGenericClass();</span>
+<span class="source-line-no">091</span><span id="line-91">                        if (genericClass != null &amp;&amp; kryo.isFinal(genericClass)) elementSerializer = kryo.getSerializer(genericClass);</span>
+<span class="source-line-no">092</span><span id="line-92">                }</span>
+<span class="source-line-no">093</span><span id="line-93">                try {</span>
+<span class="source-line-no">094</span><span id="line-94">                        outer:</span>
+<span class="source-line-no">095</span><span id="line-95">                        if (elementSerializer != null) {</span>
+<span class="source-line-no">096</span><span id="line-96">                                inner:</span>
+<span class="source-line-no">097</span><span id="line-97">                                if (elementsCanBeNull) {</span>
+<span class="source-line-no">098</span><span id="line-98">                                        for (Object element : collection) {</span>
+<span class="source-line-no">099</span><span id="line-99">                                                if (element == null) {</span>
+<span class="source-line-no">100</span><span id="line-100">                                                        output.writeVarIntFlag(true, length + 1, true);</span>
+<span class="source-line-no">101</span><span id="line-101">                                                        break inner;</span>
+<span class="source-line-no">102</span><span id="line-102">                                                }</span>
+<span class="source-line-no">103</span><span id="line-103">                                        }</span>
+<span class="source-line-no">104</span><span id="line-104">                                        output.writeVarIntFlag(false, length + 1, true);</span>
+<span class="source-line-no">105</span><span id="line-105">                                        elementsCanBeNull = false;</span>
+<span class="source-line-no">106</span><span id="line-106">                                } else</span>
+<span class="source-line-no">107</span><span id="line-107">                                        output.writeVarInt(length + 1, true);</span>
+<span class="source-line-no">108</span><span id="line-108">                                writeHeader(kryo, output, collection);</span>
+<span class="source-line-no">109</span><span id="line-109">                        } else { // Serializer is unknown, check if all elements are the same type.</span>
+<span class="source-line-no">110</span><span id="line-110">                                Class elementType = null;</span>
+<span class="source-line-no">111</span><span id="line-111">                                boolean hasNull = false;</span>
+<span class="source-line-no">112</span><span id="line-112">                                for (Object element : collection) {</span>
+<span class="source-line-no">113</span><span id="line-113">                                        if (element == null)</span>
+<span class="source-line-no">114</span><span id="line-114">                                                hasNull = true;</span>
+<span class="source-line-no">115</span><span id="line-115">                                        else if (elementType == null)</span>
+<span class="source-line-no">116</span><span id="line-116">                                                elementType = element.getClass();</span>
+<span class="source-line-no">117</span><span id="line-117">                                        else if (element.getClass() != elementType) { // Elements are different types.</span>
+<span class="source-line-no">118</span><span id="line-118">                                                output.writeVarIntFlag(false, length + 1, true);</span>
+<span class="source-line-no">119</span><span id="line-119">                                                writeHeader(kryo, output, collection);</span>
+<span class="source-line-no">120</span><span id="line-120">                                                break outer;</span>
+<span class="source-line-no">121</span><span id="line-121">                                        }</span>
+<span class="source-line-no">122</span><span id="line-122">                                }</span>
+<span class="source-line-no">123</span><span id="line-123">                                output.writeVarIntFlag(true, length + 1, true);</span>
+<span class="source-line-no">124</span><span id="line-124">                                writeHeader(kryo, output, collection);</span>
+<span class="source-line-no">125</span><span id="line-125">                                if (elementType == null) { // All elements are null.</span>
+<span class="source-line-no">126</span><span id="line-126">                                        output.writeByte(NULL);</span>
+<span class="source-line-no">127</span><span id="line-127">                                        return;</span>
+<span class="source-line-no">128</span><span id="line-128">                                }</span>
+<span class="source-line-no">129</span><span id="line-129">                                // All elements are the same class.</span>
+<span class="source-line-no">130</span><span id="line-130">                                kryo.writeClass(output, elementType);</span>
+<span class="source-line-no">131</span><span id="line-131">                                elementSerializer = kryo.getSerializer(elementType);</span>
+<span class="source-line-no">132</span><span id="line-132">                                if (elementsCanBeNull) {</span>
+<span class="source-line-no">133</span><span id="line-133">                                        output.writeBoolean(hasNull);</span>
+<span class="source-line-no">134</span><span id="line-134">                                        elementsCanBeNull = hasNull;</span>
+<span class="source-line-no">135</span><span id="line-135">                                }</span>
+<span class="source-line-no">136</span><span id="line-136">                        }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">                        if (elementSerializer != null) {</span>
+<span class="source-line-no">139</span><span id="line-139">                                if (elementsCanBeNull) {</span>
+<span class="source-line-no">140</span><span id="line-140">                                        for (Object element : collection)</span>
+<span class="source-line-no">141</span><span id="line-141">                                                kryo.writeObjectOrNull(output, element, elementSerializer);</span>
+<span class="source-line-no">142</span><span id="line-142">                                } else {</span>
+<span class="source-line-no">143</span><span id="line-143">                                        for (Object element : collection)</span>
+<span class="source-line-no">144</span><span id="line-144">                                                kryo.writeObject(output, element, elementSerializer);</span>
+<span class="source-line-no">145</span><span id="line-145">                                }</span>
+<span class="source-line-no">146</span><span id="line-146">                        } else {</span>
+<span class="source-line-no">147</span><span id="line-147">                                for (Object element : collection)</span>
+<span class="source-line-no">148</span><span id="line-148">                                        kryo.writeClassAndObject(output, element);</span>
+<span class="source-line-no">149</span><span id="line-149">                        }</span>
+<span class="source-line-no">150</span><span id="line-150">                } finally {</span>
+<span class="source-line-no">151</span><span id="line-151">                        kryo.getGenerics().popGenericType();</span>
+<span class="source-line-no">152</span><span id="line-152">                }</span>
+<span class="source-line-no">153</span><span id="line-153">        }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">        /** Can be overidden to write data needed for {@link #create(Kryo, Input, Class, int)}. The default implementation does</span>
+<span class="source-line-no">156</span><span id="line-156">         * nothing. */</span>
+<span class="source-line-no">157</span><span id="line-157">        protected void writeHeader (Kryo kryo, Output output, Array collection) {</span>
+<span class="source-line-no">158</span><span id="line-158">        }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">        /** Used by {@link #read(Kryo, Input, Class)} to create the new object. This can be overridden to customize object creation (eg</span>
+<span class="source-line-no">161</span><span id="line-161">         * to call a constructor with arguments), optionally reading bytes written in {@link #writeHeader(Kryo, Output, Array)}.</span>
+<span class="source-line-no">162</span><span id="line-162">         * The default implementation uses {@link Kryo#newInstance(Class)} with special cases for ArrayList and HashSet. */</span>
+<span class="source-line-no">163</span><span id="line-163">        protected Array&lt;?&gt; create (Kryo kryo, Input input, Class&lt;? extends Array&gt; type, int size) {</span>
+<span class="source-line-no">164</span><span id="line-164">                return new Array&lt;&gt;(size);</span>
+<span class="source-line-no">165</span><span id="line-165">        }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">        public Array read (Kryo kryo, Input input, Class&lt;? extends Array&gt; type) {</span>
+<span class="source-line-no">168</span><span id="line-168">                Class elementClass = this.elementClass;</span>
+<span class="source-line-no">169</span><span id="line-169">                Serializer elementSerializer = this.elementSerializer;</span>
+<span class="source-line-no">170</span><span id="line-170">                if (elementSerializer == null) {</span>
+<span class="source-line-no">171</span><span id="line-171">                        Class genericClass = kryo.getGenerics().nextGenericClass();</span>
+<span class="source-line-no">172</span><span id="line-172">                        if (genericClass != null &amp;&amp; kryo.isFinal(genericClass)) {</span>
+<span class="source-line-no">173</span><span id="line-173">                                elementSerializer = kryo.getSerializer(genericClass);</span>
+<span class="source-line-no">174</span><span id="line-174">                                elementClass = genericClass;</span>
+<span class="source-line-no">175</span><span id="line-175">                        }</span>
+<span class="source-line-no">176</span><span id="line-176">                }</span>
+<span class="source-line-no">177</span><span id="line-177"></span>
+<span class="source-line-no">178</span><span id="line-178">                try {</span>
+<span class="source-line-no">179</span><span id="line-179">                        Array collection;</span>
+<span class="source-line-no">180</span><span id="line-180">                        int length;</span>
+<span class="source-line-no">181</span><span id="line-181">                        boolean elementsCanBeNull = this.elementsCanBeNull;</span>
+<span class="source-line-no">182</span><span id="line-182">                        if (elementSerializer != null) {</span>
+<span class="source-line-no">183</span><span id="line-183">                                if (elementsCanBeNull) {</span>
+<span class="source-line-no">184</span><span id="line-184">                                        elementsCanBeNull = input.readVarIntFlag();</span>
+<span class="source-line-no">185</span><span id="line-185">                                        length = input.readVarIntFlag(true);</span>
+<span class="source-line-no">186</span><span id="line-186">                                } else</span>
+<span class="source-line-no">187</span><span id="line-187">                                        length = input.readVarInt(true);</span>
+<span class="source-line-no">188</span><span id="line-188">                                if (length == 0) return null;</span>
+<span class="source-line-no">189</span><span id="line-189"></span>
+<span class="source-line-no">190</span><span id="line-190">                                length--;</span>
+<span class="source-line-no">191</span><span id="line-191">                                collection = create(kryo, input, type, length);</span>
+<span class="source-line-no">192</span><span id="line-192">                                kryo.reference(collection);</span>
+<span class="source-line-no">193</span><span id="line-193"></span>
+<span class="source-line-no">194</span><span id="line-194">                                if (length == 0) return collection;</span>
+<span class="source-line-no">195</span><span id="line-195">                        } else {</span>
+<span class="source-line-no">196</span><span id="line-196">                                boolean sameType = input.readVarIntFlag();</span>
+<span class="source-line-no">197</span><span id="line-197">                                length = input.readVarIntFlag(true);</span>
+<span class="source-line-no">198</span><span id="line-198">                                if (length == 0) return null;</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">                                length--;</span>
+<span class="source-line-no">201</span><span id="line-201">                                collection = create(kryo, input, type, length);</span>
+<span class="source-line-no">202</span><span id="line-202">                                kryo.reference(collection);</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">                                if (length == 0) return collection;</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">                                if (sameType) {</span>
+<span class="source-line-no">207</span><span id="line-207">                                        Registration registration = kryo.readClass(input);</span>
+<span class="source-line-no">208</span><span id="line-208">                                        if (registration == null) { // All elements are null.</span>
+<span class="source-line-no">209</span><span id="line-209">                                                for (int i = 0; i &lt; length; i++)</span>
+<span class="source-line-no">210</span><span id="line-210">                                                        collection.add(null);</span>
+<span class="source-line-no">211</span><span id="line-211">                                                kryo.getGenerics().popGenericType();</span>
+<span class="source-line-no">212</span><span id="line-212">                                                return collection;</span>
+<span class="source-line-no">213</span><span id="line-213">                                        }</span>
+<span class="source-line-no">214</span><span id="line-214">                                        elementClass = registration.getType();</span>
+<span class="source-line-no">215</span><span id="line-215">                                        elementSerializer = kryo.getSerializer(elementClass);</span>
+<span class="source-line-no">216</span><span id="line-216">                                        if (elementsCanBeNull) elementsCanBeNull = input.readBoolean();</span>
+<span class="source-line-no">217</span><span id="line-217">                                }</span>
+<span class="source-line-no">218</span><span id="line-218">                        }</span>
+<span class="source-line-no">219</span><span id="line-219"></span>
+<span class="source-line-no">220</span><span id="line-220">                        if (elementSerializer != null) {</span>
+<span class="source-line-no">221</span><span id="line-221">                                if (elementsCanBeNull) {</span>
+<span class="source-line-no">222</span><span id="line-222">                                        for (int i = 0; i &lt; length; i++)</span>
+<span class="source-line-no">223</span><span id="line-223">                                                collection.add(kryo.readObjectOrNull(input, elementClass, elementSerializer));</span>
+<span class="source-line-no">224</span><span id="line-224">                                } else {</span>
+<span class="source-line-no">225</span><span id="line-225">                                        for (int i = 0; i &lt; length; i++)</span>
+<span class="source-line-no">226</span><span id="line-226">                                                collection.add(kryo.readObject(input, elementClass, elementSerializer));</span>
+<span class="source-line-no">227</span><span id="line-227">                                }</span>
+<span class="source-line-no">228</span><span id="line-228">                        } else {</span>
+<span class="source-line-no">229</span><span id="line-229">                                for (int i = 0; i &lt; length; i++)</span>
+<span class="source-line-no">230</span><span id="line-230">                                        collection.add(kryo.readClassAndObject(input));</span>
+<span class="source-line-no">231</span><span id="line-231">                        }</span>
+<span class="source-line-no">232</span><span id="line-232">                        return collection;</span>
+<span class="source-line-no">233</span><span id="line-233">                } finally {</span>
+<span class="source-line-no">234</span><span id="line-234">                        kryo.getGenerics().popGenericType();</span>
+<span class="source-line-no">235</span><span id="line-235">                }</span>
+<span class="source-line-no">236</span><span id="line-236">        }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">        /** Used by {@link #copy(Kryo, Array)} to create the new object. This can be overridden to customize object creation, eg</span>
+<span class="source-line-no">239</span><span id="line-239">         * to call a constructor with arguments. The default implementation uses {@link Kryo#newInstance(Class)}. */</span>
+<span class="source-line-no">240</span><span id="line-240">        protected Array createCopy (Kryo kryo, Array original) {</span>
+<span class="source-line-no">241</span><span id="line-241">                return new Array(original.ordered, original.size);</span>
+<span class="source-line-no">242</span><span id="line-242">        }</span>
+<span class="source-line-no">243</span><span id="line-243"></span>
+<span class="source-line-no">244</span><span id="line-244">        public Array copy (Kryo kryo, Array original) {</span>
+<span class="source-line-no">245</span><span id="line-245">                Array copy = createCopy(kryo, original);</span>
+<span class="source-line-no">246</span><span id="line-246">                kryo.reference(copy);</span>
+<span class="source-line-no">247</span><span id="line-247">                for (Object element : original)</span>
+<span class="source-line-no">248</span><span id="line-248">                        copy.add(kryo.copy(element));</span>
+<span class="source-line-no">249</span><span id="line-249">                return copy;</span>
+<span class="source-line-no">250</span><span id="line-250">        }</span>
+<span class="source-line-no">251</span><span id="line-251">}</span>
 
 
 
