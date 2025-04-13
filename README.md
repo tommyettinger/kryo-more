@@ -23,7 +23,7 @@ Each sub-library has its own version, linked to the version of the library it de
 The last component of the version is usually .0, but can be increased for bug-fixes to the same linked library version,
 or if Kryo itself had a (compatible) update available but the linked library did not have an update.
 
-  - kryo-regexodus is currently version 0.1.17.1
+  - kryo-regexodus is currently version 0.1.18.1
   - kryo-digital is currently version 0.6.2.1
   - kryo-jdkgdxds is currently version 1.8.1.1
   - kryo-juniper is currently version 0.6.5.1
@@ -41,7 +41,7 @@ Gradle dependency info:
 kryo-regexodus:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-regexodus:0.1.17.1"
+implementation "com.github.tommyettinger:kryo-regexodus:0.1.18.1"
 ```
 
 kryo-digital:
@@ -88,7 +88,7 @@ kryo-regexodus:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-regexodus</artifactId>
-  <version>0.1.17.1</version>
+  <version>0.1.18.1</version>
 </dependency>
 ```
 
