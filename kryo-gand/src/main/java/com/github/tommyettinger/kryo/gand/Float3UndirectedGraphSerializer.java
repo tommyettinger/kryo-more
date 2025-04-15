@@ -29,7 +29,8 @@ import java.util.Collection;
 
 /**
  * Kryo {@link Serializer} for gand {@link Float3UndirectedGraph}s.
- * You must have {@link PointF3} registered to use this as the serializer for Float3UndirectedGraph.
+ * You must have {@link PointF3} registered to use this as the serializer for Float3UndirectedGraph,
+ * such as with {@link com.github.tommyettinger.kryo.gdcrux.PointF3Serializer}.
  */
 public class Float3UndirectedGraphSerializer extends Serializer<Float3UndirectedGraph> {
 

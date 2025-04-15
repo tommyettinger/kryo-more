@@ -29,7 +29,8 @@ import java.util.Collection;
 
 /**
  * Kryo {@link Serializer} for gand {@link Float2UndirectedGraph}s.
- * You must have {@link PointF2} registered to use this as the serializer for Float2UndirectedGraph.
+ * You must have {@link PointF2} registered to use this as the serializer for Float2UndirectedGraph,
+ * such as with {@link com.github.tommyettinger.kryo.gdcrux.PointF2Serializer}.
  */
 public class Float2UndirectedGraphSerializer extends Serializer<Float2UndirectedGraph> {
 

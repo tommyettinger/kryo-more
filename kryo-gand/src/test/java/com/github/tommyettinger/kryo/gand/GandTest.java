@@ -26,7 +26,7 @@ import com.github.tommyettinger.crux.Point2;
 import com.github.tommyettinger.crux.Point3;
 import com.github.tommyettinger.gand.*;
 import com.github.tommyettinger.gdcrux.*;
-import com.github.tommyettinger.kryo.gand.points.*;
+import com.github.tommyettinger.kryo.gdcrux.*;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -502,35 +502,6 @@ public class GandTest {
             Assert.assertEquals(data.getEdges().stream().map(Object::toString).collect(Collectors.toList()),
                     data2.getEdges().stream().map(Object::toString).collect(Collectors.toList()));
             Assert.assertEquals(data, data2);
-        }
-    }
-
-    @Test
-    @Ignore("Shouldn't be necessary anymore; PointI3 isn't an issue.")
-    public void testInt3List() {
-        Kryo kryo = new Kryo();
-        kryo.setReferences(false);
-        kryo.register(PointI3.class);
-        kryo.register(ArrayList.class);
-
-        int n = 12;
-        Int3DirectedGraph data = new Int3DirectedGraph();
-        makeGridGraph3D(data, n, new com.github.tommyettinger.gdcrux.PointI3());
-        ArrayList<PointI3> list = new ArrayList<>(data.getVertices());
-        System.out.println("List with length " + list.size() + ": ");
-        System.out.println(list);
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream(8192); // no longer needed!
-        Output output = new Output(32, -1); // changed line, important!
-        kryo.writeObject(output, list);
-        byte[] bytes = output.toBytes();
-        System.out.println("ArrayList byte length: " + bytes.length);
-        try (Input input = new Input(bytes)) {
-            ArrayList<?> list2 = kryo.readObject(input, ArrayList.class);
-
-            System.out.println("Read back in with length " + list2.size() + ": ");
-            System.out.println(list2);
-            Assert.assertEquals(list.size(), list2.size());
-            Assert.assertEquals(list, list2);
         }
     }
 

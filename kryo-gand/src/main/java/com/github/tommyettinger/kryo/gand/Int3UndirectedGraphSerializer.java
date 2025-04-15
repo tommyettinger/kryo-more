@@ -29,7 +29,8 @@ import java.util.Collection;
 
 /**
  * Kryo {@link Serializer} for gand {@link Int3UndirectedGraph}s.
- * You must have {@link PointI3} registered to use this as the serializer for Int3UndirectedGraph.
+ * You must have {@link PointI3} registered to use this as the serializer for Int3UndirectedGraph,
+ * such as with {@link com.github.tommyettinger.kryo.gdcrux.PointI3Serializer}.
  */
 public class Int3UndirectedGraphSerializer extends Serializer<Int3UndirectedGraph> {
     public Int3UndirectedGraphSerializer() {
