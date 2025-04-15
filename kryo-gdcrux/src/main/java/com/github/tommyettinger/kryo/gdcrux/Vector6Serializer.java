@@ -21,37 +21,37 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.gdcrux.PointI4;
+import com.github.tommyettinger.gdcrux.Vector6;
+import com.github.tommyettinger.gdcrux.Vector6;
 
 /**
- * Kryo {@link Serializer} for gdcrux {@link PointI4}s.
+ * Kryo {@link Serializer} for gdcrux {@link Vector6}s.
  */
-public class PointI4Serializer extends Serializer<PointI4> {
+public class Vector6Serializer extends Serializer<Vector6> {
 
-    public PointI4Serializer() {
+    public Vector6Serializer() {
         setAcceptsNull(false);
         setImmutable(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final PointI4 data) {
-        output.writeInt(data.x, true);
-        output.writeInt(data.y, true);
-        output.writeInt(data.z, true);
-        output.writeInt(data.w, true);
+    public void write(final Kryo kryo, final Output output, final Vector6 data) {
+        output.writeFloat(data.x);
+        output.writeFloat(data.y);
+        output.writeFloat(data.z);
+        output.writeFloat(data.w);
+        output.writeFloat(data.u);
+        output.writeFloat(data.v);
     }
 
     @Override
-    public PointI4 read(final Kryo kryo, final Input input, final Class<? extends PointI4> dataClass) {
-        return new PointI4(
-                input.readInt(true),
-                input.readInt(true),
-                input.readInt(true),
-                input.readInt(true));
+    public Vector6 read(final Kryo kryo, final Input input, final Class<? extends Vector6> dataClass) {
+        return new Vector6(input.readFloat(), input.readFloat(), input.readFloat(),
+                input.readFloat(), input.readFloat(), input.readFloat());
     }
 
     @Override
-    public PointI4 copy(Kryo kryo, PointI4 original) {
-        return new PointI4(original);
+    public Vector6 copy(Kryo kryo, Vector6 original) {
+        return new Vector6(original);
     }
 }

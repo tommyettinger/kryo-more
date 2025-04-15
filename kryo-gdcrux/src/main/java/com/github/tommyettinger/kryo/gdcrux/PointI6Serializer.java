@@ -24,7 +24,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.gdcrux.PointI6;
 
 /**
- * Kryo {@link Serializer} for gand {@link PointI6}s.
+ * Kryo {@link Serializer} for gdcrux {@link PointI6}s.
  */
 public class PointI6Serializer extends Serializer<PointI6> {
 
