@@ -25,10 +25,11 @@ import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.crux.Point2;
 import com.github.tommyettinger.crux.Point3;
 import com.github.tommyettinger.gand.*;
+import com.github.tommyettinger.gand.ds.ObjectDeque;
+import com.github.tommyettinger.gand.utils.GridMetric;
 import com.github.tommyettinger.gdcrux.*;
 import com.github.tommyettinger.kryo.gdcrux.*;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -522,4 +523,70 @@ public class GandTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+
+    @Test
+    public void testGradientGridI2() {
+        Kryo kryo = new Kryo();
+        kryo.register(PointI2.class, new PointI2Serializer());
+        kryo.register(GradientGridI2.class, new GradientGridI2Serializer());
+
+        char[][] map = {
+                "#########".toCharArray(),
+                "#.......#".toCharArray(),
+                "#.......#".toCharArray(),
+                "#.......#".toCharArray(),
+                "#....#..#".toCharArray(),
+                "#...#...#".toCharArray(),
+                "#.......#".toCharArray(),
+                "#.......#".toCharArray(),
+                "#########".toCharArray(),
+        };
+        GradientGridI2 gg = new GradientGridI2(map, GridMetric.EUCLIDEAN);
+        gg.setBlockingRequirement(2);
+        ObjectDeque<PointI2> path = new ObjectDeque<>(16);
+
+        PointI2 start = pt(4, 4), goal0 = pt(5, 5), goal1 = pt(5, 6);
+
+        gg.setGoal(goal0);
+        gg.setGoal(goal1);
+        gg.partialScan(10, null);
+        gg.findPathPreScanned(path, start);
+
+        gg.findPath(path, 10, 10, null, null, start, ObjectDeque.with(goal0, goal1));
+
+        System.out.println(gg);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, gg);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            GradientGridI2 data2 = kryo.readObject(input, GradientGridI2.class);
+            Assert.assertEquals(gg, data2);
+        }
+    }
+
+    @Test
+    public void testGradientGridI2CornerCases() {
+        Kryo kryo = new Kryo();
+        kryo.register(PointI2.class, new PointI2Serializer());
+        kryo.register(GradientGridI2.class, new GradientGridI2Serializer());
+
+        GradientGridI2 gg = new GradientGridI2();
+        gg.setBlockingRequirement(2);
+
+        PointI2 goal0 = pt(5, 5), goal1 = pt(5, 6);
+
+        gg.setGoal(goal0);
+        gg.setGoal(goal1);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, gg);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            GradientGridI2 data2 = kryo.readObject(input, GradientGridI2.class);
+            Assert.assertEquals(gg, data2);
+        }
+    }
+
 }
