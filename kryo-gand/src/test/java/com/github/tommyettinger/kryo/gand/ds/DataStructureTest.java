@@ -20,13 +20,43 @@ package com.github.tommyettinger.kryo.gand.ds;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.gand.ds.ObjectDeque;
-import com.github.tommyettinger.gand.ds.ObjectOrderedSet;
-import com.github.tommyettinger.gand.ds.ObjectSet;
+import com.github.tommyettinger.gand.ds.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class DataStructureTest {
+    @Test
+    public void testIntList() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntList.class, new IntListSerializer());
+
+        IntList data = IntList.with(-123, 0, 456, 0, 1, -1, 0);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntList data2 = kryo.readObject(input, IntList.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testIntDeque() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntDeque.class, new IntDequeSerializer());
+
+        IntDeque data = IntDeque.with(-123, 0, 456, 0, 1, -1, 0);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntDeque data2 = kryo.readObject(input, IntDeque.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
     @Test
     public void testObjectDeque() {
         Kryo kryo = new Kryo();
