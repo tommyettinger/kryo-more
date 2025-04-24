@@ -3,12 +3,6 @@
 version "$VERSION_NAME"
 
 eclipse.project.name = project.name
-//
-//java {
-//    toolchain {
-//        languageVersion = JavaLanguageVersion.of(17)
-//    }
-//}
 
 sourceSets.test.resources.srcDirs = [ file('src/test/resources').path ]
 
@@ -20,10 +14,10 @@ javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2024.")
 
 compileJava {
-    sourceCompatibility = 7
-    targetCompatibility = 7
+    sourceCompatibility = 8
+    targetCompatibility = 8
     if (JavaVersion.current().isJava9Compatible()) {
-        options.release.set(7)
+        options.release.set(8)
     }
 }
 
