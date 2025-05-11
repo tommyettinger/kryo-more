@@ -36,6 +36,8 @@ public class IntDequeSerializer extends Serializer<IntDeque> {
     public void write(final Kryo kryo, final Output output, final IntDeque data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarInt(data.getDefaultValue(), false);
+
         for (int i = 0; i < length; i++)
             output.writeVarInt(data.get(i), false);
     }
@@ -44,6 +46,7 @@ public class IntDequeSerializer extends Serializer<IntDeque> {
     public IntDeque read(final Kryo kryo, final Input input, final Class<? extends IntDeque> dataClass) {
         int length = input.readInt(true);
         IntDeque data = new IntDeque(length);
+        data.setDefaultValue(input.readVarInt(false));
         for (int i = 0; i < length; i++)
             data.add(input.readVarInt(false));
         return data;

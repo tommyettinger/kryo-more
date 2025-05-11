@@ -36,6 +36,7 @@ public class ByteDequeSerializer extends Serializer<ByteDeque> {
     public void write(final Kryo kryo, final Output output, final ByteDeque data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeByte(data.getDefaultValue());
         for (int i = 0; i < length; i++)
             output.writeByte(data.get(i));
     }
@@ -44,6 +45,7 @@ public class ByteDequeSerializer extends Serializer<ByteDeque> {
     public ByteDeque read(final Kryo kryo, final Input input, final Class<? extends ByteDeque> dataClass) {
         int length = input.readInt(true);
         ByteDeque data = new ByteDeque(length);
+        data.setDefaultValue(input.readByte());
         for (int i = 0; i < length; i++)
             data.add(input.readByte());
         return data;

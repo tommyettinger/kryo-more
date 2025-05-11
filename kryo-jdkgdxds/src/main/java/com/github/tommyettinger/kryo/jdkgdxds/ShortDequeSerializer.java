@@ -36,6 +36,7 @@ public class ShortDequeSerializer extends Serializer<ShortDeque> {
     public void write(final Kryo kryo, final Output output, final ShortDeque data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeShort(data.getDefaultValue());
         for (int i = 0; i < length; i++)
             output.writeShort(data.get(i));
     }
@@ -44,6 +45,7 @@ public class ShortDequeSerializer extends Serializer<ShortDeque> {
     public ShortDeque read(final Kryo kryo, final Input input, final Class<? extends ShortDeque> dataClass) {
         int length = input.readInt(true);
         ShortDeque data = new ShortDeque(length);
+        data.setDefaultValue(input.readShort());
         for (int i = 0; i < length; i++)
             data.add(input.readShort());
         return data;

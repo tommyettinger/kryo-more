@@ -36,6 +36,7 @@ public class FloatDequeSerializer extends Serializer<FloatDeque> {
     public void write(final Kryo kryo, final Output output, final FloatDeque data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeFloat(data.getDefaultValue());
         for (int i = 0; i < length; i++)
             output.writeFloat(data.get(i));
     }
@@ -44,6 +45,7 @@ public class FloatDequeSerializer extends Serializer<FloatDeque> {
     public FloatDeque read(final Kryo kryo, final Input input, final Class<? extends FloatDeque> dataClass) {
         int length = input.readInt(true);
         FloatDeque data = new FloatDeque(length);
+        data.setDefaultValue(input.readFloat());
         for (int i = 0; i < length; i++)
             data.add(input.readFloat());
         return data;

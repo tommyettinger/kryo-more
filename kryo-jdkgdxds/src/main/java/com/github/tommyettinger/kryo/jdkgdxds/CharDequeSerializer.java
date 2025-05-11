@@ -36,6 +36,7 @@ public class CharDequeSerializer extends Serializer<CharDeque> {
     public void write(final Kryo kryo, final Output output, final CharDeque data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeChar(data.getDefaultValue());
         for (int i = 0; i < length; i++)
             output.writeChar(data.get(i));
     }
@@ -44,6 +45,7 @@ public class CharDequeSerializer extends Serializer<CharDeque> {
     public CharDeque read(final Kryo kryo, final Input input, final Class<? extends CharDeque> dataClass) {
         int length = input.readInt(true);
         CharDeque data = new CharDeque(length);
+        data.setDefaultValue(input.readChar());
         for (int i = 0; i < length; i++)
             data.add(input.readChar());
         return data;

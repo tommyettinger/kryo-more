@@ -36,6 +36,7 @@ public class BooleanDequeSerializer extends Serializer<BooleanDeque> {
     public void write(final Kryo kryo, final Output output, final BooleanDeque data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeBoolean(data.getDefaultValue());
         for (int i = 0; i < length; i++)
             output.writeBoolean(data.get(i));
     }
@@ -44,6 +45,7 @@ public class BooleanDequeSerializer extends Serializer<BooleanDeque> {
     public BooleanDeque read(final Kryo kryo, final Input input, final Class<? extends BooleanDeque> dataClass) {
         int length = input.readInt(true);
         BooleanDeque data = new BooleanDeque(length);
+        data.setDefaultValue(input.readBoolean());
         for (int i = 0; i < length; i++)
             data.add(input.readBoolean());
         return data;

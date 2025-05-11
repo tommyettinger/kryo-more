@@ -19,6 +19,7 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.ObjectDeque;
 
@@ -28,8 +29,15 @@ public class ObjectDequeSerializer extends CollectionSerializer<ObjectDeque<?>> 
     }
 
     @Override
+    protected void writeHeader(Kryo kryo, Output output, ObjectDeque<?> collection) {
+        kryo.writeClassAndObject(output, collection.getDefaultValue());
+    }
+
+    @Override
     protected ObjectDeque<?> create(Kryo kryo, Input input, Class<? extends ObjectDeque<?>> type, int size) {
-        return new ObjectDeque<>(size);
+        ObjectDeque<Object> od = new ObjectDeque<>(size);
+        od.setDefaultValue(kryo.readClassAndObject(input));
+        return od;
     }
 
     @Override

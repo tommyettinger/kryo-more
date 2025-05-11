@@ -36,6 +36,7 @@ public class LongDequeSerializer extends Serializer<LongDeque> {
     public void write(final Kryo kryo, final Output output, final LongDeque data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarLong(data.getDefaultValue(), false);
         for (int i = 0; i < length; i++)
             output.writeVarLong(data.get(i), false);
     }
@@ -44,6 +45,7 @@ public class LongDequeSerializer extends Serializer<LongDeque> {
     public LongDeque read(final Kryo kryo, final Input input, final Class<? extends LongDeque> dataClass) {
         int length = input.readInt(true);
         LongDeque data = new LongDeque(length);
+        data.setDefaultValue(input.readVarLong(false));
         for (int i = 0; i < length; i++)
             data.add(input.readVarLong(false));
         return data;
