@@ -21,7 +21,11 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.ds.LongDeque;
 import com.github.tommyettinger.ds.LongObjectMap;
+import com.github.tommyettinger.ds.LongObjectMap;
+
+import java.util.Iterator;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link LongObjectMap}s.
@@ -36,7 +40,8 @@ public class LongObjectMapSerializer extends Serializer<LongObjectMap<?>> {
     public void write(final Kryo kryo, final Output output, final LongObjectMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for(LongObjectMap.EntryIterator<?> it = new LongObjectMap.EntryIterator<>(data); it.hasNext();) {
+        kryo.writeClassAndObject(output, data.getDefaultValue());
+        for(Iterator<? extends LongObjectMap.Entry<?>> it = new LongObjectMap.Entries<>(data).iterator(); it.hasNext();) {
             LongObjectMap.Entry<?> ent = it.next();
             output.writeVarLong(ent.key, false);
             kryo.writeClassAndObject(output, ent.value);
@@ -49,6 +54,7 @@ public class LongObjectMapSerializer extends Serializer<LongObjectMap<?>> {
         int length = input.readInt(true);
         LongObjectMap<?> data = new LongObjectMap<>(length);
         LongObjectMap rawData = data;
+        rawData.setDefaultValue(kryo.readClassAndObject(input));
         for (int i = 0; i < length; i++)
             rawData.put(input.readVarLong(false), kryo.readClassAndObject(input));
         return data;
@@ -60,6 +66,7 @@ public class LongObjectMapSerializer extends Serializer<LongObjectMap<?>> {
         LongObjectMap<?> map = new LongObjectMap<>(original.size(), original.getLoadFactor());
         kryo.reference(map);
         LongObjectMap rawMap = map;
+        rawMap.setDefaultValue(original.getDefaultValue());
         for(LongObjectMap.Entry ent : original) {
             rawMap.put(ent.key, kryo.copy(ent.value));
         }

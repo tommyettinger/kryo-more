@@ -21,7 +21,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.ds.LongDeque;
 import com.github.tommyettinger.ds.LongOrderedSet;
+import com.github.tommyettinger.ds.Utilities;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link LongOrderedSet}s.
@@ -36,6 +38,7 @@ public class LongOrderedSetSerializer extends Serializer<LongOrderedSet> {
     public void write(final Kryo kryo, final Output output, final LongOrderedSet data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeBoolean(data.order() instanceof LongDeque);
         for(LongOrderedSet.LongOrderedSetIterator it = new LongOrderedSet.LongOrderedSetIterator(data); it.hasNext();)
             output.writeVarLong(it.nextLong(), false);
     }
@@ -43,7 +46,7 @@ public class LongOrderedSetSerializer extends Serializer<LongOrderedSet> {
     @Override
     public LongOrderedSet read(final Kryo kryo, final Input input, final Class<? extends LongOrderedSet> dataClass) {
         int length = input.readInt(true);
-        LongOrderedSet data = new LongOrderedSet(length);
+        LongOrderedSet data = new LongOrderedSet(length, Utilities.getDefaultLoadFactor(), input.readBoolean());
         for (int i = 0; i < length; i++)
             data.add(input.readVarLong(false));
         return data;

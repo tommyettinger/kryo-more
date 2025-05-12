@@ -21,6 +21,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.ds.LongDeque;
 import com.github.tommyettinger.ds.LongObjectMap;
 import com.github.tommyettinger.ds.LongObjectOrderedMap;
 
@@ -39,6 +40,8 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
     public void write(final Kryo kryo, final Output output, final LongObjectOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeBoolean(data.order() instanceof LongDeque);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
         for(Iterator<? extends LongObjectMap.Entry<?>> it = new LongObjectOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
             LongObjectOrderedMap.Entry<?> ent = it.next();
             output.writeVarLong(ent.key, false);
@@ -50,8 +53,9 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
     @Override
     public LongObjectOrderedMap<?> read(final Kryo kryo, final Input input, final Class<? extends LongObjectOrderedMap<?>> dataClass) {
         int length = input.readInt(true);
-        LongObjectOrderedMap<?> data = new LongObjectOrderedMap<>(length);
+        LongObjectOrderedMap<?> data = new LongObjectOrderedMap<>(length, input.readBoolean());
         LongObjectOrderedMap rawData = data;
+        rawData.setDefaultValue(kryo.readClassAndObject(input));
         for (int i = 0; i < length; i++)
             rawData.put(input.readVarLong(false), kryo.readClassAndObject(input));
         return data;
@@ -60,9 +64,10 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
     @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public LongObjectOrderedMap<?> copy(Kryo kryo, LongObjectOrderedMap<?> original) {
-        LongObjectOrderedMap<?> map = new LongObjectOrderedMap<>(original.size(), original.getLoadFactor());
+        LongObjectOrderedMap<?> map = new LongObjectOrderedMap<>(original.size(), original.getLoadFactor(), original.order() instanceof LongDeque);
         kryo.reference(map);
         LongObjectOrderedMap rawMap = map;
+        rawMap.setDefaultValue(original.getDefaultValue());
         for(LongObjectOrderedMap.Entry ent : original) {
             rawMap.put(ent.key, kryo.copy(ent.value));
         }
