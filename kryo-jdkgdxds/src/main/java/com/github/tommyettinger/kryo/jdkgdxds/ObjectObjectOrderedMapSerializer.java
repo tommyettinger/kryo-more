@@ -19,6 +19,7 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 
@@ -29,12 +30,21 @@ public class ObjectObjectOrderedMapSerializer extends MapSerializer<ObjectObject
     }
 
     @Override
+    protected void writeHeader(Kryo kryo, Output output, ObjectObjectOrderedMap<?, ?> map) {
+        kryo.writeClassAndObject(output, map.getDefaultValue());
+    }
+
+    @Override
     protected ObjectObjectOrderedMap<?, ?> create(Kryo kryo, Input input, Class<? extends ObjectObjectOrderedMap<?, ?>> type, int size) {
-        return new ObjectObjectOrderedMap<>(size);
+        ObjectObjectOrderedMap<Object, Object> m = new ObjectObjectOrderedMap<>(size);
+        m.setDefaultValue(kryo.readClassAndObject(input));
+        return m;
     }
 
     @Override
     protected ObjectObjectOrderedMap<?, ?> createCopy(Kryo kryo, ObjectObjectOrderedMap<?, ?> original) {
-        return new ObjectObjectOrderedMap<>(original.size(), original.getLoadFactor());
+        ObjectObjectOrderedMap<Object, Object> m = new ObjectObjectOrderedMap<>(original.size(), original.getLoadFactor());
+        m.setDefaultValue(original.getDefaultValue());
+        return m;
     }
 }
