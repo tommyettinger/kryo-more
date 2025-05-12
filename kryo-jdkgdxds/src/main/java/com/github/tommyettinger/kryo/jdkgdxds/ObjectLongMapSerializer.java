@@ -22,6 +22,9 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.ObjectLongMap;
+import com.github.tommyettinger.ds.ObjectLongMap;
+
+import java.util.Iterator;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link ObjectLongMap}s.
@@ -36,7 +39,8 @@ public class ObjectLongMapSerializer extends Serializer<ObjectLongMap<?>> {
     public void write(final Kryo kryo, final Output output, final ObjectLongMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for(ObjectLongMap.EntryIterator<?> it = new ObjectLongMap.EntryIterator<>(data); it.hasNext();) {
+        output.writeVarLong(data.getDefaultValue(), false);
+        for(Iterator<? extends ObjectLongMap.Entry<?>> it = new ObjectLongMap.Entries<>(data).iterator(); it.hasNext();) {
             ObjectLongMap.Entry<?> ent = it.next();
             kryo.writeClassAndObject(output, ent.key);
             output.writeVarLong(ent.value, false);
@@ -48,6 +52,7 @@ public class ObjectLongMapSerializer extends Serializer<ObjectLongMap<?>> {
     public ObjectLongMap<?> read(final Kryo kryo, final Input input, final Class<? extends ObjectLongMap<?>> dataClass) {
         int length = input.readInt(true);
         ObjectLongMap<?> data = new ObjectLongMap<>(length);
+        data.setDefaultValue(input.readVarLong(false));
         ObjectLongMap rawData = data;
         for (int i = 0; i < length; i++)
             rawData.put(kryo.readClassAndObject(input), input.readVarLong(false));
@@ -59,6 +64,7 @@ public class ObjectLongMapSerializer extends Serializer<ObjectLongMap<?>> {
     public ObjectLongMap<?> copy(Kryo kryo, ObjectLongMap<?> original) {
         ObjectLongMap<?> map = new ObjectLongMap<>(original.size(), original.getLoadFactor());
         kryo.reference(map);
+        map.setDefaultValue(original.getDefaultValue());
         ObjectLongMap rawMap = map;
         for(ObjectLongMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);

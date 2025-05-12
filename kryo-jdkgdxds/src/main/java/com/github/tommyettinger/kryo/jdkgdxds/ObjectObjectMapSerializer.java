@@ -19,8 +19,10 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.ObjectObjectMap;
+import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 
 public class ObjectObjectMapSerializer extends MapSerializer<ObjectObjectMap<?, ?>> {
     public ObjectObjectMapSerializer() {
@@ -29,12 +31,21 @@ public class ObjectObjectMapSerializer extends MapSerializer<ObjectObjectMap<?, 
     }
 
     @Override
+    protected void writeHeader(Kryo kryo, Output output, ObjectObjectMap<?, ?> map) {
+        kryo.writeClassAndObject(output, map.getDefaultValue());
+    }
+
+    @Override
     protected ObjectObjectMap<?, ?> create(Kryo kryo, Input input, Class<? extends ObjectObjectMap<?, ?>> type, int size) {
-        return new ObjectObjectMap<>(size);
+        ObjectObjectMap<Object, Object> m = new ObjectObjectMap<>(size);
+        m.setDefaultValue(kryo.readClassAndObject(input));
+        return m;
     }
 
     @Override
     protected ObjectObjectMap<?, ?> createCopy(Kryo kryo, ObjectObjectMap<?, ?> original) {
-        return new ObjectObjectMap<>(original.size(), original.getLoadFactor());
+        ObjectObjectMap<Object, Object> m = new ObjectObjectMap<>(original.size(), original.getLoadFactor());
+        m.setDefaultValue(original.getDefaultValue());
+        return m;
     }
 }
