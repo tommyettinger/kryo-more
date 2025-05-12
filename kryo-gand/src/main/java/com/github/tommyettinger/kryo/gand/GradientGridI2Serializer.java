@@ -27,8 +27,6 @@ import com.github.tommyettinger.gand.ds.IntList;
 import com.github.tommyettinger.gand.utils.GridMetric;
 import com.github.tommyettinger.gdcrux.PointI2;
 
-import java.util.Collection;
-
 /**
  * Kryo {@link Serializer} for gand {@link GradientGridI2}s.
  * You must have {@link PointI2} registered to use this as the serializer for GradientGridI2,

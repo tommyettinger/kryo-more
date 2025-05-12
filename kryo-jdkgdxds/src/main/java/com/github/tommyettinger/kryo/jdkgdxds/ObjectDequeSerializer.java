@@ -42,6 +42,8 @@ public class ObjectDequeSerializer extends CollectionSerializer<ObjectDeque<?>> 
 
     @Override
     protected ObjectDeque<?> createCopy(Kryo kryo, ObjectDeque<?> original) {
-        return new ObjectDeque<>(original.size());
+        ObjectDeque<Object> d = new ObjectDeque<>(original.size());
+        d.setDefaultValue(original.getDefaultValue());
+        return d;
     }
 }

@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.gdcrux.Vector6;
-import com.github.tommyettinger.gdcrux.Vector6;
 
 /**
  * Kryo {@link Serializer} for gdcrux {@link Vector6}s.

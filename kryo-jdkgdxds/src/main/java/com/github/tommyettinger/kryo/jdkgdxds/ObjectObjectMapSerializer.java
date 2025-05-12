@@ -22,7 +22,6 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.ObjectObjectMap;
-import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 
 public class ObjectObjectMapSerializer extends MapSerializer<ObjectObjectMap<?, ?>> {
     public ObjectObjectMapSerializer() {
