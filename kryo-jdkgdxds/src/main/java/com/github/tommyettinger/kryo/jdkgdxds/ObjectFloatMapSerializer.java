@@ -23,6 +23,8 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.ObjectFloatMap;
 
+import java.util.Iterator;
+
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link ObjectFloatMap}s.
  */
@@ -36,7 +38,8 @@ public class ObjectFloatMapSerializer extends Serializer<ObjectFloatMap<?>> {
     public void write(final Kryo kryo, final Output output, final ObjectFloatMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for (ObjectFloatMap.EntryIterator<?> it = new ObjectFloatMap.EntryIterator<>(data); it.hasNext(); ) {
+        output.writeFloat(data.getDefaultValue());
+        for(Iterator<? extends ObjectFloatMap.Entry<?>> it = new ObjectFloatMap.Entries<>(data).iterator(); it.hasNext();) {
             ObjectFloatMap.Entry<?> ent = it.next();
             kryo.writeClassAndObject(output, ent.key);
             output.writeFloat(ent.value);
@@ -48,6 +51,7 @@ public class ObjectFloatMapSerializer extends Serializer<ObjectFloatMap<?>> {
     public ObjectFloatMap<?> read(final Kryo kryo, final Input input, final Class<? extends ObjectFloatMap<?>> dataClass) {
         int length = input.readInt(true);
         ObjectFloatMap<?> data = new ObjectFloatMap<>(length);
+        data.setDefaultValue(input.readFloat());
         ObjectFloatMap rawData = data;
         for (int i = 0; i < length; i++)
             rawData.put(kryo.readClassAndObject(input), input.readFloat());
@@ -59,8 +63,9 @@ public class ObjectFloatMapSerializer extends Serializer<ObjectFloatMap<?>> {
     public ObjectFloatMap<?> copy(Kryo kryo, ObjectFloatMap<?> original) {
         ObjectFloatMap<?> map = new ObjectFloatMap<>(original.size(), original.getLoadFactor());
         kryo.reference(map);
+        map.setDefaultValue(original.getDefaultValue());
         ObjectFloatMap rawMap = map;
-        for (ObjectFloatMap.Entry ent : original) {
+        for(ObjectFloatMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);
         }
         return map;

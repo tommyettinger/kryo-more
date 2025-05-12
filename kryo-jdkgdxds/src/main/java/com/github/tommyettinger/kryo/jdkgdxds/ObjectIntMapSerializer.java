@@ -23,6 +23,8 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.ObjectIntMap;
 
+import java.util.Iterator;
+
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link ObjectIntMap}s.
  */
@@ -36,7 +38,8 @@ public class ObjectIntMapSerializer extends Serializer<ObjectIntMap<?>> {
     public void write(final Kryo kryo, final Output output, final ObjectIntMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        for (ObjectIntMap.EntryIterator<?> it = new ObjectIntMap.EntryIterator<>(data); it.hasNext(); ) {
+        output.writeVarInt(data.getDefaultValue(), false);
+        for(Iterator<? extends ObjectIntMap.Entry<?>> it = new ObjectIntMap.Entries<>(data).iterator(); it.hasNext();) {
             ObjectIntMap.Entry<?> ent = it.next();
             kryo.writeClassAndObject(output, ent.key);
             output.writeVarInt(ent.value, false);
@@ -48,6 +51,7 @@ public class ObjectIntMapSerializer extends Serializer<ObjectIntMap<?>> {
     public ObjectIntMap<?> read(final Kryo kryo, final Input input, final Class<? extends ObjectIntMap<?>> dataClass) {
         int length = input.readInt(true);
         ObjectIntMap<?> data = new ObjectIntMap<>(length);
+        data.setDefaultValue(input.readVarInt(false));
         ObjectIntMap rawData = data;
         for (int i = 0; i < length; i++)
             rawData.put(kryo.readClassAndObject(input), input.readVarInt(false));
@@ -59,8 +63,9 @@ public class ObjectIntMapSerializer extends Serializer<ObjectIntMap<?>> {
     public ObjectIntMap<?> copy(Kryo kryo, ObjectIntMap<?> original) {
         ObjectIntMap<?> map = new ObjectIntMap<>(original.size(), original.getLoadFactor());
         kryo.reference(map);
+        map.setDefaultValue(original.getDefaultValue());
         ObjectIntMap rawMap = map;
-        for (ObjectIntMap.Entry ent : original) {
+        for(ObjectIntMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);
         }
         return map;

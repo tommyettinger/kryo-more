@@ -39,6 +39,7 @@ public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrder
     public void write(final Kryo kryo, final Output output, final ObjectFloatOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeFloat(data.getDefaultValue());
         for(Iterator<? extends ObjectFloatMap.Entry<?>> it = new ObjectFloatOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
             ObjectFloatOrderedMap.Entry<?> ent = it.next();
             kryo.writeClassAndObject(output, ent.key);
@@ -51,6 +52,7 @@ public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrder
     public ObjectFloatOrderedMap<?> read(final Kryo kryo, final Input input, final Class<? extends ObjectFloatOrderedMap<?>> dataClass) {
         int length = input.readInt(true);
         ObjectFloatOrderedMap<?> data = new ObjectFloatOrderedMap<>(length);
+        data.setDefaultValue(input.readFloat());
         ObjectFloatOrderedMap rawData = data;
         for (int i = 0; i < length; i++)
             rawData.put(kryo.readClassAndObject(input), input.readFloat());
@@ -62,6 +64,7 @@ public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrder
     public ObjectFloatOrderedMap<?> copy(Kryo kryo, ObjectFloatOrderedMap<?> original) {
         ObjectFloatOrderedMap<?> map = new ObjectFloatOrderedMap<>(original.size(), original.getLoadFactor());
         kryo.reference(map);
+        map.setDefaultValue(original.getDefaultValue());
         ObjectFloatOrderedMap rawMap = map;
         for(ObjectFloatOrderedMap.Entry ent : original) {
             rawMap.put(kryo.copy(ent.key), ent.value);
