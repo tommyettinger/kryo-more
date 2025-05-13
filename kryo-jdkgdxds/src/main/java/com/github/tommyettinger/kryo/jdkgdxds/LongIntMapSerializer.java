@@ -36,6 +36,7 @@ public class LongIntMapSerializer extends Serializer<LongIntMap> {
     public void write(final Kryo kryo, final Output output, final LongIntMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarInt(data.getDefaultValue(), false);
         for(LongIntMap.EntryIterator it = new LongIntMap.EntryIterator(data); it.hasNext();) {
             LongIntMap.Entry ent = it.next();
             output.writeVarLong(ent.key, false);
@@ -47,6 +48,7 @@ public class LongIntMapSerializer extends Serializer<LongIntMap> {
     public LongIntMap read(final Kryo kryo, final Input input, final Class<? extends LongIntMap> dataClass) {
         int length = input.readInt(true);
         LongIntMap data = new LongIntMap(length);
+        data.setDefaultValue(input.readVarInt(false));
         for (int i = 0; i < length; i++)
             data.put(input.readVarLong(false), input.readVarInt(false));
         return data;
