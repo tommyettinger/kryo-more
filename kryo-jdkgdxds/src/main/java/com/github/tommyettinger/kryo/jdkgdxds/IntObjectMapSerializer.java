@@ -36,6 +36,7 @@ public class IntObjectMapSerializer extends Serializer<IntObjectMap<?>> {
     public void write(final Kryo kryo, final Output output, final IntObjectMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
         for(IntObjectMap.EntryIterator<?> it = new IntObjectMap.EntryIterator<>(data); it.hasNext();) {
             IntObjectMap.Entry<?> ent = it.next();
             output.writeVarInt(ent.key, false);
@@ -49,6 +50,7 @@ public class IntObjectMapSerializer extends Serializer<IntObjectMap<?>> {
         int length = input.readInt(true);
         IntObjectMap<?> data = new IntObjectMap<>(length);
         IntObjectMap rawData = data;
+        rawData.setDefaultValue(kryo.readClassAndObject(input));
         for (int i = 0; i < length; i++)
             rawData.put(input.readVarInt(false), kryo.readClassAndObject(input));
         return data;
