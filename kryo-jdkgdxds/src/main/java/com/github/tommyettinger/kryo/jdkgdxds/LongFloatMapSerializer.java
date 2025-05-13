@@ -36,6 +36,7 @@ public class LongFloatMapSerializer extends Serializer<LongFloatMap> {
     public void write(final Kryo kryo, final Output output, final LongFloatMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeFloat(data.getDefaultValue());
         for(LongFloatMap.EntryIterator it = new LongFloatMap.EntryIterator(data); it.hasNext();) {
             LongFloatMap.Entry ent = it.next();
             output.writeVarLong(ent.key, false);
@@ -47,6 +48,7 @@ public class LongFloatMapSerializer extends Serializer<LongFloatMap> {
     public LongFloatMap read(final Kryo kryo, final Input input, final Class<? extends LongFloatMap> dataClass) {
         int length = input.readInt(true);
         LongFloatMap data = new LongFloatMap(length);
+        data.setDefaultValue(input.readFloat());
         for (int i = 0; i < length; i++)
             data.put(input.readVarLong(false), input.readFloat());
         return data;
