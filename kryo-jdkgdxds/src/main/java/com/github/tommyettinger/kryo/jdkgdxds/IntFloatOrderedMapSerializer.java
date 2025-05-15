@@ -21,6 +21,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.tommyettinger.ds.IntDeque;
 import com.github.tommyettinger.ds.IntFloatMap;
 import com.github.tommyettinger.ds.IntFloatOrderedMap;
 
@@ -39,6 +40,8 @@ public class IntFloatOrderedMapSerializer extends Serializer<IntFloatOrderedMap>
     public void write(final Kryo kryo, final Output output, final IntFloatOrderedMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeBoolean(data.order() instanceof IntDeque);
+        output.writeFloat(data.getDefaultValue());
         for(Iterator<IntFloatMap.Entry> it = new IntFloatOrderedMap.OrderedMapEntries(data).iterator(); it.hasNext();) {
             IntFloatOrderedMap.Entry ent = it.next();
             output.writeVarInt(ent.key, false);
@@ -49,7 +52,8 @@ public class IntFloatOrderedMapSerializer extends Serializer<IntFloatOrderedMap>
     @Override
     public IntFloatOrderedMap read(final Kryo kryo, final Input input, final Class<? extends IntFloatOrderedMap> dataClass) {
         int length = input.readInt(true);
-        IntFloatOrderedMap data = new IntFloatOrderedMap(length);
+        IntFloatOrderedMap data = new IntFloatOrderedMap(length, input.readBoolean());
+        data.setDefaultValue(input.readFloat());
         for (int i = 0; i < length; i++)
             data.put(input.readVarInt(false), input.readFloat());
         return data;

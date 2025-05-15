@@ -36,6 +36,7 @@ public class IntFloatMapSerializer extends Serializer<IntFloatMap> {
     public void write(final Kryo kryo, final Output output, final IntFloatMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeFloat(data.getDefaultValue());
         for(IntFloatMap.EntryIterator it = new IntFloatMap.EntryIterator(data); it.hasNext();) {
             IntFloatMap.Entry ent = it.next();
             output.writeVarInt(ent.key, false);
@@ -47,6 +48,7 @@ public class IntFloatMapSerializer extends Serializer<IntFloatMap> {
     public IntFloatMap read(final Kryo kryo, final Input input, final Class<? extends IntFloatMap> dataClass) {
         int length = input.readInt(true);
         IntFloatMap data = new IntFloatMap(length);
+        data.setDefaultValue(input.readFloat());
         for (int i = 0; i < length; i++)
             data.put(input.readVarInt(false), input.readFloat());
         return data;
