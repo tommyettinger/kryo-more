@@ -36,6 +36,7 @@ public class IntIntMapSerializer extends Serializer<IntIntMap> {
     public void write(final Kryo kryo, final Output output, final IntIntMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarInt(data.getDefaultValue(), false);
         for(IntIntMap.EntryIterator it = new IntIntMap.EntryIterator(data); it.hasNext();) {
             IntIntMap.Entry ent = it.next();
             output.writeVarInt(ent.key, false);
@@ -47,6 +48,7 @@ public class IntIntMapSerializer extends Serializer<IntIntMap> {
     public IntIntMap read(final Kryo kryo, final Input input, final Class<? extends IntIntMap> dataClass) {
         int length = input.readInt(true);
         IntIntMap data = new IntIntMap(length);
+        data.setDefaultValue(input.readVarInt(false));
         for (int i = 0; i < length; i++)
             data.put(input.readVarInt(false), input.readVarInt(false));
         return data;
