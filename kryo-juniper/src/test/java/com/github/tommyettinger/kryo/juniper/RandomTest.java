@@ -459,6 +459,24 @@ public class RandomTest {
     }
 
     @Test
+    public void testMaceRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(MaceRandom.class, new MaceRandomSerializer());
+
+        MaceRandom data = new MaceRandom(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            MaceRandom data2 = kryo.readObject(input, MaceRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testXoshiro256StarStarRandom() {
         Kryo kryo = new Kryo();
         kryo.register(Xoshiro256StarStarRandom.class, new Xoshiro256StarStarRandomSerializer());
