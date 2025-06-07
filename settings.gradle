@@ -2,4 +2,4 @@
 plugins {
     id('org.gradle.toolchains.foojay-resolver-convention') version '0.7.0'
 }
-include 'kryo-regexodus', 'kryo-digital', 'kryo-jdkgdxds', 'kryo-juniper', 'kryo-simple-graphs', 'kryo-cringe', 'kryo-gdcrux', 'kryo-gand'
+include 'kryo-regexodus', 'kryo-digital', 'kryo-jdkgdxds', 'kryo-juniper', 'kryo-simple-graphs', 'kryo-cringe', 'kryo-gdcrux', 'kryo-gand', 'kryo-libgdx'
