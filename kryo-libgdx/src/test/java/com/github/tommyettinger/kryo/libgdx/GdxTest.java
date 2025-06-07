@@ -18,6 +18,8 @@
 package com.github.tommyettinger.kryo.libgdx;
 
 import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.BooleanArray;
@@ -104,6 +106,44 @@ public class GdxTest {
         try (Input input = new Input(bytes)) {
             BooleanArray data2 = kryo.readObject(input, BooleanArray.class);
             Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testBoundingBox() {
+        Kryo kryo = new Kryo();
+        kryo.register(BoundingBox.class, new BoundingBoxSerializer());
+
+        Vector3[] testing = {
+                new Vector3(0, 0, 0),
+                new Vector3(-0f, -0f, -0f),
+                new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0),
+                new Vector3(0, 0, 1),
+                new Vector3(1, 1, 1),
+                new Vector3(-1, -1, -1),
+                new Vector3(9999.9f, 9999.9f, 9999.9f),
+                new Vector3(9999.9f, -9999.9f, 0),
+                new Vector3(Float.NaN, Float.NaN, Float.NaN),
+                new Vector3(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN),
+                new Vector3(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Vector3(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Vector3(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f), new Vector3(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Vector3 origin : testing) {
+            for (Vector3 direction : testing) {
+                BoundingBox data = new BoundingBox(origin, direction);
+                Output output = new Output(32, -1);
+                kryo.writeObject(output, data);
+                byte[] bytes = output.toBytes();
+                try (Input input = new Input(bytes)) {
+                    BoundingBox data2 = kryo.readObject(input, BoundingBox.class);
+                    // BoundingBox does not implement equals().
+//                    Assert.assertEquals(data, data2);
+                    Assert.assertEquals(data.min, data2.min);
+                    Assert.assertEquals(data.max, data2.max);
+                }
+            }
         }
     }
 }
