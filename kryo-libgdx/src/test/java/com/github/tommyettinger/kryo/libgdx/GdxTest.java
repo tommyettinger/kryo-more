@@ -176,4 +176,20 @@ public class GdxTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testFloatArray() {
+        Kryo kryo = new Kryo();
+        kryo.register(FloatArray.class, new FloatArraySerializer());
+
+        FloatArray data = FloatArray.with(-123.123f, 0f, 456.456f, 0, 1f, -1f, 0.000001f);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            FloatArray data2 = kryo.readObject(input, FloatArray.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
