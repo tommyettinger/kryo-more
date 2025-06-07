@@ -20,10 +20,7 @@ package com.github.tommyettinger.kryo.libgdx;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.BooleanArray;
-import com.badlogic.gdx.utils.ByteArray;
+import com.badlogic.gdx.utils.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -160,6 +157,22 @@ public class GdxTest {
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
             ByteArray data2 = kryo.readObject(input, ByteArray.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testCharArray() {
+        Kryo kryo = new Kryo();
+        kryo.register(CharArray.class, new CharArraySerializer());
+
+        CharArray data = CharArray.with("Hello, World!".toCharArray());
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CharArray data2 = kryo.readObject(input, CharArray.class);
             Assert.assertEquals(data, data2);
         }
     }
