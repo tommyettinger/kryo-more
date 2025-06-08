@@ -1,0 +1,73 @@
+package com.github.tommyettinger.kryo.libgdx;
+
+import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import org.junit.Assert;
+import org.junit.Test;
+
+public class MathTest {
+    @Test
+    public void testAffine2() {
+        Kryo kryo = new Kryo();
+        kryo.register(Affine2.class, new Affine2Serializer());
+
+        Affine2 data = new Affine2();
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Affine2 data2 = kryo.readObject(input, Affine2.class);
+            // Affine2 does not implement equals().
+//            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.m00, data2.m00, 0.00001f);
+            Assert.assertEquals(data.m01, data2.m01, 0.00001f);
+            Assert.assertEquals(data.m02, data2.m02, 0.00001f);
+            Assert.assertEquals(data.m10, data2.m10, 0.00001f);
+            Assert.assertEquals(data.m11, data2.m11, 0.00001f);
+            Assert.assertEquals(data.m12, data2.m12, 0.00001f);
+        }
+    }
+
+    @Test
+    public void testBoundingBox() {
+        Kryo kryo = new Kryo();
+        kryo.register(BoundingBox.class, new BoundingBoxSerializer());
+
+        Vector3[] testing = {
+                new Vector3(0, 0, 0),
+                new Vector3(-0f, -0f, -0f),
+                new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0),
+                new Vector3(0, 0, 1),
+                new Vector3(1, 1, 1),
+                new Vector3(-1, -1, -1),
+                new Vector3(9999.9f, 9999.9f, 9999.9f),
+                new Vector3(9999.9f, -9999.9f, 0),
+                new Vector3(Float.NaN, Float.NaN, Float.NaN),
+                new Vector3(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN),
+                new Vector3(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Vector3(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Vector3(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f), new Vector3(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Vector3 origin : testing) {
+            for (Vector3 direction : testing) {
+                BoundingBox data = new BoundingBox(origin, direction);
+                Output output = new Output(32, -1);
+                kryo.writeObject(output, data);
+                byte[] bytes = output.toBytes();
+                try (Input input = new Input(bytes)) {
+                    BoundingBox data2 = kryo.readObject(input, BoundingBox.class);
+                    // BoundingBox does not implement equals().
+//                    Assert.assertEquals(data, data2);
+                    Assert.assertEquals(data.min, data2.min);
+                    Assert.assertEquals(data.max, data2.max);
+                }
+            }
+        }
+    }
+}
