@@ -224,4 +224,20 @@ public class GdxTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testLongArray() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongArray.class, new LongArraySerializer());
+
+        LongArray data = LongArray.with(-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongArray data2 = kryo.readObject(input, LongArray.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
