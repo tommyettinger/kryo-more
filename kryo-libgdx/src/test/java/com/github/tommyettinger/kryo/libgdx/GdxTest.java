@@ -92,6 +92,22 @@ public class GdxTest {
     }
 
     @Test
+    public void testDelayedRemovalArray() {
+        Kryo kryo = new Kryo();
+        kryo.register(DelayedRemovalArray.class, new DelayedRemovalArraySerializer());
+
+        DelayedRemovalArray<String> data = DelayedRemovalArray.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            DelayedRemovalArray<?> data2 = kryo.readObject(input, DelayedRemovalArray.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testBooleanArray() {
         Kryo kryo = new Kryo();
         kryo.register(BooleanArray.class, new BooleanArraySerializer());
