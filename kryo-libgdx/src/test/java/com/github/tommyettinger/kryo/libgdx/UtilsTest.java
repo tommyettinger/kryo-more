@@ -203,6 +203,21 @@ public class UtilsTest {
             Assert.assertEquals(data, data2);
         }
     }
+    @Test
+    public void testObjectSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectSet.class, new ObjectSetSerializer());
+
+        ObjectSet<String> data = ObjectSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectSet<?> data2 = kryo.readObject(input, ObjectSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 
     @Test
     public void testArrayMap() {
