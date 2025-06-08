@@ -108,6 +108,22 @@ public class GdxTest {
     }
 
     @Test
+    public void testSnapshotArray() {
+        Kryo kryo = new Kryo();
+        kryo.register(SnapshotArray.class, new SnapshotArraySerializer());
+
+        SnapshotArray<String> data = SnapshotArray.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            SnapshotArray<?> data2 = kryo.readObject(input, SnapshotArray.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testBooleanArray() {
         Kryo kryo = new Kryo();
         kryo.register(BooleanArray.class, new BooleanArraySerializer());
