@@ -240,4 +240,20 @@ public class GdxTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testShortArray() {
+        Kryo kryo = new Kryo();
+        kryo.register(ShortArray.class, new ShortArraySerializer());
+
+        ShortArray data = ShortArray.with(new short[]{-123, 0, 456, 0, 1, -1, 0});
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ShortArray data2 = kryo.readObject(input, ShortArray.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
