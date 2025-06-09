@@ -203,6 +203,7 @@ public class UtilsTest {
             Assert.assertEquals(data, data2);
         }
     }
+
     @Test
     public void testObjectSet() {
         Kryo kryo = new Kryo();
@@ -216,6 +217,23 @@ public class UtilsTest {
         try (Input input = new Input(bytes)) {
             ObjectSet<?> data2 = kryo.readObject(input, ObjectSet.class);
             Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
+    public void testOrderedSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(OrderedSet.class, new OrderedSetSerializer());
+
+        OrderedSet<String> data = OrderedSet.with("Hello", "World", "!", "I", "am", "a", "test", "!", "yay");
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            OrderedSet<?> data2 = kryo.readObject(input, OrderedSet.class);
+            Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.orderedItems(), data2.orderedItems());
         }
     }
 
