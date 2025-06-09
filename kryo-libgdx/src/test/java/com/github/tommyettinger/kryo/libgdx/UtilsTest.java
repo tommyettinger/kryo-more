@@ -343,4 +343,28 @@ public class UtilsTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testObjectLongMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectLongMap.class, new ObjectLongMapSerializer());
+
+        ObjectLongMap<String> data = new ObjectLongMap<>();
+        data.put("Cthulhu", -123456);
+        data.put("lies", Long.MIN_VALUE);
+        data.put("deep", 456789012);
+        data.put("in", Long.MAX_VALUE);
+        data.put("Rl'yeh", 1111111111111111L);
+        data.put("dreaming", 1);
+        data.put("of", -1);
+        data.put("waffles", 0);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectLongMap<?> data2 = kryo.readObject(input, ObjectLongMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
