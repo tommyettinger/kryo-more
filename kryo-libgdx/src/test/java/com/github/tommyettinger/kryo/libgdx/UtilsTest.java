@@ -345,6 +345,30 @@ public class UtilsTest {
     }
 
     @Test
+    public void testObjectFloatMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectFloatMap.class, new ObjectFloatMapSerializer());
+
+        ObjectFloatMap<String> data = new ObjectFloatMap<>();
+        data.put("Cthulhu", -123456.1f);
+        data.put("lies", Float.MIN_VALUE);
+        data.put("deep", 456789012);
+        data.put("in", Float.NEGATIVE_INFINITY);
+        data.put("Rl'yeh", Float.POSITIVE_INFINITY);
+        data.put("dreaming", 1);
+        data.put("of", -1);
+        data.put("waffles", 0);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectFloatMap<?> data2 = kryo.readObject(input, ObjectFloatMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testObjectLongMap() {
         Kryo kryo = new Kryo();
         kryo.register(ObjectLongMap.class, new ObjectLongMapSerializer());
