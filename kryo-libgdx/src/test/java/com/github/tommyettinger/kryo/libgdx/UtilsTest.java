@@ -238,6 +238,22 @@ public class UtilsTest {
     }
 
     @Test
+    public void testIntSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntSet.class, new IntSetSerializer());
+
+        IntSet data = IntSet.with(-123, 0, 456, 0, 1, -1, 0x80000000);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntSet data2 = kryo.readObject(input, IntSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testArrayMap() {
         Kryo kryo = new Kryo();
         kryo.register(ArrayMap.class, new ArrayMapSerializer());
