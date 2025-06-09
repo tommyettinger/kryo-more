@@ -17,41 +17,42 @@
 
 package com.github.tommyettinger.kryo.libgdx;
 
-import com.badlogic.gdx.utils.OrderedSet;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 /**
- * Kryo {@link Serializer} for libGDX {@link OrderedSet}s.
+ * Kryo {@link Serializer} for libGDX {@link OrderedMap}s.
  */
-public class OrderedSetSerializer extends Serializer<OrderedSet> {
+public class OrderedMapSerializer extends Serializer<OrderedMap> {
 
-    public OrderedSetSerializer() {
+    public OrderedMapSerializer() {
         setImmutable(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final OrderedSet data) {
+    public void write(final Kryo kryo, final Output output, final OrderedMap data) {
         output.writeVarInt(data.size, true);
-        for(Object item : data.orderedItems()) {
+        for(Object item : data.orderedKeys()) {
             kryo.writeClassAndObject(output, item);
+            kryo.writeClassAndObject(output, data.get(item));
         }
     }
 
     @Override
-    public OrderedSet<?> read(final Kryo kryo, final Input input, final Class<? extends OrderedSet> dataClass) {
+    public OrderedMap<?,?> read(final Kryo kryo, final Input input, final Class<? extends OrderedMap> dataClass) {
         final int len = input.readVarInt(true);
-        OrderedSet data = new OrderedSet(len);
+        OrderedMap data = new OrderedMap(len);
         for (int i = 0; i < len; i++) {
-            data.add(kryo.readClassAndObject(input));
+            data.put(kryo.readClassAndObject(input), kryo.readClassAndObject(input));
         }
         return data;
     }
 
     @Override
-    public OrderedSet<?> copy(Kryo kryo, OrderedSet original) {
-        return new OrderedSet<>(original);
+    public OrderedMap<?,?> copy(Kryo kryo, OrderedMap original) {
+        return new OrderedMap<>(original);
     }
 }
