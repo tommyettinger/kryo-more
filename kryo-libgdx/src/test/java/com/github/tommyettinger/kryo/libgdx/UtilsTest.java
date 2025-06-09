@@ -205,6 +205,25 @@ public class UtilsTest {
     }
 
     @Test
+    public void testLongQueue() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongQueue.class, new LongQueueSerializer());
+
+        LongQueue data = new LongQueue();
+        for(long item : new long[]{-1234567890L, 0L, 4567890123456789L, 0, 1L, 1, -1, 0}) {
+            data.addLast(item);
+        }
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongQueue data2 = kryo.readObject(input, LongQueue.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testObjectSet() {
         Kryo kryo = new Kryo();
         kryo.register(ObjectSet.class, new ObjectSetSerializer());
