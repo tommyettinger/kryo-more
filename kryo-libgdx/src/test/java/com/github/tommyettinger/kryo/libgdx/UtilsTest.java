@@ -295,4 +295,28 @@ public class UtilsTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testObjectMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(ObjectMap.class, new ObjectMapSerializer());
+
+        ObjectMap<String, Integer> data = new ObjectMap<>();
+        data.put("Cthulhu", -123456);
+        data.put("lies", Integer.MIN_VALUE);
+        data.put("deep", 456789012);
+        data.put("in", 0);
+        data.put("Rl'yeh", 1111);
+        data.put("dreaming", 1);
+        data.put("of", -1);
+        data.put("waffles", 0);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ObjectMap<?,?> data2 = kryo.readObject(input, ObjectMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
