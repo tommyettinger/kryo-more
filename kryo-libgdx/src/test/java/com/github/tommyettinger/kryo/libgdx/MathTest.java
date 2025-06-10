@@ -1,5 +1,7 @@
 package com.github.tommyettinger.kryo.libgdx;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.esotericsoftware.kryo.Kryo;
@@ -246,6 +248,22 @@ public class MathTest {
             byte[] bytes = output.toBytes();
             try (Input input = new Input(bytes)) {
                 Vector4 data2 = kryo.readObject(input, Vector4.class);
+                Assert.assertEquals(data, data2);
+            }
+        }
+    }
+
+    @Test
+    public void testColor() {
+        Kryo kryo = new Kryo();
+        kryo.register(Color.class, new ColorSerializer());
+
+        for (Color data : Colors.getColors().values()) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Color data2 = kryo.readObject(input, Color.class);
                 Assert.assertEquals(data, data2);
             }
         }
