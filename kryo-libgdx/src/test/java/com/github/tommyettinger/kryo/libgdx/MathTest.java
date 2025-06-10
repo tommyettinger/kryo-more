@@ -102,6 +102,26 @@ public class MathTest {
     }
 
     @Test
+    public void testGridPoint2() {
+        Kryo kryo = new Kryo();
+        kryo.register(GridPoint2.class, new GridPoint2Serializer());
+
+        GridPoint2[] testing = {new GridPoint2(0, 0), new GridPoint2(1, 0), new GridPoint2(0, 1),
+                new GridPoint2(-1, -1), new GridPoint2(9999, 9999), new GridPoint2(9999, -9999),
+                new GridPoint2(0x7FFFFFFF, 0x7FFFFFFF), new GridPoint2(0x80000000, 0x80000000)};
+
+        for (GridPoint2 data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                GridPoint2 data2 = kryo.readObject(input, GridPoint2.class);
+                Assert.assertEquals(data, data2);
+            }
+        }
+    }
+
+    @Test
     public void testRandomXS128() {
         Kryo kryo = new Kryo();
         kryo.register(RandomXS128.class, new RandomXS128Serializer());
