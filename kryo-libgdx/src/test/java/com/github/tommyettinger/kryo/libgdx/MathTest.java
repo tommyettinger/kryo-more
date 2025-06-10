@@ -93,4 +93,36 @@ public class MathTest {
             }
         }
     }
+
+    @Test
+    public void testVector3() {
+        Kryo kryo = new Kryo();
+        kryo.register(Vector3.class, new Vector3Serializer());
+
+        Vector3[] testing = {
+                new Vector3(0, 0, 0),
+                new Vector3(-0f, -0f, -0f),
+                new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0),
+                new Vector3(0, 0, 1),
+                new Vector3(1, 1, 1),
+                new Vector3(-1, -1, -1),
+                new Vector3(9999.9f, 9999.9f, 9999.9f),
+                new Vector3(9999.9f, -9999.9f, 0),
+                new Vector3(Float.NaN, Float.NaN, Float.NaN),
+                new Vector3(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN),
+                new Vector3(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Vector3(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Vector3(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f), new Vector3(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Vector3 data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Vector3 data2 = kryo.readObject(input, Vector3.class);
+                Assert.assertEquals(data, data2);
+            }
+        }
+    }
 }
