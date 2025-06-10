@@ -3,6 +3,7 @@ package com.github.tommyettinger.kryo.libgdx;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -121,6 +122,40 @@ public class MathTest {
             byte[] bytes = output.toBytes();
             try (Input input = new Input(bytes)) {
                 Vector3 data2 = kryo.readObject(input, Vector3.class);
+                Assert.assertEquals(data, data2);
+            }
+        }
+    }
+
+    @Test
+    public void testVector4() {
+        Kryo kryo = new Kryo();
+        kryo.register(Vector4.class, new Vector4Serializer());
+
+        Vector4[] testing = {
+                new Vector4(0, 0, 0, 0),
+                new Vector4(-0f, -0f, -0f, -0f),
+                new Vector4(1, 0, 0, 0),
+                new Vector4(0, 1, 0, 0),
+                new Vector4(0, 0, 1, 0),
+                new Vector4(0, 0, 0, 1),
+                new Vector4(1, 1, 1, 1),
+                new Vector4(-1, -1, -1, -1),
+                new Vector4(9999.9f, 9999.9f, 9999.9f, 9999.9f),
+                new Vector4(9999.9f, -9999.9f, 0, -0f),
+                new Vector4(Float.NaN, Float.NaN, Float.NaN, Float.NaN),
+                new Vector4(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN, Float.MIN_VALUE),
+                new Vector4(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Vector4(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Vector4(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f),
+                new Vector4(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Vector4 data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Vector4 data2 = kryo.readObject(input, Vector4.class);
                 Assert.assertEquals(data, data2);
             }
         }
