@@ -439,4 +439,28 @@ public class UtilsTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testIntFloatMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntFloatMap.class, new IntFloatMapSerializer());
+
+        IntFloatMap data = new IntFloatMap();
+        data.put(-1234567890, 1.2f);
+        data.put(0, 2.3f);
+        data.put(4567890, -3.4f);
+        data.put(0, -4.5f);
+        data.put(1, -5.6f);
+        data.put(1, 6.7f);
+        data.put(-1, -7.8f);
+        data.put(0, 8.9f);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntFloatMap data2 = kryo.readObject(input, IntFloatMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
