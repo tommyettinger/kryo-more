@@ -1,9 +1,6 @@
 package com.github.tommyettinger.kryo.libgdx;
 
-import com.badlogic.gdx.math.Affine2;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.Vector4;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -70,6 +67,27 @@ public class MathTest {
                     Assert.assertEquals(data.max, data2.max);
                 }
             }
+        }
+    }
+
+    @Test
+    public void testRandomXS128() {
+        Kryo kryo = new Kryo();
+        kryo.register(RandomXS128.class, new RandomXS128Serializer());
+
+        RandomXS128 data = new RandomXS128(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            RandomXS128 data2 = kryo.readObject(input, RandomXS128.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            // RandomXS128 does not implement equals().
+//        Assert.assertEquals(data, data2);
+            Assert.assertEquals(data.getState(0), data2.getState(0));
+            Assert.assertEquals(data.getState(1), data2.getState(1));
         }
     }
 
