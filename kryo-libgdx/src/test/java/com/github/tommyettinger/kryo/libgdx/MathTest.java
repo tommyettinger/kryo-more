@@ -71,6 +71,37 @@ public class MathTest {
     }
 
     @Test
+    public void testCircle() {
+        Kryo kryo = new Kryo();
+        kryo.register(Circle.class, new CircleSerializer());
+
+        Circle[] testing = {
+                new Circle(0, 0, 0),
+                new Circle(-0f, -0f, -0f),
+                new Circle(1, 0, 0),
+                new Circle(0, 1, 0),
+                new Circle(0, 0, 1),
+                new Circle(1, 1, 1),
+                new Circle(-1, -1, -1),
+                new Circle(9999.9f, 9999.9f, 9999.9f),
+                new Circle(9999.9f, -9999.9f, 0),
+                new Circle(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.MIN_VALUE),
+                new Circle(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Circle(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Circle(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f), new Circle(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Circle data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Circle data2 = kryo.readObject(input, Circle.class);
+                Assert.assertEquals(data, data2);
+            }
+        }
+    }
+
+    @Test
     public void testRandomXS128() {
         Kryo kryo = new Kryo();
         kryo.register(RandomXS128.class, new RandomXS128Serializer());
