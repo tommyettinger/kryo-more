@@ -463,4 +463,28 @@ public class UtilsTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testIntIntMap() {
+        Kryo kryo = new Kryo();
+        kryo.register(IntIntMap.class, new IntIntMapSerializer());
+
+        IntIntMap data = new IntIntMap();
+        data.put(-1234567890, 12);
+        data.put(0, 23);
+        data.put(4567890, -34);
+        data.put(0, -45);
+        data.put(1, -56);
+        data.put(1, 67);
+        data.put(-1, -78);
+        data.put(0, 89);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            IntIntMap data2 = kryo.readObject(input, IntIntMap.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
