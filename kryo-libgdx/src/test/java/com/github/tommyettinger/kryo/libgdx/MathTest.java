@@ -1,6 +1,7 @@
 package com.github.tommyettinger.kryo.libgdx;
 
 import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.esotericsoftware.kryo.Kryo;
@@ -67,6 +68,28 @@ public class MathTest {
                     Assert.assertEquals(data.min, data2.min);
                     Assert.assertEquals(data.max, data2.max);
                 }
+            }
+        }
+    }
+
+    @Test
+    public void testVector2() {
+        Kryo kryo = new Kryo();
+        kryo.register(Vector2.class, new Vector2Serializer());
+
+        Vector2[] testing = {new Vector2(0, 0), new Vector2(-0f, -0f), new Vector2(1, 0), new Vector2(0, 1),
+                new Vector2(-1, -1), new Vector2(9999.9f, 9999.9f), new Vector2(9999.9f, -9999.9f),
+                new Vector2(Float.NaN, Float.NaN), new Vector2(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY),
+                new Vector2(Float.MIN_VALUE, Float.MIN_VALUE), new Vector2(-Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Vector2(0x7FF.FFp-5f, 0x7FF.FFp-5f), new Vector2(-0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Vector2 data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Vector2 data2 = kryo.readObject(input, Vector2.class);
+                Assert.assertEquals(data, data2);
             }
         }
     }
