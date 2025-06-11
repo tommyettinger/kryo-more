@@ -104,6 +104,45 @@ public class MathTest {
     }
 
     @Test
+    public void testEllipse() {
+        Kryo kryo = new Kryo();
+        kryo.register(Ellipse.class, new EllipseSerializer());
+        
+        Ellipse[] testing = {
+                new Ellipse(0, 0, 0, 0),
+                new Ellipse(-0f, -0f, -0f, -0f),
+                new Ellipse(1, 0, 0, 0),
+                new Ellipse(0, 1, 0, 0),
+                new Ellipse(0, 0, 1, 0),
+                new Ellipse(0, 0, 0, 1),
+                new Ellipse(1, 1, 1, 1),
+                new Ellipse(-1, -1, -1, -1),
+                new Ellipse(9999.9f, 9999.9f, 9999.9f, 9999.9f),
+                new Ellipse(9999.9f, -9999.9f, 0, -0f),
+                new Ellipse(Float.NaN, Float.NaN, Float.NaN, Float.NaN),
+                new Ellipse(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN, Float.MIN_VALUE),
+                new Ellipse(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Ellipse(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Ellipse(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f),
+                new Ellipse(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Ellipse data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Ellipse data2 = kryo.readObject(input, Ellipse.class);
+                // Ellipse does not implement equals().
+//            Assert.assertEquals(data, data2);
+                Assert.assertEquals(data.x, data2.x, 0.00001f);
+                Assert.assertEquals(data.y, data2.y, 0.00001f);
+                Assert.assertEquals(data.width, data2.width, 0.00001f);
+                Assert.assertEquals(data.height, data2.height, 0.00001f);
+            }
+        }
+    }
+
+    @Test
     public void testGridPoint2() {
         Kryo kryo = new Kryo();
         kryo.register(GridPoint2.class, new GridPoint2Serializer());
