@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.math.collision.OrientedBoundingBox;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -107,7 +108,7 @@ public class MathTest {
     public void testEllipse() {
         Kryo kryo = new Kryo();
         kryo.register(Ellipse.class, new EllipseSerializer());
-        
+
         Ellipse[] testing = {
                 new Ellipse(0, 0, 0, 0),
                 new Ellipse(-0f, -0f, -0f, -0f),
@@ -216,6 +217,27 @@ public class MathTest {
             // Matrix4 does not implement equals().
 //            Assert.assertEquals(data, data2);
             Assert.assertArrayEquals(data.val, data2.val, 0.00001f);
+        }
+    }
+
+    @Test
+    public void testOrientedBoundingBox() {
+        Kryo kryo = new Kryo();
+        kryo.register(OrientedBoundingBox.class, new OrientedBoundingBoxSerializer());
+
+        BoundingBox bb = new BoundingBox(new Vector3(-1, -1, -1), new Vector3(5, 6, 7));
+        Matrix4 m = new Matrix4().scale(2.1f, 3.3f, 4.6f).rotateRad(-1.1f, -2.2f, -3.3f, 99.9f);
+        OrientedBoundingBox data = new OrientedBoundingBox(bb, m);
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            OrientedBoundingBox data2 = kryo.readObject(input, OrientedBoundingBox.class);
+            // OrientedBoundingBox does not implement equals().
+//            Assert.assertEquals(data, data2);
+            Assert.assertTrue(data.getBounds().min.epsilonEquals(data2.getBounds().min));
+            Assert.assertTrue(data.getBounds().max.epsilonEquals(data2.getBounds().max));
+            Assert.assertArrayEquals(data.transform.val, data2.transform.val, 0.0001f);
         }
     }
 
