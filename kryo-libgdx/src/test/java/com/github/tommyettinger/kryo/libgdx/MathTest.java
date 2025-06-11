@@ -188,7 +188,7 @@ public class MathTest {
         Kryo kryo = new Kryo();
         kryo.register(Matrix3.class, new Matrix3Serializer());
 
-        Matrix3 data = new Matrix3();
+        Matrix3 data = new Matrix3().scale(2.1f, 3.3f).rotateRad(2f);
 
         Output output = new Output(32, -1);
         kryo.writeObject(output, data);
@@ -196,6 +196,24 @@ public class MathTest {
         try (Input input = new Input(bytes)) {
             Matrix3 data2 = kryo.readObject(input, Matrix3.class);
             // Matrix3 does not implement equals().
+//            Assert.assertEquals(data, data2);
+            Assert.assertArrayEquals(data.val, data2.val, 0.00001f);
+        }
+    }
+
+    @Test
+    public void testMatrix4() {
+        Kryo kryo = new Kryo();
+        kryo.register(Matrix4.class, new Matrix4Serializer());
+
+        Matrix4 data = new Matrix4().scale(2.1f, 3.3f, 4.6f).rotateRad(-1.1f, -2.2f, -3.3f, 99.9f);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Matrix4 data2 = kryo.readObject(input, Matrix4.class);
+            // Matrix4 does not implement equals().
 //            Assert.assertEquals(data, data2);
             Assert.assertArrayEquals(data.val, data2.val, 0.00001f);
         }
