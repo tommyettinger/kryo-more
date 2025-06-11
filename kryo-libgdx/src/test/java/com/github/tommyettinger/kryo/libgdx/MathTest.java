@@ -184,6 +184,24 @@ public class MathTest {
     }
 
     @Test
+    public void testMatrix3() {
+        Kryo kryo = new Kryo();
+        kryo.register(Matrix3.class, new Matrix3Serializer());
+
+        Matrix3 data = new Matrix3();
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Matrix3 data2 = kryo.readObject(input, Matrix3.class);
+            // Matrix3 does not implement equals().
+//            Assert.assertEquals(data, data2);
+            Assert.assertArrayEquals(data.val, data2.val, 0.00001f);
+        }
+    }
+
+    @Test
     public void testRandomXS128() {
         Kryo kryo = new Kryo();
         kryo.register(RandomXS128.class, new RandomXS128Serializer());
