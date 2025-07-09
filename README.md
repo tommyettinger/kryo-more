@@ -11,10 +11,10 @@ and [simple-graphs](https://github.com/earlygrey/simple-graphs).
 All of these but simple-graphs are maintained by [tommyettinger](https://github.com/tommyettinger), who also maintains
 this serialization library.
 
-You may want to consider using [Fury](https://fury.apache.org) serialization instead of Kryo, since it
+You may want to consider using [Fory](https://fory.apache.org) serialization instead of Kryo, since it
 sometimes doesn't need these kinds of manual serializer, and is faster than Kryo in some benchmarks. It isn't
 as mature of a project, but it's being incubated by the Apache Foundation, and is developing quickly. If you
-do use Fury, you can get manual serializers (when they are needed) from kryo-more's relative project,
+do use Fory, you can get manual serializers (when they are needed) from kryo-more's relative project,
 [tantrum](https://github.com/tommyettinger/tantrum). The same author maintains both, and both do work well, so if you already use Kryo, then you can
 use this repo with Kryo just fine!
 
@@ -26,7 +26,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
 
   - kryo-regexodus is currently version 0.1.19.1
   - kryo-digital is currently version 0.7.0.1
-  - kryo-jdkgdxds is currently version 1.10.0.1
+  - kryo-jdkgdxds is currently version 1.10.1.1
   - kryo-juniper is currently version 0.6.9.1
   - kryo-cringe is currently version 0.2.2.1
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
@@ -54,7 +54,7 @@ implementation "com.github.tommyettinger:kryo-digital:0.7.0.1"
 kryo-jdkgdxds:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-jdkgdxds:1.10.0.1"
+implementation "com.github.tommyettinger:kryo-jdkgdxds:1.10.1.1"
 ```
 
 kryo-juniper:
@@ -115,7 +115,7 @@ kryo-jdkgdxds:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-jdkgdxds</artifactId>
-  <version>1.10.0.1</version>
+  <version>1.10.1.1</version>
 </dependency>
 ```
 
