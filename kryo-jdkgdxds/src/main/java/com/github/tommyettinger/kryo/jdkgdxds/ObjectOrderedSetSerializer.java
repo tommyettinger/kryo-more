@@ -19,22 +19,32 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.ObjectOrderedSet;
+import com.github.tommyettinger.ds.OrderType;
 
 public class ObjectOrderedSetSerializer extends CollectionSerializer<ObjectOrderedSet<?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public ObjectOrderedSetSerializer() {
         super();
         setElementsCanBeNull(false);
     }
 
     @Override
+    protected void writeHeader(Kryo kryo, Output output, ObjectOrderedSet<?> data) {
+        output.writeVarInt(data.getOrderType().ordinal(), true);
+    }
+
+    @Override
     protected ObjectOrderedSet<?> create(Kryo kryo, Input input, Class<? extends ObjectOrderedSet<?>> type, int size) {
-        return new ObjectOrderedSet<>(size);
+        return new ObjectOrderedSet<>(size, ORDER_TYPES[input.readVarInt(true)]);
     }
 
     @Override
     protected ObjectOrderedSet<?> createCopy(Kryo kryo, ObjectOrderedSet<?> original) {
-        return new ObjectOrderedSet<>(original.size(), original.getLoadFactor());
+        return new ObjectOrderedSet<>(original.size(), original.getLoadFactor(), original.getOrderType());
     }
 }

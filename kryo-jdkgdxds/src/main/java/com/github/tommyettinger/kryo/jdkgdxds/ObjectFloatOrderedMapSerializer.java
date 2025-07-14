@@ -23,6 +23,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.ObjectFloatMap;
 import com.github.tommyettinger.ds.ObjectFloatOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 
 import java.util.Iterator;
 
@@ -30,6 +31,8 @@ import java.util.Iterator;
  * Kryo {@link Serializer} for jdkgdxds {@link ObjectFloatOrderedMap}s.
  */
 public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrderedMap<?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
 
     public ObjectFloatOrderedMapSerializer() {
         setAcceptsNull(true);
@@ -39,6 +42,7 @@ public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrder
     public void write(final Kryo kryo, final Output output, final ObjectFloatOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
         output.writeFloat(data.getDefaultValue());
         for(Iterator<? extends ObjectFloatMap.Entry<?>> it = new ObjectFloatOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
             ObjectFloatOrderedMap.Entry<?> ent = it.next();
@@ -51,7 +55,7 @@ public class ObjectFloatOrderedMapSerializer extends Serializer<ObjectFloatOrder
     @Override
     public ObjectFloatOrderedMap<?> read(final Kryo kryo, final Input input, final Class<? extends ObjectFloatOrderedMap<?>> dataClass) {
         int length = input.readInt(true);
-        ObjectFloatOrderedMap<?> data = new ObjectFloatOrderedMap<>(length);
+        ObjectFloatOrderedMap<?> data = new ObjectFloatOrderedMap<>(length, ORDER_TYPES[input.readVarInt(true)]);
         data.setDefaultValue(input.readFloat());
         ObjectFloatOrderedMap rawData = data;
         for (int i = 0; i < length; i++)
