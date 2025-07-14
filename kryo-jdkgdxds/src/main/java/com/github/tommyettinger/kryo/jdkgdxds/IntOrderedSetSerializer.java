@@ -23,12 +23,15 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.IntDeque;
 import com.github.tommyettinger.ds.IntOrderedSet;
+import com.github.tommyettinger.ds.OrderType;
 import com.github.tommyettinger.ds.Utilities;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link IntOrderedSet}s.
  */
 public class IntOrderedSetSerializer extends Serializer<IntOrderedSet> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
 
     public IntOrderedSetSerializer() {
         setAcceptsNull(false);
@@ -38,7 +41,7 @@ public class IntOrderedSetSerializer extends Serializer<IntOrderedSet> {
     public void write(final Kryo kryo, final Output output, final IntOrderedSet data) {
         int length = data.size();
         output.writeInt(length, true);
-        output.writeBoolean(data.order() instanceof IntDeque);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
         for(IntOrderedSet.IntOrderedSetIterator it = new IntOrderedSet.IntOrderedSetIterator(data); it.hasNext();)
             output.writeVarInt(it.nextInt(), false);
     }
@@ -46,7 +49,7 @@ public class IntOrderedSetSerializer extends Serializer<IntOrderedSet> {
     @Override
     public IntOrderedSet read(final Kryo kryo, final Input input, final Class<? extends IntOrderedSet> dataClass) {
         int length = input.readInt(true);
-        IntOrderedSet data = new IntOrderedSet(length, Utilities.getDefaultLoadFactor(), input.readBoolean());
+        IntOrderedSet data = new IntOrderedSet(length, Utilities.getDefaultLoadFactor(), ORDER_TYPES[input.readVarInt(true)]);
         for (int i = 0; i < length; i++)
             data.add(input.readVarInt(false));
         return data;

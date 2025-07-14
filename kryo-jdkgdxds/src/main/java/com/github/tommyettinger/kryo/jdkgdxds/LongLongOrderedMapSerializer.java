@@ -24,6 +24,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.LongDeque;
 import com.github.tommyettinger.ds.LongLongMap;
 import com.github.tommyettinger.ds.LongLongOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 
 import java.util.Iterator;
 
@@ -31,6 +32,8 @@ import java.util.Iterator;
  * Kryo {@link Serializer} for jdkgdxds {@link LongLongOrderedMap}s.
  */
 public class LongLongOrderedMapSerializer extends Serializer<LongLongOrderedMap> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
 
     public LongLongOrderedMapSerializer() {
         setAcceptsNull(false);
@@ -40,7 +43,7 @@ public class LongLongOrderedMapSerializer extends Serializer<LongLongOrderedMap>
     public void write(final Kryo kryo, final Output output, final LongLongOrderedMap data) {
         int length = data.size();
         output.writeInt(length, true);
-        output.writeBoolean(data.order() instanceof LongDeque);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
         output.writeVarLong(data.getDefaultValue(), false);
         for(Iterator<LongLongMap.Entry> it = new LongLongOrderedMap.OrderedMapEntries(data).iterator(); it.hasNext();) {
             LongLongOrderedMap.Entry ent = it.next();
@@ -52,7 +55,7 @@ public class LongLongOrderedMapSerializer extends Serializer<LongLongOrderedMap>
     @Override
     public LongLongOrderedMap read(final Kryo kryo, final Input input, final Class<? extends LongLongOrderedMap> dataClass) {
         int length = input.readInt(true);
-        LongLongOrderedMap data = new LongLongOrderedMap(length, input.readBoolean());
+        LongLongOrderedMap data = new LongLongOrderedMap(length, ORDER_TYPES[input.readVarInt(true)]);
         data.setDefaultValue(input.readVarLong(false));
         for (int i = 0; i < length; i++)
             data.put(input.readVarLong(false), input.readVarLong(false));

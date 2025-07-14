@@ -24,6 +24,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.IntDeque;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.IntObjectOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 
 import java.util.Iterator;
 
@@ -31,6 +32,8 @@ import java.util.Iterator;
  * Kryo {@link Serializer} for jdkgdxds {@link IntObjectOrderedMap}s.
  */
 public class IntObjectOrderedMapSerializer extends Serializer<IntObjectOrderedMap<?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
 
     public IntObjectOrderedMapSerializer() {
         setAcceptsNull(true);
@@ -40,7 +43,7 @@ public class IntObjectOrderedMapSerializer extends Serializer<IntObjectOrderedMa
     public void write(final Kryo kryo, final Output output, final IntObjectOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        output.writeBoolean(data.order() instanceof IntDeque);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
         kryo.writeClassAndObject(output, data.getDefaultValue());
         for(Iterator<? extends IntObjectMap.Entry<?>> it = new IntObjectOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
             IntObjectOrderedMap.Entry<?> ent = it.next();
@@ -53,7 +56,7 @@ public class IntObjectOrderedMapSerializer extends Serializer<IntObjectOrderedMa
     @Override
     public IntObjectOrderedMap<?> read(final Kryo kryo, final Input input, final Class<? extends IntObjectOrderedMap<?>> dataClass) {
         int length = input.readInt(true);
-        IntObjectOrderedMap<?> data = new IntObjectOrderedMap<>(length, input.readBoolean());
+        IntObjectOrderedMap<?> data = new IntObjectOrderedMap<>(length, ORDER_TYPES[input.readVarInt(true)]);
         IntObjectOrderedMap rawData = data;
         rawData.setDefaultValue(kryo.readClassAndObject(input));
         for (int i = 0; i < length; i++)

@@ -24,6 +24,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.LongDeque;
 import com.github.tommyettinger.ds.LongObjectMap;
 import com.github.tommyettinger.ds.LongObjectOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 
 import java.util.Iterator;
 
@@ -31,6 +32,8 @@ import java.util.Iterator;
  * Kryo {@link Serializer} for jdkgdxds {@link LongObjectOrderedMap}s.
  */
 public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrderedMap<?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
 
     public LongObjectOrderedMapSerializer() {
         setAcceptsNull(true);
@@ -40,7 +43,7 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
     public void write(final Kryo kryo, final Output output, final LongObjectOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
-        output.writeBoolean(data.order() instanceof LongDeque);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
         kryo.writeClassAndObject(output, data.getDefaultValue());
         for(Iterator<? extends LongObjectMap.Entry<?>> it = new LongObjectOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
             LongObjectOrderedMap.Entry<?> ent = it.next();
@@ -53,7 +56,7 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
     @Override
     public LongObjectOrderedMap<?> read(final Kryo kryo, final Input input, final Class<? extends LongObjectOrderedMap<?>> dataClass) {
         int length = input.readInt(true);
-        LongObjectOrderedMap<?> data = new LongObjectOrderedMap<>(length, input.readBoolean());
+        LongObjectOrderedMap<?> data = new LongObjectOrderedMap<>(length, ORDER_TYPES[input.readVarInt(true)]);
         LongObjectOrderedMap rawData = data;
         rawData.setDefaultValue(kryo.readClassAndObject(input));
         for (int i = 0; i < length; i++)
@@ -64,7 +67,7 @@ public class LongObjectOrderedMapSerializer extends Serializer<LongObjectOrdered
     @SuppressWarnings({"rawtypes", "unchecked", "UnnecessaryLocalVariable"})
     @Override
     public LongObjectOrderedMap<?> copy(Kryo kryo, LongObjectOrderedMap<?> original) {
-        LongObjectOrderedMap<?> map = new LongObjectOrderedMap<>(original.size(), original.getLoadFactor(), original.order() instanceof LongDeque);
+        LongObjectOrderedMap<?> map = new LongObjectOrderedMap<>(original.size(), original.getLoadFactor(), original.getOrderType());
         kryo.reference(map);
         LongObjectOrderedMap rawMap = map;
         rawMap.setDefaultValue(original.getDefaultValue());
