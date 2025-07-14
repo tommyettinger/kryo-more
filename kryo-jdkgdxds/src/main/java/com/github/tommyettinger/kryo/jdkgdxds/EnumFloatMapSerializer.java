@@ -47,6 +47,7 @@ public class EnumFloatMapSerializer extends Serializer<EnumFloatMap> {
     public EnumFloatMap read(final Kryo kryo, final Input input, final Class<? extends EnumFloatMap> dataClass) {
         int length = input.readInt(true);
         EnumFloatMap data = new EnumFloatMap();
+        data.setDefaultValue(input.readFloat());
         for (int i = 0; i < length; i++)
             data.put((Enum<?>)kryo.readClassAndObject(input), input.readFloat());
         return data;

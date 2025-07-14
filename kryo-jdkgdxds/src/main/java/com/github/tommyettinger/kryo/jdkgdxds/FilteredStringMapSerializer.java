@@ -34,20 +34,27 @@ public class FilteredStringMapSerializer extends MapSerializer<FilteredStringMap
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, FilteredStringMap<?> map) {
-        CharFilter fil = map.getFilter();
+    protected void writeHeader(Kryo kryo, Output output, FilteredStringMap<?> data) {
+        CharFilter fil = data.getFilter();
         if(fil == null)
             throw new NoSuchElementException("A FilteredStringMap must have a non-null filter to be serialized.");
         output.writeString(fil.getName());
+        kryo.writeClassAndObject(output, data.getDefaultValue());
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected FilteredStringMap<?> create(Kryo kryo, Input input, Class<? extends FilteredStringMap<?>> type, int size) {
-        return new FilteredStringMap<>(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor());
+        FilteredStringMap data = new FilteredStringMap(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor());
+        data.setDefaultValue(kryo.readClassAndObject(input));
+        return data;
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected FilteredStringMap<?> createCopy(Kryo kryo, FilteredStringMap<?> original) {
-        return new FilteredStringMap<>(original.getFilter(), original.size(), original.getLoadFactor());
+        FilteredStringMap data = new FilteredStringMap(original.getFilter(), original.size(), original.getLoadFactor());
+        data.setDefaultValue(original.getDefaultValue());
+        return data;
     }
 }

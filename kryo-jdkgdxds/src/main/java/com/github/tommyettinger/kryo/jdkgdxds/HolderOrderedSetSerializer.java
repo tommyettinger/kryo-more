@@ -22,35 +22,40 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.HolderOrderedSet;
+import com.github.tommyettinger.ds.OrderType;
 import com.github.tommyettinger.function.ObjToObjFunction;
 
 import java.util.NoSuchElementException;
 
 public class HolderOrderedSetSerializer extends CollectionSerializer<HolderOrderedSet<?, ?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public HolderOrderedSetSerializer() {
         super();
         setElementsCanBeNull(false);
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, HolderOrderedSet<?, ?> collection) {
-        ObjToObjFunction<?, ?> ext = collection.getExtractor();
+    protected void writeHeader(Kryo kryo, Output output, HolderOrderedSet<?, ?> data) {
+        ObjToObjFunction<?, ?> ext = data.getExtractor();
         if(ext == null)
             throw new NoSuchElementException("A HolderSet must have a non-null extractor to be serialized.");
         if(kryo.getClassResolver().getRegistration(ext.getClass()) == null)
             kryo.register(ext.getClass());
         kryo.writeClassAndObject(output, ext);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected HolderOrderedSet<?, ?> create(Kryo kryo, Input input, Class<? extends HolderOrderedSet<?, ?>> type, int size) {
-        return new HolderOrderedSet<>((ObjToObjFunction)kryo.readClassAndObject(input), size);
+        return new HolderOrderedSet((ObjToObjFunction)kryo.readClassAndObject(input), size, ORDER_TYPES[input.readVarInt(true)]);
     }
 
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected HolderOrderedSet<?, ?> createCopy(Kryo kryo, HolderOrderedSet<?, ?> original) {
-        return new HolderOrderedSet<>(original.getExtractor(), original.size(), original.getLoadFactor());
+        return new HolderOrderedSet<>(original.getExtractor(), original.size(), original.getLoadFactor(), original.getOrderType());
     }
 }

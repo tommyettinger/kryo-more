@@ -35,9 +35,9 @@ public class FilteredIterableMapSerializer extends MapSerializer<FilteredIterabl
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, FilteredIterableMap<?, ?, ?> collection) {
-        ObjPredicate<?> filter = collection.getFilter();
-        ObjToSameFunction<?> editor = collection.getEditor();
+    protected void writeHeader(Kryo kryo, Output output, FilteredIterableMap<?, ?, ?> data) {
+        ObjPredicate<?> filter = data.getFilter();
+        ObjToSameFunction<?> editor = data.getEditor();
         if(filter == null || editor == null)
             throw new NoSuchElementException("A FilteredIterableMap must have a non-null filter and editor to be serialized.");
         if(kryo.getClassResolver().getRegistration(filter.getClass()) == null)
@@ -46,17 +46,22 @@ public class FilteredIterableMapSerializer extends MapSerializer<FilteredIterabl
             kryo.register(editor.getClass());
         kryo.writeClassAndObject(output, filter);
         kryo.writeClassAndObject(output, editor);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected FilteredIterableMap<?, ?, ?> create(Kryo kryo, Input input, Class<? extends FilteredIterableMap<?, ?, ?>> type, int size) {
-        return new FilteredIterableMap((ObjPredicate<?>)kryo.readClassAndObject(input), (ObjToSameFunction<?>) kryo.readClassAndObject(input), size, Utilities.getDefaultLoadFactor());
+        FilteredIterableMap data = new FilteredIterableMap((ObjPredicate<?>)kryo.readClassAndObject(input), (ObjToSameFunction<?>) kryo.readClassAndObject(input), size, Utilities.getDefaultLoadFactor());
+        data.setDefaultValue(kryo.readClassAndObject(input));
+        return data;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected FilteredIterableMap<?, ?, ?> createCopy(Kryo kryo, FilteredIterableMap<?, ?, ?> original) {
-        return new FilteredIterableMap(original.getFilter(), original.getEditor(), original.size(), original.getLoadFactor());
+        FilteredIterableMap data = new FilteredIterableMap(original.getFilter(), original.getEditor(), original.size(), original.getLoadFactor());
+        data.setDefaultValue(original.getDefaultValue());
+        return data;
     }
 }
