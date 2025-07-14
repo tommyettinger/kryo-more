@@ -19,22 +19,39 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.CaseInsensitiveOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 
 public class CaseInsensitiveOrderedMapSerializer extends MapSerializer<CaseInsensitiveOrderedMap<?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public CaseInsensitiveOrderedMapSerializer() {
         super();
         setKeysCanBeNull(false);
     }
 
     @Override
+    protected void writeHeader(Kryo kryo, Output output, CaseInsensitiveOrderedMap<?> data) {
+        output.writeVarInt(data.getOrderType().ordinal(), true);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
+    }
+
+    @Override
     protected CaseInsensitiveOrderedMap<?> create(Kryo kryo, Input input, Class<? extends CaseInsensitiveOrderedMap<?>> type, int size) {
-        return new CaseInsensitiveOrderedMap<>(size);
+        CaseInsensitiveOrderedMap data = new CaseInsensitiveOrderedMap<>(size, ORDER_TYPES[input.readVarInt(true)]);
+        kryo.reference(data);
+        data.setDefaultValue(kryo.readClassAndObject(input));
+        return data;
     }
 
     @Override
     protected CaseInsensitiveOrderedMap<?> createCopy(Kryo kryo, CaseInsensitiveOrderedMap<?> original) {
-        return new CaseInsensitiveOrderedMap<>(original.size(), original.getLoadFactor());
+        CaseInsensitiveOrderedMap data = new CaseInsensitiveOrderedMap<>(original.size(), original.getLoadFactor(), original.getOrderType());
+        kryo.reference(data);
+        data.setDefaultValue(original.getDefaultValue());
+        return data;
     }
 }

@@ -19,22 +19,32 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.CaseInsensitiveOrderedSet;
+import com.github.tommyettinger.ds.OrderType;
 
 public class CaseInsensitiveOrderedSetSerializer extends CollectionSerializer<CaseInsensitiveOrderedSet> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public CaseInsensitiveOrderedSetSerializer() {
         super();
         setElementsCanBeNull(false);
     }
 
     @Override
+    protected void writeHeader(Kryo kryo, Output output, CaseInsensitiveOrderedSet data) {
+        output.writeVarInt(data.getOrderType().ordinal(), true);
+    }
+
+    @Override
     protected CaseInsensitiveOrderedSet create(Kryo kryo, Input input, Class<? extends CaseInsensitiveOrderedSet> type, int size) {
-        return new CaseInsensitiveOrderedSet(size);
+        return new CaseInsensitiveOrderedSet(size, ORDER_TYPES[input.readVarInt(true)]);
     }
 
     @Override
     protected CaseInsensitiveOrderedSet createCopy(Kryo kryo, CaseInsensitiveOrderedSet original) {
-        return new CaseInsensitiveOrderedSet(original.size(), original.getLoadFactor());
+        return new CaseInsensitiveOrderedSet(original.size(), original.getLoadFactor(), original.getOrderType());
     }
 }
