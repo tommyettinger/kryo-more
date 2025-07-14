@@ -36,6 +36,7 @@ public class EnumFloatMapSerializer extends Serializer<EnumFloatMap> {
     public void write(final Kryo kryo, final Output output, final EnumFloatMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeFloat(data.getDefaultValue());
         for(EnumFloatMap.Entry ent : data) {
             kryo.writeClassAndObject(output, ent.getKey());
             output.writeFloat(ent.getValue());

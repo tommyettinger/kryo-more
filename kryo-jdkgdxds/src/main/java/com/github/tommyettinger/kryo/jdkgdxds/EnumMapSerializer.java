@@ -39,6 +39,7 @@ public class EnumMapSerializer extends Serializer<EnumMap<?>> {
     public void write(final Kryo kryo, final Output output, final EnumMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
         for(Iterator<? extends Map.Entry<Enum<?>, ?>> it = new EnumMap.Entries<>(data).iterator(); it.hasNext();) {
             Map.Entry<Enum<?>, ?> ent = it.next();
             kryo.writeClassAndObject(output, ent.getKey());
@@ -52,6 +53,7 @@ public class EnumMapSerializer extends Serializer<EnumMap<?>> {
         int length = input.readInt(true);
         EnumMap<?> data = new EnumMap<>();
         EnumMap rawData = data;
+        rawData.setDefaultValue(kryo.readClassAndObject(input));
         for (int i = 0; i < length; i++)
             rawData.put((Enum<?>)kryo.readClassAndObject(input), kryo.readClassAndObject(input));
         return data;

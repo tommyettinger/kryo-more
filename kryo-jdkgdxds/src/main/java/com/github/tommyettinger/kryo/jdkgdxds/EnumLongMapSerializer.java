@@ -36,6 +36,7 @@ public class EnumLongMapSerializer extends Serializer<EnumLongMap> {
     public void write(final Kryo kryo, final Output output, final EnumLongMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeLong(data.getDefaultValue());
         for(EnumLongMap.Entry ent : data) {
             kryo.writeClassAndObject(output, ent.getKey());
             output.writeVarLong(ent.getValue(), false);
@@ -46,6 +47,7 @@ public class EnumLongMapSerializer extends Serializer<EnumLongMap> {
     public EnumLongMap read(final Kryo kryo, final Input input, final Class<? extends EnumLongMap> dataClass) {
         int length = input.readInt(true);
         EnumLongMap data = new EnumLongMap();
+        data.setDefaultValue(input.readLong());
         for (int i = 0; i < length; i++)
             data.put((Enum<?>)kryo.readClassAndObject(input), input.readVarLong(false));
         return data;

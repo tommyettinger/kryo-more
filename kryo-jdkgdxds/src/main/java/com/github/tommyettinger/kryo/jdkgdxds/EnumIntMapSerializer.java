@@ -36,6 +36,7 @@ public class EnumIntMapSerializer extends Serializer<EnumIntMap> {
     public void write(final Kryo kryo, final Output output, final EnumIntMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeInt(data.getDefaultValue());
         for(EnumIntMap.Entry ent : data) {
             kryo.writeClassAndObject(output, ent.getKey());
             output.writeVarInt(ent.getValue(), false);
@@ -46,6 +47,7 @@ public class EnumIntMapSerializer extends Serializer<EnumIntMap> {
     public EnumIntMap read(final Kryo kryo, final Input input, final Class<? extends EnumIntMap> dataClass) {
         int length = input.readInt(true);
         EnumIntMap data = new EnumIntMap();
+        data.setDefaultValue(input.readInt());
         for (int i = 0; i < length; i++)
             data.put((Enum<?>)kryo.readClassAndObject(input), input.readVarInt(false));
         return data;
