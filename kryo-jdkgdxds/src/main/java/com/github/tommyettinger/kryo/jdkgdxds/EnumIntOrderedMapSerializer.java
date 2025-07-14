@@ -22,12 +22,15 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.EnumIntOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 
 /**
  * Kryo {@link Serializer} for jdkgdxds {@link EnumIntOrderedMap}s.
  * Requires the type of any enum keys that are contained in an EnumIntOrderedMap to also be registered.
  */
 public class EnumIntOrderedMapSerializer extends Serializer<EnumIntOrderedMap> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
 
     public EnumIntOrderedMapSerializer() {
     }
@@ -36,6 +39,8 @@ public class EnumIntOrderedMapSerializer extends Serializer<EnumIntOrderedMap> {
     public void write(final Kryo kryo, final Output output, final EnumIntOrderedMap data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
+        output.writeInt(data.getDefaultValue());
         for(EnumIntOrderedMap.Entry ent : data) {
             kryo.writeClassAndObject(output, ent.getKey());
             output.writeVarInt(ent.getValue(), false);
@@ -45,7 +50,8 @@ public class EnumIntOrderedMapSerializer extends Serializer<EnumIntOrderedMap> {
     @Override
     public EnumIntOrderedMap read(final Kryo kryo, final Input input, final Class<? extends EnumIntOrderedMap> dataClass) {
         int length = input.readInt(true);
-        EnumIntOrderedMap data = new EnumIntOrderedMap();
+        EnumIntOrderedMap data = new EnumIntOrderedMap(ORDER_TYPES[input.readVarInt(true)]);
+        data.setDefaultValue(input.readInt());
         for (int i = 0; i < length; i++)
             data.put((Enum<?>)kryo.readClassAndObject(input), input.readVarInt(false));
         return data;

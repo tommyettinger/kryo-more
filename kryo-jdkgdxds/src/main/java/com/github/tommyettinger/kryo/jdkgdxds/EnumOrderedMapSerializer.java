@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.EnumOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -32,6 +33,8 @@ import java.util.Map;
  */
 public class EnumOrderedMapSerializer extends Serializer<EnumOrderedMap<?>> {
 
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public EnumOrderedMapSerializer() {
     }
 
@@ -39,6 +42,8 @@ public class EnumOrderedMapSerializer extends Serializer<EnumOrderedMap<?>> {
     public void write(final Kryo kryo, final Output output, final EnumOrderedMap<?> data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
         for(Iterator<? extends Map.Entry<Enum<?>, ?>> it = new EnumOrderedMap.OrderedMapEntries<>(data).iterator(); it.hasNext();) {
             Map.Entry<Enum<?>, ?> ent = it.next();
             kryo.writeClassAndObject(output, ent.getKey());
@@ -50,8 +55,9 @@ public class EnumOrderedMapSerializer extends Serializer<EnumOrderedMap<?>> {
     @Override
     public EnumOrderedMap<?> read(final Kryo kryo, final Input input, final Class<? extends EnumOrderedMap<?>> dataClass) {
         int length = input.readInt(true);
-        EnumOrderedMap<?> data = new EnumOrderedMap<>();
+        EnumOrderedMap<?> data = new EnumOrderedMap<>(ORDER_TYPES[input.readVarInt(true)]);
         EnumOrderedMap rawData = data;
+        rawData.setDefaultValue(kryo.readClassAndObject(input));
         for (int i = 0; i < length; i++)
             rawData.put((Enum<?>)kryo.readClassAndObject(input), kryo.readClassAndObject(input));
         return data;

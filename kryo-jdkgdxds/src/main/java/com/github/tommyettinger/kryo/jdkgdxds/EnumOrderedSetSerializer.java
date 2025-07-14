@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.EnumOrderedSet;
+import com.github.tommyettinger.ds.OrderType;
 
 import java.util.Iterator;
 
@@ -31,6 +32,8 @@ import java.util.Iterator;
  */
 public class EnumOrderedSetSerializer extends Serializer<EnumOrderedSet> {
 
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public EnumOrderedSetSerializer() {
         setAcceptsNull(false);
     }
@@ -39,6 +42,7 @@ public class EnumOrderedSetSerializer extends Serializer<EnumOrderedSet> {
     public void write(final Kryo kryo, final Output output, final EnumOrderedSet data) {
         int length = data.size();
         output.writeInt(length, true);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
         for (Iterator<Enum<?>> it = new EnumOrderedSet.EnumOrderedSetIterator(data); it.hasNext(); )
             kryo.writeClassAndObject(output, it.next());
     }
@@ -47,7 +51,7 @@ public class EnumOrderedSetSerializer extends Serializer<EnumOrderedSet> {
     public EnumOrderedSet read(final Kryo kryo, final Input input, final Class<? extends EnumOrderedSet> dataClass) {
         int length = input.readInt(true);
         EnumOrderedSet data;
-        data = new EnumOrderedSet();
+        data = new EnumOrderedSet(ORDER_TYPES[input.readVarInt(true)]);
         for (int i = 0; i < length; i++)
             data.add((Enum<?>)kryo.readClassAndObject(input));
         return data;
