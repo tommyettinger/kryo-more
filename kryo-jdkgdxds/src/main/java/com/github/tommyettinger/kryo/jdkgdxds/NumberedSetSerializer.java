@@ -19,6 +19,7 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.NumberedSet;
 
@@ -29,12 +30,21 @@ public class NumberedSetSerializer extends CollectionSerializer<NumberedSet<?>> 
     }
 
     @Override
+    protected void writeHeader(Kryo kryo, Output output, NumberedSet<?> data) {
+        output.writeInt(data.getDefaultValue());
+    }
+
+    @Override
     protected NumberedSet<?> create(Kryo kryo, Input input, Class<? extends NumberedSet<?>> type, int size) {
-        return new NumberedSet<>(size);
+        NumberedSet<?> data = new NumberedSet<>(size);
+        data.setDefaultValue(input.readInt());
+        return data;
     }
 
     @Override
     protected NumberedSet<?> createCopy(Kryo kryo, NumberedSet<?> original) {
-        return new NumberedSet<>(original.size(), original.getLoadFactor());
+        NumberedSet<?> data = new NumberedSet<>(original.size(), original.getLoadFactor());
+        data.setDefaultValue(original.getDefaultValue());
+        return data;
     }
 }
