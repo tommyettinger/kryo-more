@@ -23,31 +23,43 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.CharFilter;
 import com.github.tommyettinger.ds.FilteredStringOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 import com.github.tommyettinger.ds.Utilities;
 
 import java.util.NoSuchElementException;
 
 public class FilteredStringOrderedMapSerializer extends MapSerializer<FilteredStringOrderedMap<?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public FilteredStringOrderedMapSerializer() {
         super();
         setKeysCanBeNull(false);
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, FilteredStringOrderedMap<?> map) {
-        CharFilter fil = map.getFilter();
+    protected void writeHeader(Kryo kryo, Output output, FilteredStringOrderedMap<?> data) {
+        CharFilter fil = data.getFilter();
         if(fil == null)
             throw new NoSuchElementException("A FilteredStringOrderedMap must have a non-null filter to be serialized.");
         output.writeString(fil.getName());
+        output.writeVarInt(data.getOrderType().ordinal(), true);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected FilteredStringOrderedMap<?> create(Kryo kryo, Input input, Class<? extends FilteredStringOrderedMap<?>> type, int size) {
-        return new FilteredStringOrderedMap<>(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor());
+        FilteredStringOrderedMap data = new FilteredStringOrderedMap(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor(),
+                ORDER_TYPES[input.readVarInt(true)]);
+        data.setDefaultValue(kryo.readClassAndObject(input));
+        return data;
     }
 
     @Override
     protected FilteredStringOrderedMap<?> createCopy(Kryo kryo, FilteredStringOrderedMap<?> original) {
-        return new FilteredStringOrderedMap<>(original.getFilter(), original.size(), original.getLoadFactor());
+        FilteredStringOrderedMap data = new FilteredStringOrderedMap(original.getFilter(), original.size(), original.getLoadFactor(), original.getOrderType());
+        data.setDefaultValue(original.getDefaultValue());
+        return data;
     }
 }

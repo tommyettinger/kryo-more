@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.FilteredIterableOrderedMap;
+import com.github.tommyettinger.ds.OrderType;
 import com.github.tommyettinger.ds.Utilities;
 import com.github.tommyettinger.function.ObjPredicate;
 import com.github.tommyettinger.function.ObjToSameFunction;
@@ -29,15 +30,18 @@ import com.github.tommyettinger.function.ObjToSameFunction;
 import java.util.NoSuchElementException;
 
 public class FilteredIterableOrderedMapSerializer extends MapSerializer<FilteredIterableOrderedMap<?, ?, ?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public FilteredIterableOrderedMapSerializer() {
         super();
         setKeysCanBeNull(false);
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, FilteredIterableOrderedMap<?, ?, ?> collection) {
-        ObjPredicate<?> filter = collection.getFilter();
-        ObjToSameFunction<?> editor = collection.getEditor();
+    protected void writeHeader(Kryo kryo, Output output, FilteredIterableOrderedMap<?, ?, ?> data) {
+        ObjPredicate<?> filter = data.getFilter();
+        ObjToSameFunction<?> editor = data.getEditor();
         if(filter == null || editor == null)
             throw new NoSuchElementException("A FilteredIterableOrderedMap must have a non-null filter and editor to be serialized.");
         if(kryo.getClassResolver().getRegistration(filter.getClass()) == null)
@@ -46,17 +50,25 @@ public class FilteredIterableOrderedMapSerializer extends MapSerializer<Filtered
             kryo.register(editor.getClass());
         kryo.writeClassAndObject(output, filter);
         kryo.writeClassAndObject(output, editor);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
+        kryo.writeClassAndObject(output, data.getDefaultValue());
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected FilteredIterableOrderedMap<?, ?, ?> create(Kryo kryo, Input input, Class<? extends FilteredIterableOrderedMap<?, ?, ?>> type, int size) {
-        return new FilteredIterableOrderedMap((ObjPredicate<?>)kryo.readClassAndObject(input), (ObjToSameFunction<?>) kryo.readClassAndObject(input), size, Utilities.getDefaultLoadFactor());
+        FilteredIterableOrderedMap data = new FilteredIterableOrderedMap((ObjPredicate<?>)kryo.readClassAndObject(input),
+                (ObjToSameFunction<?>) kryo.readClassAndObject(input), size, Utilities.getDefaultLoadFactor(),
+                ORDER_TYPES[input.readVarInt(true)]);
+        data.setDefaultValue(kryo.readClassAndObject(input));
+        return data;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected FilteredIterableOrderedMap<?, ?, ?> createCopy(Kryo kryo, FilteredIterableOrderedMap<?, ?, ?> original) {
-        return new FilteredIterableOrderedMap(original.getFilter(), original.getEditor(), original.size(), original.getLoadFactor());
+        FilteredIterableOrderedMap data = new FilteredIterableOrderedMap(original.getFilter(), original.getEditor(), original.size(), original.getLoadFactor(), original.getOrderType());
+        data.setDefaultValue(original.getDefaultValue());
+        return data;
     }
 }

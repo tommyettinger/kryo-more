@@ -23,31 +23,36 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.CharFilter;
 import com.github.tommyettinger.ds.FilteredStringOrderedSet;
+import com.github.tommyettinger.ds.OrderType;
 import com.github.tommyettinger.ds.Utilities;
 
 import java.util.NoSuchElementException;
 
 public class FilteredStringOrderedSetSerializer extends CollectionSerializer<FilteredStringOrderedSet> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public FilteredStringOrderedSetSerializer() {
         super();
         setElementsCanBeNull(false);
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, FilteredStringOrderedSet collection) {
-        CharFilter fil = collection.getFilter();
+    protected void writeHeader(Kryo kryo, Output output, FilteredStringOrderedSet data) {
+        CharFilter fil = data.getFilter();
         if(fil == null)
             throw new NoSuchElementException("A FilteredStringOrderedSet must have a non-null filter to be serialized.");
         output.writeString(fil.getName());
+        output.writeVarInt(data.getOrderType().ordinal(), true);
     }
 
     @Override
     protected FilteredStringOrderedSet create(Kryo kryo, Input input, Class<? extends FilteredStringOrderedSet> type, int size) {
-        return new FilteredStringOrderedSet(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor());
+        return new FilteredStringOrderedSet(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor(), ORDER_TYPES[input.readVarInt(true)]);
     }
 
     @Override
     protected FilteredStringOrderedSet createCopy(Kryo kryo, FilteredStringOrderedSet original) {
-        return new FilteredStringOrderedSet(original.getFilter(), original.size(), original.getLoadFactor());
+        return new FilteredStringOrderedSet(original.getFilter(), original.size(), original.getLoadFactor(), original.getOrderType());
     }
 }

@@ -22,21 +22,25 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.github.tommyettinger.ds.FilteredIterableOrderedSet;
+import com.github.tommyettinger.ds.OrderType;
 import com.github.tommyettinger.function.ObjPredicate;
 import com.github.tommyettinger.function.ObjToSameFunction;
 
 import java.util.NoSuchElementException;
 
 public class FilteredIterableOrderedSetSerializer extends CollectionSerializer<FilteredIterableOrderedSet<?, ?>> {
+
+    private static final OrderType[] ORDER_TYPES = OrderType.values();
+
     public FilteredIterableOrderedSetSerializer() {
         super();
         setElementsCanBeNull(false);
     }
 
     @Override
-    protected void writeHeader(Kryo kryo, Output output, FilteredIterableOrderedSet<?, ?> collection) {
-        ObjPredicate<?> filter = collection.getFilter();
-        ObjToSameFunction<?> editor = collection.getEditor();
+    protected void writeHeader(Kryo kryo, Output output, FilteredIterableOrderedSet<?, ?> data) {
+        ObjPredicate<?> filter = data.getFilter();
+        ObjToSameFunction<?> editor = data.getEditor();
         if(filter == null || editor == null)
             throw new NoSuchElementException("A FilteredIterableOrderedSet must have a non-null filter and editor to be serialized.");
         if(kryo.getClassResolver().getRegistration(filter.getClass()) == null)
@@ -45,17 +49,18 @@ public class FilteredIterableOrderedSetSerializer extends CollectionSerializer<F
             kryo.register(editor.getClass());
         kryo.writeClassAndObject(output, filter);
         kryo.writeClassAndObject(output, editor);
+        output.writeVarInt(data.getOrderType().ordinal(), true);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected FilteredIterableOrderedSet<?, ?> create(Kryo kryo, Input input, Class<? extends FilteredIterableOrderedSet<?, ?>> type, int size) {
-        return new FilteredIterableOrderedSet((ObjPredicate<?>)kryo.readClassAndObject(input), (ObjToSameFunction<?>) kryo.readClassAndObject(input), size);
+        return new FilteredIterableOrderedSet((ObjPredicate<?>)kryo.readClassAndObject(input), (ObjToSameFunction<?>) kryo.readClassAndObject(input), size, ORDER_TYPES[input.readVarInt(true)]);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected FilteredIterableOrderedSet<?, ?> createCopy(Kryo kryo, FilteredIterableOrderedSet original) {
-        return new FilteredIterableOrderedSet(original.getFilter(), original.getEditor(), original.size(), original.getLoadFactor());
+        return new FilteredIterableOrderedSet(original.getFilter(), original.getEditor(), original.size(), original.getLoadFactor(), original.getOrderType());
     }
 }
