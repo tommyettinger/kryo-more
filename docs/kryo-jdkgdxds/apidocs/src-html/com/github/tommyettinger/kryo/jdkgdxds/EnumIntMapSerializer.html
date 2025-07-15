@@ -49,32 +49,34 @@
 <span class="source-line-no">036</span><span id="line-36">    public void write(final Kryo kryo, final Output output, final EnumIntMap data) {</span>
 <span class="source-line-no">037</span><span id="line-37">        int length = data.size();</span>
 <span class="source-line-no">038</span><span id="line-38">        output.writeInt(length, true);</span>
-<span class="source-line-no">039</span><span id="line-39">        for(EnumIntMap.Entry ent : data) {</span>
-<span class="source-line-no">040</span><span id="line-40">            kryo.writeClassAndObject(output, ent.getKey());</span>
-<span class="source-line-no">041</span><span id="line-41">            output.writeVarInt(ent.getValue(), false);</span>
-<span class="source-line-no">042</span><span id="line-42">        }</span>
-<span class="source-line-no">043</span><span id="line-43">    }</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">    @Override</span>
-<span class="source-line-no">046</span><span id="line-46">    public EnumIntMap read(final Kryo kryo, final Input input, final Class&lt;? extends EnumIntMap&gt; dataClass) {</span>
-<span class="source-line-no">047</span><span id="line-47">        int length = input.readInt(true);</span>
-<span class="source-line-no">048</span><span id="line-48">        EnumIntMap data = new EnumIntMap();</span>
-<span class="source-line-no">049</span><span id="line-49">        for (int i = 0; i &lt; length; i++)</span>
-<span class="source-line-no">050</span><span id="line-50">            data.put((Enum&lt;?&gt;)kryo.readClassAndObject(input), input.readVarInt(false));</span>
-<span class="source-line-no">051</span><span id="line-51">        return data;</span>
-<span class="source-line-no">052</span><span id="line-52">    }</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">    @Override</span>
-<span class="source-line-no">055</span><span id="line-55">    public EnumIntMap copy(Kryo kryo, EnumIntMap original) {</span>
-<span class="source-line-no">056</span><span id="line-56">        EnumIntMap map = new EnumIntMap(original);</span>
-<span class="source-line-no">057</span><span id="line-57">        kryo.reference(map);</span>
-<span class="source-line-no">058</span><span id="line-58">        map.clear();</span>
-<span class="source-line-no">059</span><span id="line-59">        for(EnumIntMap.Entry ent : original) {</span>
-<span class="source-line-no">060</span><span id="line-60">            map.put(ent.getKey(), ent.getValue());</span>
-<span class="source-line-no">061</span><span id="line-61">        }</span>
-<span class="source-line-no">062</span><span id="line-62">        return map;</span>
-<span class="source-line-no">063</span><span id="line-63">    }</span>
-<span class="source-line-no">064</span><span id="line-64">}</span>
+<span class="source-line-no">039</span><span id="line-39">        output.writeInt(data.getDefaultValue());</span>
+<span class="source-line-no">040</span><span id="line-40">        for(EnumIntMap.Entry ent : data) {</span>
+<span class="source-line-no">041</span><span id="line-41">            kryo.writeClassAndObject(output, ent.getKey());</span>
+<span class="source-line-no">042</span><span id="line-42">            output.writeVarInt(ent.getValue(), false);</span>
+<span class="source-line-no">043</span><span id="line-43">        }</span>
+<span class="source-line-no">044</span><span id="line-44">    }</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">    @Override</span>
+<span class="source-line-no">047</span><span id="line-47">    public EnumIntMap read(final Kryo kryo, final Input input, final Class&lt;? extends EnumIntMap&gt; dataClass) {</span>
+<span class="source-line-no">048</span><span id="line-48">        int length = input.readInt(true);</span>
+<span class="source-line-no">049</span><span id="line-49">        EnumIntMap data = new EnumIntMap();</span>
+<span class="source-line-no">050</span><span id="line-50">        data.setDefaultValue(input.readInt());</span>
+<span class="source-line-no">051</span><span id="line-51">        for (int i = 0; i &lt; length; i++)</span>
+<span class="source-line-no">052</span><span id="line-52">            data.put((Enum&lt;?&gt;)kryo.readClassAndObject(input), input.readVarInt(false));</span>
+<span class="source-line-no">053</span><span id="line-53">        return data;</span>
+<span class="source-line-no">054</span><span id="line-54">    }</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">    @Override</span>
+<span class="source-line-no">057</span><span id="line-57">    public EnumIntMap copy(Kryo kryo, EnumIntMap original) {</span>
+<span class="source-line-no">058</span><span id="line-58">        EnumIntMap map = new EnumIntMap(original);</span>
+<span class="source-line-no">059</span><span id="line-59">        kryo.reference(map);</span>
+<span class="source-line-no">060</span><span id="line-60">        map.clear();</span>
+<span class="source-line-no">061</span><span id="line-61">        for(EnumIntMap.Entry ent : original) {</span>
+<span class="source-line-no">062</span><span id="line-62">            map.put(ent.getKey(), ent.getValue());</span>
+<span class="source-line-no">063</span><span id="line-63">        }</span>
+<span class="source-line-no">064</span><span id="line-64">        return map;</span>
+<span class="source-line-no">065</span><span id="line-65">    }</span>
+<span class="source-line-no">066</span><span id="line-66">}</span>
 
 
 

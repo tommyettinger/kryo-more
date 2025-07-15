@@ -32,25 +32,42 @@
 <span class="source-line-no">019</span><span id="line-19"></span>
 <span class="source-line-no">020</span><span id="line-20">import com.esotericsoftware.kryo.Kryo;</span>
 <span class="source-line-no">021</span><span id="line-21">import com.esotericsoftware.kryo.io.Input;</span>
-<span class="source-line-no">022</span><span id="line-22">import com.esotericsoftware.kryo.serializers.MapSerializer;</span>
-<span class="source-line-no">023</span><span id="line-23">import com.github.tommyettinger.ds.CaseInsensitiveOrderedMap;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">public class CaseInsensitiveOrderedMapSerializer extends MapSerializer&lt;CaseInsensitiveOrderedMap&lt;?&gt;&gt; {</span>
-<span class="source-line-no">026</span><span id="line-26">    public CaseInsensitiveOrderedMapSerializer() {</span>
-<span class="source-line-no">027</span><span id="line-27">        super();</span>
-<span class="source-line-no">028</span><span id="line-28">        setKeysCanBeNull(false);</span>
-<span class="source-line-no">029</span><span id="line-29">    }</span>
+<span class="source-line-no">022</span><span id="line-22">import com.esotericsoftware.kryo.io.Output;</span>
+<span class="source-line-no">023</span><span id="line-23">import com.esotericsoftware.kryo.serializers.MapSerializer;</span>
+<span class="source-line-no">024</span><span id="line-24">import com.github.tommyettinger.ds.CaseInsensitiveOrderedMap;</span>
+<span class="source-line-no">025</span><span id="line-25">import com.github.tommyettinger.ds.OrderType;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">public class CaseInsensitiveOrderedMapSerializer extends MapSerializer&lt;CaseInsensitiveOrderedMap&lt;?&gt;&gt; {</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">    private static final OrderType[] ORDER_TYPES = OrderType.values();</span>
 <span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">    @Override</span>
-<span class="source-line-no">032</span><span id="line-32">    protected CaseInsensitiveOrderedMap&lt;?&gt; create(Kryo kryo, Input input, Class&lt;? extends CaseInsensitiveOrderedMap&lt;?&gt;&gt; type, int size) {</span>
-<span class="source-line-no">033</span><span id="line-33">        return new CaseInsensitiveOrderedMap&lt;&gt;(size);</span>
+<span class="source-line-no">031</span><span id="line-31">    public CaseInsensitiveOrderedMapSerializer() {</span>
+<span class="source-line-no">032</span><span id="line-32">        super();</span>
+<span class="source-line-no">033</span><span id="line-33">        setKeysCanBeNull(false);</span>
 <span class="source-line-no">034</span><span id="line-34">    }</span>
 <span class="source-line-no">035</span><span id="line-35"></span>
 <span class="source-line-no">036</span><span id="line-36">    @Override</span>
-<span class="source-line-no">037</span><span id="line-37">    protected CaseInsensitiveOrderedMap&lt;?&gt; createCopy(Kryo kryo, CaseInsensitiveOrderedMap&lt;?&gt; original) {</span>
-<span class="source-line-no">038</span><span id="line-38">        return new CaseInsensitiveOrderedMap&lt;&gt;(original.size(), original.getLoadFactor());</span>
-<span class="source-line-no">039</span><span id="line-39">    }</span>
-<span class="source-line-no">040</span><span id="line-40">}</span>
+<span class="source-line-no">037</span><span id="line-37">    protected void writeHeader(Kryo kryo, Output output, CaseInsensitiveOrderedMap&lt;?&gt; data) {</span>
+<span class="source-line-no">038</span><span id="line-38">        output.writeVarInt(data.getOrderType().ordinal(), true);</span>
+<span class="source-line-no">039</span><span id="line-39">        kryo.writeClassAndObject(output, data.getDefaultValue());</span>
+<span class="source-line-no">040</span><span id="line-40">    }</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">    @Override</span>
+<span class="source-line-no">043</span><span id="line-43">    protected CaseInsensitiveOrderedMap&lt;?&gt; create(Kryo kryo, Input input, Class&lt;? extends CaseInsensitiveOrderedMap&lt;?&gt;&gt; type, int size) {</span>
+<span class="source-line-no">044</span><span id="line-44">        CaseInsensitiveOrderedMap data = new CaseInsensitiveOrderedMap&lt;&gt;(size, ORDER_TYPES[input.readVarInt(true)]);</span>
+<span class="source-line-no">045</span><span id="line-45">        kryo.reference(data);</span>
+<span class="source-line-no">046</span><span id="line-46">        data.setDefaultValue(kryo.readClassAndObject(input));</span>
+<span class="source-line-no">047</span><span id="line-47">        return data;</span>
+<span class="source-line-no">048</span><span id="line-48">    }</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">    @Override</span>
+<span class="source-line-no">051</span><span id="line-51">    protected CaseInsensitiveOrderedMap&lt;?&gt; createCopy(Kryo kryo, CaseInsensitiveOrderedMap&lt;?&gt; original) {</span>
+<span class="source-line-no">052</span><span id="line-52">        CaseInsensitiveOrderedMap data = new CaseInsensitiveOrderedMap&lt;&gt;(original.size(), original.getLoadFactor(), original.getOrderType());</span>
+<span class="source-line-no">053</span><span id="line-53">        kryo.reference(data);</span>
+<span class="source-line-no">054</span><span id="line-54">        data.setDefaultValue(original.getDefaultValue());</span>
+<span class="source-line-no">055</span><span id="line-55">        return data;</span>
+<span class="source-line-no">056</span><span id="line-56">    }</span>
+<span class="source-line-no">057</span><span id="line-57">}</span>
 
 
 

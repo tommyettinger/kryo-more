@@ -36,34 +36,46 @@
 <span class="source-line-no">023</span><span id="line-23">import com.esotericsoftware.kryo.serializers.MapSerializer;</span>
 <span class="source-line-no">024</span><span id="line-24">import com.github.tommyettinger.ds.CharFilter;</span>
 <span class="source-line-no">025</span><span id="line-25">import com.github.tommyettinger.ds.FilteredStringOrderedMap;</span>
-<span class="source-line-no">026</span><span id="line-26">import com.github.tommyettinger.ds.Utilities;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">import java.util.NoSuchElementException;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">public class FilteredStringOrderedMapSerializer extends MapSerializer&lt;FilteredStringOrderedMap&lt;?&gt;&gt; {</span>
-<span class="source-line-no">031</span><span id="line-31">    public FilteredStringOrderedMapSerializer() {</span>
-<span class="source-line-no">032</span><span id="line-32">        super();</span>
-<span class="source-line-no">033</span><span id="line-33">        setKeysCanBeNull(false);</span>
-<span class="source-line-no">034</span><span id="line-34">    }</span>
-<span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36">    @Override</span>
-<span class="source-line-no">037</span><span id="line-37">    protected void writeHeader(Kryo kryo, Output output, FilteredStringOrderedMap&lt;?&gt; map) {</span>
-<span class="source-line-no">038</span><span id="line-38">        CharFilter fil = map.getFilter();</span>
-<span class="source-line-no">039</span><span id="line-39">        if(fil == null)</span>
-<span class="source-line-no">040</span><span id="line-40">            throw new NoSuchElementException("A FilteredStringOrderedMap must have a non-null filter to be serialized.");</span>
-<span class="source-line-no">041</span><span id="line-41">        output.writeString(fil.getName());</span>
-<span class="source-line-no">042</span><span id="line-42">    }</span>
-<span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">    @Override</span>
-<span class="source-line-no">045</span><span id="line-45">    protected FilteredStringOrderedMap&lt;?&gt; create(Kryo kryo, Input input, Class&lt;? extends FilteredStringOrderedMap&lt;?&gt;&gt; type, int size) {</span>
-<span class="source-line-no">046</span><span id="line-46">        return new FilteredStringOrderedMap&lt;&gt;(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor());</span>
-<span class="source-line-no">047</span><span id="line-47">    }</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">    @Override</span>
-<span class="source-line-no">050</span><span id="line-50">    protected FilteredStringOrderedMap&lt;?&gt; createCopy(Kryo kryo, FilteredStringOrderedMap&lt;?&gt; original) {</span>
-<span class="source-line-no">051</span><span id="line-51">        return new FilteredStringOrderedMap&lt;&gt;(original.getFilter(), original.size(), original.getLoadFactor());</span>
-<span class="source-line-no">052</span><span id="line-52">    }</span>
-<span class="source-line-no">053</span><span id="line-53">}</span>
+<span class="source-line-no">026</span><span id="line-26">import com.github.tommyettinger.ds.OrderType;</span>
+<span class="source-line-no">027</span><span id="line-27">import com.github.tommyettinger.ds.Utilities;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">import java.util.NoSuchElementException;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">public class FilteredStringOrderedMapSerializer extends MapSerializer&lt;FilteredStringOrderedMap&lt;?&gt;&gt; {</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">    private static final OrderType[] ORDER_TYPES = OrderType.values();</span>
+<span class="source-line-no">034</span><span id="line-34"></span>
+<span class="source-line-no">035</span><span id="line-35">    public FilteredStringOrderedMapSerializer() {</span>
+<span class="source-line-no">036</span><span id="line-36">        super();</span>
+<span class="source-line-no">037</span><span id="line-37">        setKeysCanBeNull(false);</span>
+<span class="source-line-no">038</span><span id="line-38">    }</span>
+<span class="source-line-no">039</span><span id="line-39"></span>
+<span class="source-line-no">040</span><span id="line-40">    @Override</span>
+<span class="source-line-no">041</span><span id="line-41">    protected void writeHeader(Kryo kryo, Output output, FilteredStringOrderedMap&lt;?&gt; data) {</span>
+<span class="source-line-no">042</span><span id="line-42">        CharFilter fil = data.getFilter();</span>
+<span class="source-line-no">043</span><span id="line-43">        if(fil == null)</span>
+<span class="source-line-no">044</span><span id="line-44">            throw new NoSuchElementException("A FilteredStringOrderedMap must have a non-null filter to be serialized.");</span>
+<span class="source-line-no">045</span><span id="line-45">        output.writeString(fil.getName());</span>
+<span class="source-line-no">046</span><span id="line-46">        output.writeVarInt(data.getOrderType().ordinal(), true);</span>
+<span class="source-line-no">047</span><span id="line-47">        kryo.writeClassAndObject(output, data.getDefaultValue());</span>
+<span class="source-line-no">048</span><span id="line-48">    }</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">    @SuppressWarnings({"rawtypes", "unchecked"})</span>
+<span class="source-line-no">051</span><span id="line-51">    @Override</span>
+<span class="source-line-no">052</span><span id="line-52">    protected FilteredStringOrderedMap&lt;?&gt; create(Kryo kryo, Input input, Class&lt;? extends FilteredStringOrderedMap&lt;?&gt;&gt; type, int size) {</span>
+<span class="source-line-no">053</span><span id="line-53">        FilteredStringOrderedMap data = new FilteredStringOrderedMap(CharFilter.get(input.readString()), size, Utilities.getDefaultLoadFactor(),</span>
+<span class="source-line-no">054</span><span id="line-54">                ORDER_TYPES[input.readVarInt(true)]);</span>
+<span class="source-line-no">055</span><span id="line-55">        data.setDefaultValue(kryo.readClassAndObject(input));</span>
+<span class="source-line-no">056</span><span id="line-56">        return data;</span>
+<span class="source-line-no">057</span><span id="line-57">    }</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">    @Override</span>
+<span class="source-line-no">060</span><span id="line-60">    protected FilteredStringOrderedMap&lt;?&gt; createCopy(Kryo kryo, FilteredStringOrderedMap&lt;?&gt; original) {</span>
+<span class="source-line-no">061</span><span id="line-61">        FilteredStringOrderedMap data = new FilteredStringOrderedMap(original.getFilter(), original.size(), original.getLoadFactor(), original.getOrderType());</span>
+<span class="source-line-no">062</span><span id="line-62">        data.setDefaultValue(original.getDefaultValue());</span>
+<span class="source-line-no">063</span><span id="line-63">        return data;</span>
+<span class="source-line-no">064</span><span id="line-64">    }</span>
+<span class="source-line-no">065</span><span id="line-65">}</span>
 
 
 
