@@ -19,6 +19,7 @@ package com.github.tommyettinger.kryo.jdkgdxds;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 import com.github.tommyettinger.ds.CaseInsensitiveMap;
 
@@ -29,12 +30,23 @@ public class CaseInsensitiveMapSerializer extends MapSerializer<CaseInsensitiveM
     }
 
     @Override
-    protected CaseInsensitiveMap<?> create(Kryo kryo, Input input, Class<? extends CaseInsensitiveMap<?>> type, int size) {
-        return new CaseInsensitiveMap<>(size);
+    protected void writeHeader(Kryo kryo, Output output, CaseInsensitiveMap<?> data) {
+        kryo.writeClassAndObject(output, data.getDefaultValue());
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Override
+    protected CaseInsensitiveMap<?> create(Kryo kryo, Input input, Class<? extends CaseInsensitiveMap<?>> type, int size) {
+        CaseInsensitiveMap data = new CaseInsensitiveMap(size);
+        data.setDefaultValue(kryo.readClassAndObject(input));
+        return data;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected CaseInsensitiveMap<?> createCopy(Kryo kryo, CaseInsensitiveMap<?> original) {
-        return new CaseInsensitiveMap<>(original.size(), original.getLoadFactor());
+        CaseInsensitiveMap data = new CaseInsensitiveMap(original.size(), original.getLoadFactor());
+        data.setDefaultValue(original.getDefaultValue());
+        return data;
     }
 }
