@@ -263,6 +263,101 @@ public class MathTest {
     }
 
     @Test
+    public void testPlane() {
+        Kryo kryo = new Kryo();
+        kryo.register(Plane.class, new PlaneSerializer());
+
+        Plane[] testing = {
+                new Plane(new Vector3(0, 0, 0), 0),
+                new Plane(new Vector3(-0f, -0f, -0f), -0f),
+                new Plane(new Vector3(1, 0, 0), 0),
+                new Plane(new Vector3(0, 1, 0), 0),
+                new Plane(new Vector3(0, 0, 1), 0),
+                new Plane(new Vector3(0, 0, 0), 1),
+                new Plane(new Vector3(1, 1, 1), 1),
+                new Plane(new Vector3(-1, -1, -1), -1),
+                new Plane(new Vector3(9999.9f, 9999.9f, 9999.9f), 9999.9f),
+                new Plane(new Vector3(9999.9f, -9999.9f, 0), -0f),
+                new Plane(new Vector3(Float.NaN, Float.NaN, Float.NaN), Float.NaN),
+                new Plane(new Vector3(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN), Float.MIN_VALUE),
+                new Plane(new Vector3(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE), Float.MIN_VALUE),
+                new Plane(new Vector3(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE), -Float.MIN_VALUE),
+                new Plane(new Vector3(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f), 0x7FF.FFp-5f),
+                new Plane(new Vector3(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f), -0x7FF.FFp-5f)};
+
+        for (Plane data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Plane data2 = kryo.readObject(input, Plane.class);
+                Assert.assertEquals(data.normal, data2.normal);
+                Assert.assertEquals(data.d, data2.d, 0.0001f);
+            }
+        }
+    }
+
+    @Test
+    public void testPolygon() {
+        Kryo kryo = new Kryo();
+        kryo.register(Polygon.class, new PolygonSerializer());
+
+        RandomXS128 random = new RandomXS128(12345L);
+        Polygon[] polygons = {new Polygon(), new Polygon(), new Polygon()};
+        for (int i = 0; i < polygons.length; i++) {
+            float[] vs = new float[6 + i + i];
+            for (int j = 0; j < vs.length; j++) {
+                vs[j] = random.nextFloat() * 10 - 5;
+            }
+            polygons[i].setVertices(vs);
+            polygons[i].setPosition(random.nextFloat(), random.nextFloat());
+            polygons[i].setOrigin(random.nextFloat(), random.nextFloat());
+            polygons[i].setScale(random.nextFloat() * 2, random.nextFloat() * 2);
+            polygons[i].setRotation(random.nextFloat() * 360);
+        }
+
+        for (Polygon data : polygons) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Polygon data2 = kryo.readObject(input, Polygon.class);
+                Assert.assertArrayEquals(data.getTransformedVertices(), data2.getTransformedVertices(), 0.0001f);
+            }
+        }
+    }
+
+    @Test
+    public void testPolyline() {
+        Kryo kryo = new Kryo();
+        kryo.register(Polyline.class, new PolylineSerializer());
+
+        RandomXS128 random = new RandomXS128(12345L);
+        Polyline[] polylines = {new Polyline(), new Polyline(), new Polyline()};
+        for (int i = 0; i < polylines.length; i++) {
+            float[] vs = new float[6 + i + i];
+            for (int j = 0; j < vs.length; j++) {
+                vs[j] = random.nextFloat() * 10 - 5;
+            }
+            polylines[i].setVertices(vs);
+            polylines[i].setPosition(random.nextFloat(), random.nextFloat());
+            polylines[i].setOrigin(random.nextFloat(), random.nextFloat());
+            polylines[i].setScale(random.nextFloat() * 2, random.nextFloat() * 2);
+            polylines[i].setRotation(random.nextFloat() * 360);
+        }
+
+        for (Polyline data : polylines) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Polyline data2 = kryo.readObject(input, Polyline.class);
+                Assert.assertArrayEquals(data.getTransformedVertices(), data2.getTransformedVertices(), 0.0001f);
+            }
+        }
+    }
+
+    @Test
     public void testVector2() {
         Kryo kryo = new Kryo();
         kryo.register(Vector2.class, new Vector2Serializer());
