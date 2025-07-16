@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.OrientedBoundingBox;
+import com.badlogic.gdx.math.collision.Ray;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -387,6 +388,41 @@ public class MathTest {
             try (Input input = new Input(bytes)) {
                 Quaternion data2 = kryo.readObject(input, Quaternion.class);
                 Assert.assertEquals(data, data2);
+            }
+        }
+    }
+
+    @Test
+    public void testRay() {
+        Kryo kryo = new Kryo();
+        kryo.register(Ray.class, new RaySerializer());
+
+        Vector3[] testing = {
+                new Vector3(0, 0, 0),
+                new Vector3(-0f, -0f, -0f),
+                new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0),
+                new Vector3(0, 0, 1),
+                new Vector3(1, 1, 1),
+                new Vector3(-1, -1, -1),
+                new Vector3(9999.9f, 9999.9f, 9999.9f),
+                new Vector3(9999.9f, -9999.9f, 0),
+                new Vector3(Float.NaN, Float.NaN, Float.NaN),
+                new Vector3(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN),
+                new Vector3(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Vector3(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Vector3(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f), new Vector3(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Vector3 origin : testing) {
+            for (Vector3 direction : testing) {
+                Ray data = new Ray(origin, direction);
+                Output output = new Output(32, -1);
+                kryo.writeObject(output, data);
+                byte[] bytes = output.toBytes();
+                try (Input input = new Input(bytes)) {
+                    Ray data2 = kryo.readObject(input, Ray.class);
+                    Assert.assertEquals(data, data2);
+                }
             }
         }
     }
