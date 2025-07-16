@@ -428,6 +428,40 @@ public class MathTest {
     }
 
     @Test
+    public void testRectangle() {
+        Kryo kryo = new Kryo();
+        kryo.register(Rectangle.class, new RectangleSerializer());
+
+        Rectangle[] testing = {
+                new Rectangle(0, 0, 0, 0),
+                new Rectangle(-0f, -0f, -0f, -0f),
+                new Rectangle(1, 0, 0, 0),
+                new Rectangle(0, 1, 0, 0),
+                new Rectangle(0, 0, 1, 0),
+                new Rectangle(0, 0, 0, 1),
+                new Rectangle(1, 1, 1, 1),
+                new Rectangle(-1, -1, -1, -1),
+                new Rectangle(9999.9f, 9999.9f, 9999.9f, 9999.9f),
+                new Rectangle(9999.9f, -9999.9f, 0, -0f),
+                new Rectangle(Float.NaN, Float.NaN, Float.NaN, Float.NaN),
+                new Rectangle(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NaN, Float.MIN_VALUE),
+                new Rectangle(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE),
+                new Rectangle(-Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE, -Float.MIN_VALUE),
+                new Rectangle(0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f, 0x7FF.FFp-5f),
+                new Rectangle(-0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f, -0x7FF.FFp-5f)};
+
+        for (Rectangle data : testing) {
+            Output output = new Output(32, -1);
+            kryo.writeObject(output, data);
+            byte[] bytes = output.toBytes();
+            try (Input input = new Input(bytes)) {
+                Rectangle data2 = kryo.readObject(input, Rectangle.class);
+                Assert.assertEquals(data, data2);
+            }
+        }
+    }
+
+    @Test
     public void testVector2() {
         Kryo kryo = new Kryo();
         kryo.register(Vector2.class, new Vector2Serializer());
