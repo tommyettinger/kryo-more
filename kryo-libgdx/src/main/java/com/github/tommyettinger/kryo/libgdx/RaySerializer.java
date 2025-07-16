@@ -44,11 +44,17 @@ public class RaySerializer extends Serializer<Ray> {
 
     @Override
     public Ray read(final Kryo kryo, final Input input, final Class<? extends Ray> dataClass) {
-        return new Ray().set(input.readFloat(), input.readFloat(), input.readFloat(), input.readFloat(), input.readFloat(), input.readFloat());
+        Ray data = new Ray();
+        data.origin.set(input.readFloat(), input.readFloat(), input.readFloat());
+        data.direction.set(input.readFloat(), input.readFloat(), input.readFloat());
+        return data;
     }
 
     @Override
     public Ray copy(Kryo kryo, Ray original) {
-        return new Ray(original.origin, original.direction);
+        Ray data = new Ray();
+        data.origin.set(original.origin);
+        data.direction.set(original.direction);
+        return data;
     }
 }
