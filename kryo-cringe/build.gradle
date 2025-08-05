@@ -22,7 +22,7 @@ mavenPublishing {
     configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
 }
 
-mavenPlainJavadocJar.archiveBaseName.set("$POM_NAME")
+plainJavadocJar.archiveBaseName.set("$POM_NAME")
 
 compileJava {
     sourceCompatibility = 8
