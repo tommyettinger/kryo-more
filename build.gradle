@@ -12,6 +12,7 @@ buildscript {
 
 apply plugin: 'java-library'
 apply plugin: 'com.vanniktech.maven.publish'
+apply plugin: 'idea'
 
 configure(subprojects) {
     apply plugin: 'java-library'
@@ -75,6 +76,8 @@ compileTestJava {
         options.release.set(8)
     }
 }
+
+idea.module.excludeDirs += [file("docs/")]
 
 repositories {
     // You can uncomment mavenLocal() if you need self-built versions, but it can be a problem with GWT or other sources dependencies.
