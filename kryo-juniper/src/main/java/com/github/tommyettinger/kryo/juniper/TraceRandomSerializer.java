@@ -21,21 +21,21 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.random.MaceRandom;
+import com.github.tommyettinger.random.TraceRandom;
 
 /**
- * Kryo {@link Serializer} for juniper {@link MaceRandom}s.
+ * Kryo {@link Serializer} for juniper {@link TraceRandom}s.
  */
-public class MaceRandomSerializer extends Serializer<MaceRandom> {
+public class TraceRandomSerializer extends Serializer<TraceRandom> {
 
-    public MaceRandomSerializer() {
+    public TraceRandomSerializer() {
         setImmutable(false);
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final MaceRandom data) {
-        output.writeVarInt(data.getStreamIdentifier(), true);
+    public void write(final Kryo kryo, final Output output, final TraceRandom data) {
+        output.writeVarLong(data.getStream(), false);
         output.writeVarLong(data.getStateA(), false);
         output.writeVarLong(data.getStateB(), false);
         output.writeVarLong(data.getStateC(), false);
@@ -44,13 +44,13 @@ public class MaceRandomSerializer extends Serializer<MaceRandom> {
     }
 
     @Override
-    public MaceRandom read(final Kryo kryo, final Input input, final Class<? extends MaceRandom> dataClass) {
-        return new MaceRandom(input.readVarInt(true), input.readVarLong(false), input.readVarLong(false),
+    public TraceRandom read(final Kryo kryo, final Input input, final Class<? extends TraceRandom> dataClass) {
+        return new TraceRandom(input.readVarLong(false), input.readVarLong(false), input.readVarLong(false),
                 input.readVarLong(false), input.readVarLong(false), input.readVarLong(false));
     }
 
     @Override
-    public MaceRandom copy(Kryo kryo, MaceRandom original) {
+    public TraceRandom copy(Kryo kryo, TraceRandom original) {
         return original.copy();
     }
 }
