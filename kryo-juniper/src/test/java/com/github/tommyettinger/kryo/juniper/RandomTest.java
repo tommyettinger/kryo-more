@@ -260,6 +260,60 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+    
+    @Test
+    public void testSoloRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(SoloRandom.class, new SoloRandomSerializer());
+
+        SoloRandom data = new SoloRandom(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            SoloRandom data2 = kryo.readObject(input, SoloRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testThrashRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(ThrashRandom.class, new ThrashRandomSerializer());
+
+        ThrashRandom data = new ThrashRandom(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ThrashRandom data2 = kryo.readObject(input, ThrashRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+    
+    @Test
+    public void testThrooshRandom() {
+        Kryo kryo = new Kryo();
+        kryo.register(ThrooshRandom.class, new ThrooshRandomSerializer());
+
+        ThrooshRandom data = new ThrooshRandom(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            ThrooshRandom data2 = kryo.readObject(input, ThrooshRandom.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
 
     @Test
     public void testChoo32Random() {
@@ -459,17 +513,17 @@ public class RandomTest {
     }
 
     @Test
-    public void testMaceRandom() {
+    public void testTraceRandom() {
         Kryo kryo = new Kryo();
-        kryo.register(MaceRandom.class, new MaceRandomSerializer());
+        kryo.register(TraceRandom.class, new TraceRandomSerializer());
 
-        MaceRandom data = new MaceRandom(-12345L);
+        TraceRandom data = new TraceRandom(-12345L);
 
         Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            MaceRandom data2 = kryo.readObject(input, MaceRandom.class);
+            TraceRandom data2 = kryo.readObject(input, TraceRandom.class);
             Assert.assertEquals(data.nextInt(), data2.nextInt());
             Assert.assertEquals(data.nextLong(), data2.nextLong());
             Assert.assertEquals(data, data2);
