@@ -32,7 +32,7 @@ compileTestJava {
 }
 
 dependencies {
-    api "com.github.tommyettinger:kryo-digital:0.7.0.1"
+    api "com.github.tommyettinger:kryo-digital:0.9.2.1"
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
     testImplementation "junit:junit:4.13.2"
