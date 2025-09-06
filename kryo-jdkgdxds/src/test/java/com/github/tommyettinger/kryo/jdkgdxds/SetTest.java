@@ -219,6 +219,23 @@ public class SetTest {
     }
 
     @Test
+    public void testCharBitSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(CharBitSet.class, new CharBitSetSerializer());
+
+        CharBitSet data = new CharBitSet(1024);
+        data.addAll("Gotta ċątch ém all!");
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CharBitSet data2 = kryo.readObject(input, CharBitSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testNumberedSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);
