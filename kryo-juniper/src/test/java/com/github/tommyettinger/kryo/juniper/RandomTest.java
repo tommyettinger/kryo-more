@@ -45,6 +45,25 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testMx3Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Mx3Random.class, new Mx3RandomSerializer());
+
+        Mx3Random data = new Mx3Random(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Mx3Random data2 = kryo.readObject(input, Mx3Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
     @Test
     public void testVanDerCorputQuasiRandom() {
         Kryo kryo = new Kryo();
