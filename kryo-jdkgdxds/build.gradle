@@ -13,7 +13,7 @@ javadoc.options.source("8")
 ((StandardJavadocDocletOptions)javadoc.options).linkSource(true)
 ((StandardJavadocDocletOptions)javadoc.options).noTimestamp(true)
 ((StandardJavadocDocletOptions)javadoc.options).use(true)
-((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2024.")
+((StandardJavadocDocletOptions)javadoc.options).bottom("Copyright &#169; Tommy Ettinger 2022-2025.")
 
 compileJava {
     sourceCompatibility = 8
@@ -32,7 +32,7 @@ compileTestJava {
 }
 
 dependencies {
-    api "com.github.tommyettinger:kryo-digital:0.9.2.1"
+    api "com.github.tommyettinger:kryo-digital:0.9.4.1"
     api "com.esotericsoftware:kryo:$kryoVersion"
     api "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
     testImplementation "junit:junit:4.13.2"
