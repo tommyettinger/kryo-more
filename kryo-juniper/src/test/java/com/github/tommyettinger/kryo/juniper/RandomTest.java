@@ -369,6 +369,7 @@ public class RandomTest {
             Assert.assertEquals(data, data2);
         }
     }
+
     @Test
     public void testFourWheelRandom() {
         Kryo kryo = new Kryo();
