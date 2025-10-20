@@ -26,7 +26,7 @@ Each sub-library has its own version, linked to the version of the library it de
 The last component of the version is usually .0, but can be increased for bug-fixes to the same linked library version,
 or if Kryo itself had a (compatible) update available but the linked library did not have an update.
 
-  - kryo-libgdx is currently at version 1.13.1.1
+  - kryo-libgdx is currently at version 1.14.0.1
   - kryo-regexodus is currently version 0.1.19.1
   - kryo-digital is currently version 0.9.4.1
   - kryo-jdkgdxds is currently version 1.13.0.1
@@ -45,7 +45,7 @@ Gradle dependency info:
 kryo-libgdx:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-libgdx:1.13.1.1"
+implementation "com.github.tommyettinger:kryo-libgdx:1.14.0.1"
 ```
 
 kryo-regexodus:
@@ -104,7 +104,7 @@ kryo-libgdx:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-libgdx</artifactId>
-  <version>1.13.1.1</version>
+  <version>1.14.0.1</version>
 </dependency>
 ```
 
