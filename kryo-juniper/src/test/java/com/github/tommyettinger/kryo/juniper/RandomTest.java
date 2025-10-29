@@ -83,6 +83,24 @@ public class RandomTest {
     }
 
     @Test
+    public void testLCG64Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(LCG64Random.class, new LCG64RandomSerializer());
+
+        LCG64Random data = new LCG64Random(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LCG64Random data2 = kryo.readObject(input, LCG64Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testVanDerCorputQuasiRandom() {
         Kryo kryo = new Kryo();
         kryo.register(VanDerCorputQuasiRandom.class, new VanDerCorputQuasiRandomSerializer());
