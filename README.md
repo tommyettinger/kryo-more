@@ -35,7 +35,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
     - This depends on simple-graphs v3.0.0, not the current 5.1.1, because versions since 4.0.0 don't make the edges on
       graphs serializable in any way (they use a lambda per-edge).
-  - kryo-gdcrux is currently version 0.1.1.1
+  - kryo-gdcrux is currently version 0.1.2.1
   - kryo-gand is currently version 0.3.5.1
 
 All of these sub-libraries depend on Java 8 or higher, except for some older versions of kryo-digital and kryo-juniper.
@@ -81,7 +81,7 @@ implementation "com.github.tommyettinger:kryo-cringe:0.3.0.1"
 kryo-gdcrux:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-gdcrux:0.1.1.1"
+implementation "com.github.tommyettinger:kryo-gdcrux:0.1.2.1"
 ```
 
 kryo-gand:
@@ -164,7 +164,7 @@ kryo-gdcrux:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-gdcrux</artifactId>
-  <version>0.1.1.1</version>
+  <version>0.1.2.1</version>
 </dependency>
 ```
 
