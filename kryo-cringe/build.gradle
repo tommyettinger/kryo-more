@@ -1,6 +1,6 @@
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
-version "$VERSION_NAME"
+version = "$VERSION_NAME"
 
 eclipse.project.name = project.name
 

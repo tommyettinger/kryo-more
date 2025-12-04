@@ -2,11 +2,11 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.34.0'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.35.0'
     }
 }
 
@@ -26,9 +26,9 @@ configure(subprojects) {
 
 def projectName = 'kryo-more'
 
-group 'com.github.tommyettinger'
+group = 'com.github.tommyettinger'
 
-version "$VERSION_NAME"
+version = "$VERSION_NAME"
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
@@ -38,11 +38,8 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-//        maven { url 'https://s01.oss.sonatype.org' }
         google()
-//        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-//        maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
-        maven { url 'https://jitpack.io' }
+        maven { url = 'https://jitpack.io' }
     }
 }
 
@@ -83,6 +80,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     google()
-    maven { url 'https://central.sonatype.com/repository/maven-snapshots/' }
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }
+    maven { url = 'https://jitpack.io' }
 }
