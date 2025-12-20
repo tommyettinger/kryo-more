@@ -15,45 +15,41 @@
  *
  */
 
-package com.github.tommyettinger.kryo.jdkgdxds;
+package com.github.tommyettinger.kryo.regexodus;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.tommyettinger.ds.OffsetBitSet;
+import regexodus.ds.CharBitSet;
 
 /**
- * Kryo {@link Serializer} for jdkgdxds {@link OffsetBitSet}s.
+ * Kryo {@link Serializer} for jdkgdxds {@link CharBitSet}s.
  */
-public class OffsetBitSetSerializer extends Serializer<OffsetBitSet> {
+public class CharBitSetSerializer extends Serializer<CharBitSet> {
 
-    public OffsetBitSetSerializer() {
+    public CharBitSetSerializer() {
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final OffsetBitSet data) {
+    public void write(final Kryo kryo, final Output output, final CharBitSet data) {
         int[] bits = data.getRawBits();
         int length = bits.length;
-        int off = data.getOffset();
-        output.writeInt(off);
         output.writeInt(length, true);
         output.writeInts(bits, 0, length);
     }
 
     @Override
-    public OffsetBitSet read(final Kryo kryo, final Input input, final Class<? extends OffsetBitSet> dataClass) {
-        int off = input.readInt();
+    public CharBitSet read(final Kryo kryo, final Input input, final Class<? extends CharBitSet> dataClass) {
         int length = input.readInt(true);
-        OffsetBitSet data = new OffsetBitSet();
+        CharBitSet data = new CharBitSet();
         data.setRawBits(input.readInts(length));
-        data.setOffset(off);
         return data;
     }
 
     @Override
-    public OffsetBitSet copy(Kryo kryo, OffsetBitSet original) {
-        return new OffsetBitSet(original);
+    public CharBitSet copy(Kryo kryo, CharBitSet original) {
+        return new CharBitSet(original);
     }
 }

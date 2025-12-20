@@ -22,8 +22,10 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import org.junit.Assert;
 import org.junit.Test;
+import regexodus.Category;
 import regexodus.Pattern;
 import regexodus.REFlags;
+import regexodus.ds.CharBitSet;
 
 public class RegexodusTest {
     @Test
@@ -43,4 +45,23 @@ public class RegexodusTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+
+    @Test
+    public void testCharBitSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(CharBitSet.class, new CharBitSetSerializer());
+
+        CharBitSet data = Category.LowercaseLetter.decompress();
+        data.addAll("ATOZ €".toCharArray());
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CharBitSet data2 = kryo.readObject(input, CharBitSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
 }
