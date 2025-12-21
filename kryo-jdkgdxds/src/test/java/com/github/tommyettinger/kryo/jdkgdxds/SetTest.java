@@ -236,6 +236,23 @@ public class SetTest {
     }
 
     @Test
+    public void testCharBitSetResizable() {
+        Kryo kryo = new Kryo();
+        kryo.register(CharBitSetResizable.class, new CharBitSetResizableSerializer());
+
+        CharBitSetResizable data = new CharBitSetResizable(1024);
+        data.addAll("Gotta ċątch ém all!".toCharArray());
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CharBitSetResizable data2 = kryo.readObject(input, CharBitSetResizable.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testNumberedSet() {
         Kryo kryo = new Kryo();
         kryo.register(String.class);
