@@ -10,7 +10,7 @@ de/serialize objects from [RegExodus](https://github.com/tommyettinger/RegExodus
 All of these are maintained by [tommyettinger](https://github.com/tommyettinger), who also maintains
 this serialization library. Arguably more importantly, this updates Kryo
 support for [libGDX](https://libgdx.com) classes (compared to the only available libraries
-before for libGDX+Kryo, which used Kryo 4.x), and also supports
+before for libGDX+Kryo, which used Kryo 4.x). This also supports
 older [simple-graphs](https://github.com/earlygrey/simple-graphs).
 
 You may want to consider using [Fory](https://fory.apache.org) serialization instead of Kryo, since it
@@ -29,7 +29,7 @@ or if Kryo itself had a (compatible) update available but the linked library did
   - kryo-libgdx is currently at version 1.14.0.1
   - kryo-regexodus is currently version 0.1.20.1
   - kryo-digital is currently version 0.9.8.1
-  - kryo-jdkgdxds is currently version 1.13.2.1
+  - kryo-jdkgdxds is currently version 1.14.0.1
   - kryo-juniper is currently version 0.8.5.1
   - kryo-cringe is currently version 0.3.0.1
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
@@ -63,7 +63,7 @@ implementation "com.github.tommyettinger:kryo-digital:0.9.8.1"
 kryo-jdkgdxds:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-jdkgdxds:1.13.2.1"
+implementation "com.github.tommyettinger:kryo-jdkgdxds:1.14.0.1"
 ```
 
 kryo-juniper:
@@ -134,7 +134,7 @@ kryo-jdkgdxds:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-jdkgdxds</artifactId>
-  <version>1.13.2.1</version>
+  <version>1.14.0.1</version>
 </dependency>
 ```
 
