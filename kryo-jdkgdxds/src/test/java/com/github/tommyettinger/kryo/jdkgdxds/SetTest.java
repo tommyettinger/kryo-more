@@ -224,7 +224,7 @@ public class SetTest {
         kryo.register(CharBitSet.class, new CharBitSetSerializer());
 
         CharBitSet data = new CharBitSet(1024);
-        data.addAll("Gotta ċątch ém all!");
+        data.addSeq("Gotta ċątch ém all!");
 
         Output output = new Output(32, -1);
         kryo.writeObject(output, data);
@@ -236,18 +236,18 @@ public class SetTest {
     }
 
     @Test
-    public void testCharBitSetResizable() {
+    public void testCharBitSetFixedSize() {
         Kryo kryo = new Kryo();
-        kryo.register(CharBitSetResizable.class, new CharBitSetResizableSerializer());
+        kryo.register(CharBitSetFixedSize.class, new CharBitSetFixedSizeSerializer());
 
-        CharBitSetResizable data = new CharBitSetResizable(1024);
-        data.addAll("Gotta ċątch ém all!".toCharArray());
+        CharBitSetFixedSize data = new CharBitSetFixedSize();
+        data.addSeq("Gotta ċątch ém all!");
 
         Output output = new Output(32, -1);
         kryo.writeObject(output, data);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            CharBitSetResizable data2 = kryo.readObject(input, CharBitSetResizable.class);
+            CharBitSetFixedSize data2 = kryo.readObject(input, CharBitSetFixedSize.class);
             Assert.assertEquals(data, data2);
         }
     }

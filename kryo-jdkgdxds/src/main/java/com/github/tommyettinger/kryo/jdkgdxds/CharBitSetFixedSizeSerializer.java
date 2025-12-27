@@ -22,35 +22,32 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.ds.CharBitSet;
-import com.github.tommyettinger.ds.CharBitSetResizable;
+import com.github.tommyettinger.ds.CharBitSetFixedSize;
 
 /**
- * Kryo {@link Serializer} for jdkgdxds {@link CharBitSetResizable}s.
+ * Kryo {@link Serializer} for jdkgdxds {@link CharBitSetFixedSize}s.
  */
-public class CharBitSetResizableSerializer extends Serializer<CharBitSetResizable> {
+public class CharBitSetFixedSizeSerializer extends Serializer<CharBitSetFixedSize> {
 
-    public CharBitSetResizableSerializer() {
+    public CharBitSetFixedSizeSerializer() {
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final CharBitSetResizable data) {
+    public void write(final Kryo kryo, final Output output, final CharBitSetFixedSize data) {
         int[] bits = data.getRawBits();
-        int length = bits.length;
-        output.writeInt(length, true);
-        output.writeInts(bits, 0, length);
+        output.writeInts(bits, 0, 2048);
     }
 
     @Override
-    public CharBitSetResizable read(final Kryo kryo, final Input input, final Class<? extends CharBitSetResizable> dataClass) {
-        int length = input.readInt(true);
-        CharBitSetResizable cbsr = new CharBitSetResizable();
-        cbsr.setRawBits(input.readInts(length));
+    public CharBitSetFixedSize read(final Kryo kryo, final Input input, final Class<? extends CharBitSetFixedSize> dataClass) {
+        CharBitSetFixedSize cbsr = new CharBitSetFixedSize();
+        cbsr.setRawBits(input.readInts(2048));
         return cbsr;
     }
 
     @Override
-    public CharBitSetResizable copy(Kryo kryo, CharBitSetResizable original) {
-        return new CharBitSetResizable(original);
+    public CharBitSetFixedSize copy(Kryo kryo, CharBitSetFixedSize original) {
+        return new CharBitSetFixedSize(original);
     }
 }
