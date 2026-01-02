@@ -695,6 +695,24 @@ public class RandomTest {
     }
 
     @Test
+    public void testLamb32Random() {
+        Kryo kryo = new Kryo();
+        kryo.register(Lamb32Random.class, new Lamb32RandomSerializer());
+
+        Lamb32Random data = new Lamb32Random(-12345L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            Lamb32Random data2 = kryo.readObject(input, Lamb32Random.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testJsf32Random() {
         Kryo kryo = new Kryo();
         kryo.register(Jsf32Random.class, new Jsf32RandomSerializer());
