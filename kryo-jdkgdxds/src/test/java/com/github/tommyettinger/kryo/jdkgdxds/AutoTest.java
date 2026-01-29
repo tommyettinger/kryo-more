@@ -153,4 +153,21 @@ public class AutoTest {
             Assert.assertEquals(data, data2);
         }
     }
+
+    @Test
+    public void testStringJunction() {
+        Kryo kryo = new Kryo();
+        kryo.setRegistrationRequired(true);
+        kryo.register(StringJunction.class, new StringJunctionSerializer());
+
+        StringJunction data = StringJunction.parse("(foo|bar|baz)^QUUX^woop woop");
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            StringJunction data2 = kryo.readObject(input, StringJunction.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
 }
