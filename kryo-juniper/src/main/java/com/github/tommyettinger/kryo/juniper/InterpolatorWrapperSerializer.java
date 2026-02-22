@@ -22,34 +22,34 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.random.InterpolatedRandom;
+import com.github.tommyettinger.random.InterpolatorWrapper;
 
 /**
- * Kryo {@link Serializer} for juniper {@link InterpolatedRandom}s.
- * Internally, this stores the serialized String produced by {@link InterpolatedRandom#stringSerialize(Base)}.
+ * Kryo {@link Serializer} for juniper {@link InterpolatorWrapper}s.
+ * Internally, this stores the serialized String produced by {@link InterpolatorWrapper#stringSerialize(Base)}.
  * This allows it to reliably store the Interpolator it needs.
  */
-public class InterpolatedRandomSerializer extends Serializer<InterpolatedRandom> {
+public class InterpolatorWrapperSerializer extends Serializer<InterpolatorWrapper> {
 
-    public InterpolatedRandomSerializer() {
+    public InterpolatorWrapperSerializer() {
         setImmutable(false);
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final InterpolatedRandom data) {
+    public void write(final Kryo kryo, final Output output, final InterpolatorWrapper data) {
         output.writeString(data.stringSerialize(Base.BASE86));
     }
 
     @Override
-    public InterpolatedRandom read(final Kryo kryo, final Input input, final Class<? extends InterpolatedRandom> dataClass) {
-        InterpolatedRandom random = new InterpolatedRandom(0L);
+    public InterpolatorWrapper read(final Kryo kryo, final Input input, final Class<? extends InterpolatorWrapper> dataClass) {
+        InterpolatorWrapper random = new InterpolatorWrapper(0L);
         random.stringDeserialize(input.readString(), Base.BASE86);
         return random;
     }
 
     @Override
-    public InterpolatedRandom copy(Kryo kryo, InterpolatedRandom original) {
+    public InterpolatorWrapper copy(Kryo kryo, InterpolatorWrapper original) {
         return original.copy();
     }
 }

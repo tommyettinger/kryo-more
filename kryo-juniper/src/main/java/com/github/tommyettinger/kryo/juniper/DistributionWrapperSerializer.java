@@ -22,34 +22,34 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.random.DistributedRandom;
+import com.github.tommyettinger.random.DistributionWrapper;
 
 /**
- * Kryo {@link Serializer} for juniper {@link DistributedRandom}s.
- * Internally, this stores the serialized String produced by {@link DistributedRandom#stringSerialize(Base)}.
+ * Kryo {@link Serializer} for juniper {@link DistributionWrapper}s.
+ * Internally, this stores the serialized String produced by {@link DistributionWrapper#stringSerialize(Base)}.
  * This allows it to reliably store the Distribution and ReductionMode it needs.
  */
-public class DistributedRandomSerializer extends Serializer<DistributedRandom> {
+public class DistributionWrapperSerializer extends Serializer<DistributionWrapper> {
 
-    public DistributedRandomSerializer() {
+    public DistributionWrapperSerializer() {
         setImmutable(false);
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final DistributedRandom data) {
+    public void write(final Kryo kryo, final Output output, final DistributionWrapper data) {
         output.writeString(data.stringSerialize(Base.BASE86));
     }
 
     @Override
-    public DistributedRandom read(final Kryo kryo, final Input input, final Class<? extends DistributedRandom> dataClass) {
-        DistributedRandom random = new DistributedRandom(0L);
+    public DistributionWrapper read(final Kryo kryo, final Input input, final Class<? extends DistributionWrapper> dataClass) {
+        DistributionWrapper random = new DistributionWrapper(0L);
         random.stringDeserialize(input.readString(), Base.BASE86);
         return random;
     }
 
     @Override
-    public DistributedRandom copy(Kryo kryo, DistributedRandom original) {
+    public DistributionWrapper copy(Kryo kryo, DistributionWrapper original) {
         return original.copy();
     }
 }

@@ -803,19 +803,19 @@ public class RandomTest {
     }
 
     @Test
-    public void testInterpolatedRandom() {
+    public void testInterpolatorWrapper() {
         Kryo kryo = new Kryo();
-//        InterpolatedRandomSerializer ser = new InterpolatedRandomSerializer();
-        kryo.register(InterpolatedRandom.class, new InterpolatedRandomSerializer());
+//        InterpolatorWrapperSerializer ser = new InterpolatorWrapperSerializer();
+        kryo.register(InterpolatorWrapper.class, new InterpolatorWrapperSerializer());
 
-        InterpolatedRandom random = new InterpolatedRandom(Interpolations.kumaraswamyExtremeB,
+        InterpolatorWrapper random = new InterpolatorWrapper(Interpolations.kumaraswamyExtremeB,
                 new DistinctRandom(123L));
 
         Output output = new Output(32, -1);
         kryo.writeObject(output, random);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            InterpolatedRandom data2 = kryo.readObject(input, InterpolatedRandom.class);
+            InterpolatorWrapper data2 = kryo.readObject(input, InterpolatorWrapper.class);
             Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
             Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
             Assert.assertTrue(EnhancedRandom.areEqual(random, data2));

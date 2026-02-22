@@ -111,19 +111,19 @@ public class DistributionTest {
     }
 
     @Test
-    public void testDistributedRandom() {
+    public void testDistributionWrapper() {
         Kryo kryo = new Kryo();
-//        DistributedRandomSerializer ser = new DistributedRandomSerializer();
-        kryo.register(DistributedRandom.class, new DistributedRandomSerializer());
+//        DistributionWrapperSerializer ser = new DistributionWrapperSerializer();
+        kryo.register(DistributionWrapper.class, new DistributionWrapperSerializer());
 
-        DistributedRandom random = new DistributedRandom(
-                new KumaraswamyDistribution(new DistinctRandom(123L), 2.5, 2.0), DistributedRandom.ReductionMode.FRACTION);
+        DistributionWrapper random = new DistributionWrapper(
+                new KumaraswamyDistribution(new DistinctRandom(123L), 2.5, 2.0), DistributionWrapper.ReductionMode.FRACTION);
 
         Output output = new Output(32, -1);
         kryo.writeObject(output, random);
         byte[] bytes = output.toBytes();
         try (Input input = new Input(bytes)) {
-            DistributedRandom data2 = kryo.readObject(input, DistributedRandom.class);
+            DistributionWrapper data2 = kryo.readObject(input, DistributionWrapper.class);
             Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
             Assert.assertEquals(random.nextDouble(), data2.nextDouble(), 0x1p-32);
             Assert.assertTrue(EnhancedRandom.areEqual(random, data2));
