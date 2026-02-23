@@ -22,33 +22,33 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.random.DeckWrapper;
+import com.github.tommyettinger.random.CompositeWrapper;
 
 /**
- * Kryo {@link Serializer} for juniper {@link DeckWrapper}s.
- * Internally, this stores the serialized String produced by {@link DeckWrapper#stringSerialize(Base)}.
+ * Kryo {@link Serializer} for juniper {@link CompositeWrapper}s.
+ * Internally, this stores the serialized String produced by {@link CompositeWrapper#stringSerialize(Base)}.
  */
-public class DeckWrapperSerializer extends Serializer<DeckWrapper> {
+public class CompositeWrapperSerializer extends Serializer<CompositeWrapper> {
 
-    public DeckWrapperSerializer() {
+    public CompositeWrapperSerializer() {
         setImmutable(false);
         setAcceptsNull(false);
     }
 
     @Override
-    public void write(final Kryo kryo, final Output output, final DeckWrapper data) {
+    public void write(final Kryo kryo, final Output output, final CompositeWrapper data) {
         output.writeString(data.stringSerialize(Base.BASE90));
     }
 
     @Override
-    public DeckWrapper read(final Kryo kryo, final Input input, final Class<? extends DeckWrapper> dataClass) {
-        DeckWrapper random = new DeckWrapper();
+    public CompositeWrapper read(final Kryo kryo, final Input input, final Class<? extends CompositeWrapper> dataClass) {
+        CompositeWrapper random = new CompositeWrapper();
         random.stringDeserialize(input.readString(), Base.BASE90);
         return random;
     }
 
     @Override
-    public DeckWrapper copy(Kryo kryo, DeckWrapper original) {
+    public CompositeWrapper copy(Kryo kryo, CompositeWrapper original) {
         return original.copy();
     }
 }

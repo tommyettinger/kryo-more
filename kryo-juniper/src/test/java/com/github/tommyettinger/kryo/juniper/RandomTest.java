@@ -881,6 +881,25 @@ public class RandomTest {
     }
 
     @Test
+    public void testCompositeWrapper() {
+        Kryo kryo = new Kryo();
+        CompositeWrapperSerializer ser = new CompositeWrapperSerializer();
+        kryo.register(CompositeWrapper.class, ser);
+
+        CompositeWrapper data = new CompositeWrapper(new HornRandom(-12345L), new Xoroshiro128StarStarRandom(123L));
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data, ser);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            CompositeWrapper data2 = kryo.readObject(input, CompositeWrapper.class);
+            Assert.assertEquals(data.nextInt(), data2.nextInt());
+            Assert.assertEquals(data.nextLong(), data2.nextLong());
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testArchivalWrapper() {
         Kryo kryo = new Kryo();
         ArchivalWrapperSerializer ser = new ArchivalWrapperSerializer();
