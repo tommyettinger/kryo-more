@@ -273,6 +273,22 @@ public class UtilsTest {
     }
 
     @Test
+    public void testLongSet() {
+        Kryo kryo = new Kryo();
+        kryo.register(LongSet.class, new LongSetSerializer());
+
+        LongSet data = LongSet.with(-123L, 0L, 456L, 0L, 1L, -1L, 0x80000000L, 0x8000000000000000L);
+
+        Output output = new Output(32, -1);
+        kryo.writeObject(output, data);
+        byte[] bytes = output.toBytes();
+        try (Input input = new Input(bytes)) {
+            LongSet data2 = kryo.readObject(input, LongSet.class);
+            Assert.assertEquals(data, data2);
+        }
+    }
+
+    @Test
     public void testArrayMap() {
         Kryo kryo = new Kryo();
         kryo.register(ArrayMap.class, new ArrayMapSerializer());
