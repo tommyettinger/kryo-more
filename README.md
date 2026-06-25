@@ -26,17 +26,19 @@ Each sub-library has its own version, linked to the version of the library it de
 The last component of the version is usually .0, but can be increased for bug-fixes to the same linked library version,
 or if Kryo itself had a (compatible) update available but the linked library did not have an update.
 
-  - kryo-libgdx is currently at version 1.14.2.1
-  - kryo-regexodus is currently version 0.1.21.1
-  - kryo-digital is currently version 0.10.1.1
-  - kryo-jdkgdxds is currently version 2.1.4.1
-  - kryo-juniper is currently version 0.10.4.1
-  - kryo-cringe is currently version 0.3.0.1
+Every sub-library is now in its own GitHub repository, except for kryo-simple-graphs, which probably won't be updated.
+
+  - [kryo-libgdx](https://github.com/tommyettinger/kryo-libgdx) is currently at version 1.14.2.2
+  - [kryo-regexodus](https://github.com/tommyettinger/kryo-regexodus) is currently version 0.1.21.2
+  - [kryo-digital](https://github.com/tommyettinger/kryo-digital) is currently version 0.10.2.2
+  - [kryo-jdkgdxds](https://github.com/tommyettinger/kryo-jdkgdxds) is currently version 2.1.5.2
+  - [kryo-juniper](https://github.com/tommyettinger/kryo-juniper) is currently version 0.10.5.2
+  - [kryo-cringe](https://github.com/tommyettinger/kryo-cringe) is currently version 0.3.1.2
   - kryo-simple-graphs is currently (usable at) version 3.0.0.1
     - This depends on simple-graphs v3.0.0, not the current 5.1.1, because versions since 4.0.0 don't make the edges on
       graphs serializable in any way (they use a lambda per-edge).
-  - kryo-gdcrux is currently version 0.1.2.1
-  - kryo-gand is currently version 0.3.6.1
+  - [kryo-gdcrux](https://github.com/tommyettinger/kryo-gdcrux) is currently version 0.1.2.2
+  - [kryo-gand](https://github.com/tommyettinger/kryo-gand) is currently version 0.3.7.2
 
 All of these sub-libraries depend on Java 8 or higher, except for some older versions of kryo-digital and kryo-juniper.
 
@@ -45,49 +47,49 @@ Gradle dependency info:
 kryo-libgdx:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-libgdx:1.14.2.1"
+implementation "com.github.tommyettinger:kryo-libgdx:1.14.2.2"
 ```
 
 kryo-regexodus:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-regexodus:0.1.21.1"
+implementation "com.github.tommyettinger:kryo-regexodus:0.1.21.2"
 ```
 
 kryo-digital:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-digital:0.10.1.1"
+implementation "com.github.tommyettinger:kryo-digital:0.10.2.2"
 ```
 
 kryo-jdkgdxds:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-jdkgdxds:2.1.4.1"
+implementation "com.github.tommyettinger:kryo-jdkgdxds:2.1.5.2"
 ```
 
 kryo-juniper:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-juniper:0.10.4.1"
+implementation "com.github.tommyettinger:kryo-juniper:0.10.5.2"
 ```
 
 kryo-cringe:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-cringe:0.3.0.1"
+implementation "com.github.tommyettinger:kryo-cringe:0.3.1.2"
 ```
 
 kryo-gdcrux:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-gdcrux:0.1.2.1"
+implementation "com.github.tommyettinger:kryo-gdcrux:0.1.2.2"
 ```
 
 kryo-gand:
 
 ```gradle
-implementation "com.github.tommyettinger:kryo-gand:0.3.6.1"
+implementation "com.github.tommyettinger:kryo-gand:0.3.7.2"
 ```
 
 kryo-simple-graphs:
@@ -104,7 +106,7 @@ kryo-libgdx:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-libgdx</artifactId>
-  <version>1.14.2.1</version>
+  <version>1.14.2.2</version>
 </dependency>
 ```
 
@@ -114,7 +116,7 @@ kryo-regexodus:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-regexodus</artifactId>
-  <version>0.1.21.1</version>
+  <version>0.1.21.2</version>
 </dependency>
 ```
 
@@ -124,7 +126,7 @@ kryo-digital:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-digital</artifactId>
-  <version>0.10.1.1</version>
+  <version>0.10.2.2</version>
 </dependency>
 ```
 
@@ -134,7 +136,7 @@ kryo-jdkgdxds:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-jdkgdxds</artifactId>
-  <version>2.1.4.1</version>
+  <version>2.1.5.2</version>
 </dependency>
 ```
 
@@ -144,7 +146,7 @@ kryo-juniper:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-juniper</artifactId>
-  <version>0.10.4.1</version>
+  <version>0.10.5.2</version>
 </dependency>
 ```
 
@@ -154,7 +156,7 @@ kryo-cringe:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-cringe</artifactId>
-  <version>0.3.0.1</version>
+  <version>0.3.1.2</version>
 </dependency>
 ```
 
@@ -164,7 +166,7 @@ kryo-gdcrux:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-gdcrux</artifactId>
-  <version>0.1.2.1</version>
+  <version>0.1.2.2</version>
 </dependency>
 ```
 
@@ -174,7 +176,7 @@ kryo-gand:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>kryo-gand</artifactId>
-  <version>0.3.6.1</version>
+  <version>0.3.7.2</version>
 </dependency>
 ```
 
